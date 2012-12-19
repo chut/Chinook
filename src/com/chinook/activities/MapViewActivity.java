@@ -303,10 +303,11 @@ public class MapViewActivity extends Activity implements OnTouchListener{
 		//Log.v("fbreaknode-index", Integer.toString(routePut.indexOf(fBreakNode)+1));
 		
 		if(fBreakNode != null){
+			bNodeIndex = routePut.indexOf(fBreakNode);
 			Log.v("in-if", "in multifloor setup");
 			nextFloorNode = routePut.get(bNodeIndex + 1);
-			//multifloor = true;
-			bNodeIndex = routePut.indexOf(fBreakNode);
+			multifloor = true;
+			
 			Log.v("in-if", "in multifloor setup  bnode:"+Integer.toString(bNodeIndex));
 		}else bNodeIndex = routePut.size() - 1;
 		
@@ -314,7 +315,7 @@ public class MapViewActivity extends Activity implements OnTouchListener{
 		
 		
 		
-		Log.v("bnode", "                     bnode:"+Integer.toString(bNodeIndex));
+		//Log.v("bnode", "                     bnode:"+Integer.toString(bNodeIndex));
 		for(int i = 0; i <= bNodeIndex; i++){
 			xPoints.add(routePut.get(i).getStepNode().getX());
 			yPoints.add(routePut.get(i).getStepNode().getY());
@@ -382,6 +383,10 @@ public class MapViewActivity extends Activity implements OnTouchListener{
 			currentNodeFloor = routePut.get(index).getStepNode().getFloorLevel();
 			Node cNode = routePut.get(index).getStepNode();
 			int cNodeFloor = cNode.getFloorLevel();
+			
+			Log.v("floor", "nextnodefloor:"+Integer.toString(nextFloorNode.getStepNode().getFloorLevel()));
+			Log.v("floor", "breaknodefloor:"+Integer.toString(fBreakNode.getStepNode().getFloorLevel()));
+			Log.v("floor", "         floor:"+Integer.toString(floor));
 			
 			if(multifloor){
 				//Log.v("multi", "in the multifloor");
