@@ -636,10 +636,18 @@ public class Route {
 			// if neighbor is not in settledBucket
 			if (inSettled == -1) {
 				//System.out.println("   " + n1.getNode().getNodeID()	+ " is not in settledBucket");
+				// if node and neighbor are on same floor/map, then calculate distance based upon pixel coordinates
+				int neighborDistance = -1;
+				if ((myNode.getBuildingID().equals(myNode.getNeighborList().get(i).getNode().getBuildingID())) && (myNode.getFloorLevel() == myNode.getNeighborList().get(i).getNode().getFloorLevel())) {
+					neighborDistance = calculateDistance(myNode.getX(), myNode.getNeighborList().get(i).getNode().getX(), myNode.getY(), myNode.getNeighborList().get(i).getNode().getY());
+					myNode.getNeighborList().get(i).setDistance(neighborDistance);
+				} else {
+					// otherwise, use the distance value from the database
+					neighborDistance = myNode.getNeighborList().get(i).getDistance();
+					
+				}
 				// if a shorter distance exists to neighbor
-				int neighborDistance = calculateDistance(myNode.getX(), myNode.getNeighborList().get(i).getNode().getX(), myNode.getY(), myNode.getNeighborList().get(i).getNode().getY());
-				myNode.getNeighborList().get(i).setDistance(neighborDistance);
-				////Log.i("ROUTE","Node: " + myNode.getNodeID() + ", Neighbor: " + myNode.getNeighborList().get(i).getNodeID() + ", distance: " + neighborDistance);
+				Log.i("ROUTE","Node: " + myNode.getNodeID() + ", Neighbor: " + myNode.getNeighborList().get(i).getNodeID() + ", distance: " + neighborDistance);
 				if (myNode.getNeighborList().get(i).getNode().getShortestDist() > (myNode.getShortestDist() + neighborDistance)) {
 				//if (myNode.getNeighborList().get(i).getNode().getShortestDist() > (myNode.getShortestDist() + myNode.getNeighborList().get(i).getDistance())) {
 
