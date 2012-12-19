@@ -101,7 +101,18 @@ public class AppPreferencesActivity extends PreferenceActivity {
 		elevatorPref.setSummary("Default method of traveling between floors");
 		elevatorPref.setDefaultValue("elevator");
 		AppPrefCat.addPreference(elevatorPref);
-
+		
+		// Verbose
+		ListPreference mapmodePref = new ListPreference(this);
+		mapmodePref.setEntries(new CharSequence[] { "Map", "Text"});
+		mapmodePref.setEntryValues(new CharSequence[] { "map", "text"});
+		mapmodePref.setDialogTitle("Map Mode");
+		mapmodePref.setKey(AppPrefs.PREFERENCE_MAP_MODE);
+		mapmodePref.setTitle("Map Mode");
+		mapmodePref.setSummary("Default behavior of GO button");
+		mapmodePref.setDefaultValue("map");
+		AppPrefCat.addPreference(mapmodePref);
+				
 		// Verbose
 		CheckBoxPreference verbosePref = new CheckBoxPreference(this);
 		verbosePref.setKey(AppPrefs.PREFERENCE_VERBOSE);
