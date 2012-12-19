@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 
+import com.chinook.app.Node;
 import com.chinook.app.Route;
 import com.chinook.app.RouteStep;
 import com.chinook.app.async_core.AsyncConstants;
@@ -97,7 +98,7 @@ public class MapViewActivity extends Activity implements OnTouchListener{
 	Rect imageBounds;
 	int currentFloor;
 	boolean listTab = false;
-	
+	RouteStep fBreakNode;
 	TextView tvX, tvY;
 	float[] mValues = new float[9];
 	
@@ -280,9 +281,19 @@ public class MapViewActivity extends Activity implements OnTouchListener{
 	
 	
 	public void drawMap(){
+		int ifloor = 0;
+		boolean broken = false;
+		
+		while(ifloor < routePut.size() && !broken){
+			if(routePut.get(ifloor).getStepNode().getIsConnector()){
+				fBreakNode = routePut.get(ifloor);
+				broken = true;
+			}
+		ifloor++;
+	 }
 		
 		
-		for(int i = 0; i < routePut.size(); i++){
+		for(int i = 0; i < routePut.indexOf(fBreakNode)+1; i++){
 			xPoints.add(routePut.get(i).getStepNode().getX());
 			yPoints.add(routePut.get(i).getStepNode().getY());
 			
@@ -291,7 +302,7 @@ public class MapViewActivity extends Activity implements OnTouchListener{
 		floor = sFloor;
 		eFloor = routePut.get(routePut.size()-1).getStepNode().getFloorLevel();
 		
-		
+		//routePut.get(1).getStepNode().getIsConnector();
 		
 		
 		//TODO set this somehow
@@ -338,67 +349,42 @@ public class MapViewActivity extends Activity implements OnTouchListener{
 		
 		//TODO this must be updated
 		public boolean step(){
-			//
-			//everything to end is questionable
-//			if(floor == 0 && listTab == false){
-//				if(currentNodeFloor == 0  && outsideHelper == 1){
-//					if(eFloor == 0){
-//						index = walkNodePath.size()-1;
-//					}else if(walkNodePath.indexOf(bNode) == index){ 
-//						index = index;				
-//					}else index = walkNodePath.indexOf(bNode)-1;
-//				}
-//				
-//				if(currentNodeFloor == 0  && outsideHelper == 0){
-//					if(sFloor == 0){
-//						index = 0;
-//					}else if(walkNodePath.indexOf(bNode) == index){ 
-//						index--;				
-//					}else index = walkNodePath.indexOf(bNode)+1;
-//				}
-//			}
-//			
-//			//end
-//			if(index < 0) {
-//				index = 0;
-//			} else if(index >= walkNodePath.size()) {
-//				index = walkNodePath.size()-1;
-//			}
-//			
-//			
-//			
-//			
-//			currentNodeFloor = walkNodePath.get(index).getNodeFloor();
-//			Node cNode = walkNodePath.get(index);
-//			int cNodeFloor = cNode.getNodeFloor();
-//			
-//			if(multifloor){
-//				if(index <= bNodeIndex && floor != cNodeFloor){
-//					xPoints.clear();
-//					yPoints.clear();
-//					for(int i = 0; i <= bNodeIndex; i++){
-//						xPoints.add(walkNodePath.get(i).getX());
-//						yPoints.add(walkNodePath.get(i).getY());
-//					}
-//					pv.updatePath(xPoints, yPoints, cNodeFloor, sFloor, eFloor);
-//					floor = cNodeFloor;
-//					pv.setCenterPoint(cNode);			
-//				} else if(index > bNodeIndex && floor != cNodeFloor){
-//					xPoints.clear();
-//					yPoints.clear();
-//					for(int i = bNodeIndex+1; i < walkNodePath.size(); i++){
-//						xPoints.add(walkNodePath.get(i).getX());
-//						yPoints.add(walkNodePath.get(i).getY());
-//					}
-//					pv.updatePath(xPoints, yPoints, cNodeFloor, sFloor, eFloor);
-//					floor = cNodeFloor;
-//					pv.setCenterPoint(cNode);
-//				} else if(floor == cNodeFloor){
-//					pv.setCenterPoint(cNode);	
-//				}
-//			} else {
-//				pv.setCenterPoint(cNode);
-//			}
+				
+			//System.out.println("Hello, world!");
+			
+			
+			
+			currentNodeFloor = routePut.get(index).getStepNode().getFloorLevel();
+			Node cNode = routePut.get(index).getStepNode();
+			int cNodeFloor = cNode.getFloorLevel();
+			
+			if(multifloor){
+				if(index <= bNodeIndex && floor != cNodeFloor){
+					xPoints.clear();
+					yPoints.clear();
+					for(int i = 0; i <= bNodeIndex; i++){
+						xPoints.add(routePut.get(index).getStepNode().getX());
+						yPoints.add(routePut.get(index).getStepNode().getY());
+					}
+					pv.updatePath(xPoints, yPoints, cNodeFloor, sFloor, eFloor);
+					floor = cNodeFloor;
+					pv.setCenterPoint(cNode);			
+				} else if(index > bNodeIndex && floor != cNodeFloor){
+					xPoints.clear();
+					yPoints.clear();
+					for(int i = bNodeIndex+1; i < walkNodePath.size(); i++){
+						xPoints.add(routePut.get(index).getStepNode().getX());
+						yPoints.add(routePut.get(index).getStepNode().getY());
+					}
+					pv.updatePath(xPoints, yPoints, cNodeFloor, sFloor, eFloor);
+					floor = cNodeFloor;
+					pv.setCenterPoint(cNode);
+				} else if(floor == cNodeFloor){
+					pv.setCenterPoint(cNode);	
+				}
+			} else {
+				pv.setCenterPoint(cNode);
+			}
 			
 			return true;
 		}

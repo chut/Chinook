@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
+import com.chinook.app.Node;
+
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
@@ -234,35 +236,35 @@ public class PathView extends View{
 	}
 	
 	//TRANSLATE VIEW TO CENTER OVER NODE n
-//	public synchronized void setCenterPoint(Node n){
-//		Point centerPoint;
-//		float currentX, currentY;
-//		int nodeX = (int)-1*n.getX();
-//		int nodeY = (int)-1*n.getY();
-//		
-//		if(getCenterPoint() != null){
-//			centerPoint= getCenterPoint();
-//			
-//			matrix.getValues(mValues);															//PULL OUT X AND Y TRANSFORMATION VALUES FROM MATRIX
-//			currentX = mValues[Matrix.MTRANS_X];
-//			currentY = mValues[Matrix.MTRANS_Y];
-//			
-//			currentX -= centerPoint.x;
-//			currentY -= (centerPoint.y + 67);													//COMPENSATING FOR 67 PIXEL BUG
-//			
-//			
-//			
-//			transX = ((nodeX - currentX)) / (ANIMATIONTOTAL/ANIMATIONSTEP);						//SET EACH INTERMEDIATE X TRANSLATION
-//			transY = ((nodeY - currentY)) / (ANIMATIONTOTAL/ANIMATIONSTEP);						//SET EACH INTERMEDIATE Y TRANSLATION
-//			Thread ani = new Thread(animate, "translation animation");
-//			ani.start();
-//		}	
-//		
-//		curX = -nodeX;
-//		curY = -nodeY;
-//		
-//		
-//	}
+	public synchronized void setCenterPoint(Node n){
+		Point centerPoint;
+		float currentX, currentY;
+		int nodeX = (int)-1*n.getX();
+		int nodeY = (int)-1*n.getY();
+		
+		if(getCenterPoint() != null){
+			centerPoint= getCenterPoint();
+			
+			matrix.getValues(mValues);															//PULL OUT X AND Y TRANSFORMATION VALUES FROM MATRIX
+			currentX = mValues[Matrix.MTRANS_X];
+			currentY = mValues[Matrix.MTRANS_Y];
+			
+			currentX -= centerPoint.x;
+			currentY -= (centerPoint.y + 67);													//COMPENSATING FOR 67 PIXEL BUG
+			
+			
+			
+			transX = ((nodeX - currentX)) / (ANIMATIONTOTAL/ANIMATIONSTEP);						//SET EACH INTERMEDIATE X TRANSLATION
+			transY = ((nodeY - currentY)) / (ANIMATIONTOTAL/ANIMATIONSTEP);						//SET EACH INTERMEDIATE Y TRANSLATION
+			Thread ani = new Thread(animate, "translation animation");
+			ani.start();
+		}	
+		
+		curX = -nodeX;
+		curY = -nodeY;
+		
+		
+	}
 	
 	//USED TO ANIMATE TRANSLATION
 	private void step(){
