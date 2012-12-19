@@ -734,11 +734,17 @@ public class Entry extends Activity implements OnClickListener, OnItemSelectedLi
 			// we are good to go
 //			String startID = AppPrefs.PREFERENCE_START_ID;
 //			String endID = AppPrefs.PREFERENCE_END_ID;
-			Intent intent5 = new Intent(this, AppConstants.CLASS_MAP);
+			if (AppPrefs.getMapMode(this).equals("text")) {
+				Intent intent5 = new Intent(this, AppConstants.CLASS_TEXT);
+				startActivity(intent5);
+			} else {
+				Intent intent5 = new Intent(this, AppConstants.CLASS_MAP);
+				startActivity(intent5);
+			}
 //			intent5.putExtra("mode", "route");
 //			intent5.putExtra("start", startID);
 //			intent5.putExtra("end", endID);
-			startActivity(intent5);
+			
 			
 			return true;
 	}

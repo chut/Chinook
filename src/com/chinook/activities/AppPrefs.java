@@ -61,7 +61,7 @@ public final class AppPrefs {
 
 	public static String getMapMode(Context context) {
 		prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		return prefs.getString(PREFERENCE_MAP_MODE, "browse");
+		return prefs.getString(PREFERENCE_MAP_MODE, "map");
 	}
 
 	public static void setMapMode(String mode, Context context) {

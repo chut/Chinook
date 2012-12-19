@@ -18,8 +18,8 @@ public final class AppConstants {
 	public static final Class CLASS_PREF = AppPreferencesActivity.class;
 	public static final Class CLASS_ENTRY = Entry.class;
 	public static final Class CLASS_SHARE = ShareRouteActivity.class;
-	//public static final Class CLASS_MAP = MapViewActivity.class;
-	public static final Class CLASS_MAP = TestActivity.class;
+	public static final Class CLASS_MAP = MapViewActivity.class;
+	public static final Class CLASS_TEXT = TestActivity.class;
 
 	
 	// database connection providers
