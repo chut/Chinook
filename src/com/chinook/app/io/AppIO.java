@@ -28,7 +28,7 @@ private final UIHandler handlerUI;
 	}
 	
 	// calculate route
-	public int calculateRoute(Context context, Route route, IMapViewCallback activity) {
+	public int calculateRoute(Context context, Route route, MapViewActivity activity) {
 		// create task
 		Task_Route<String, String> routeTask = new Task_Route<String, String>(context, handlerUI, route, activity);
 		

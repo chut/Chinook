@@ -5,7 +5,6 @@ import com.chinook.activities.Entry;
 import com.chinook.activities.MapViewActivity;
 import com.chinook.activities.ShareRouteActivity;
 //import com.chinook.activities.WebViewActivity;
-import com.chinook.activities.TestActivity;
 
 public final class AppConstants {
 	public static final String GLOBAL_IMG_STORAGE_LOC = ""; //some location on android storage
@@ -19,7 +18,6 @@ public final class AppConstants {
 	public static final Class CLASS_ENTRY = Entry.class;
 	public static final Class CLASS_SHARE = ShareRouteActivity.class;
 	public static final Class CLASS_MAP = MapViewActivity.class;
-	public static final Class CLASS_TEXT = TestActivity.class;
 
 	
 	// database connection providers
