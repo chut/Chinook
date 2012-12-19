@@ -108,10 +108,10 @@ public final class R {
         public static final int ScanStartButton=0x7f05001c;
         public static final int Search=0x7f050002;
         public static final int bottomtext=0x7f050031;
-        public static final int btnNext=0x7f05002d;
-        public static final int btnPrev=0x7f05002c;
+        public static final int btnNext=0x7f05002c;
+        public static final int btnPrev=0x7f05002b;
         public static final int button1=0x7f050000;
-        public static final int buttons=0x7f05002b;
+        public static final int buttons=0x7f05002a;
         public static final int cardinalDirection=0x7f05002f;
         public static final int directionsTab=0x7f05003a;
         public static final int endByBldgSpinner=0x7f05000a;
@@ -139,8 +139,8 @@ public final class R {
         public static final int mapTab=0x7f050041;
         public static final int mapView=0x7f050044;
         public static final int nIDtext=0x7f050032;
-        public static final int pathTab=0x7f050029;
-        public static final int pathView=0x7f05002a;
+        public static final int pathTab=0x7f050028;
+        public static final int pathView=0x7f050029;
         public static final int scanClear=0x7f05001e;
         public static final int scanEndText=0x7f05001b;
         public static final int scanNext=0x7f05001d;
@@ -168,7 +168,7 @@ public final class R {
         public static final int startSpin=0x7f05003d;
         public static final int tabhost=0x7f050001;
         public static final int textInstructions=0x7f050024;
-        public static final int textView1=0x7f050028;
+        public static final int textView1=0x7f05002d;
         public static final int toptext=0x7f050030;
         public static final int viewMapButton=0x7f050021;
     }

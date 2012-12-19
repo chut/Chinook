@@ -21,6 +21,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -121,6 +122,10 @@ public class PathView extends View{
 		this.STARTMAP = (floor == startFloor);
 		this.ENDMAP = (floor == endFloor);
 		
+		Log.i("makePathView", xArray.toString());
+		Log.i("makePathView", yArray.toString());
+		Log.i("makePathView", Integer.toString(floor));
+		
 		loadFloorMap(floor);
 		invalidate();																			//CALLED TO TELL VM TO REDRAW
 	}
@@ -142,7 +147,9 @@ public class PathView extends View{
 	//LOAD FLOOR PLAN BASED ON FLOOR NUMBER
 	private void loadFloorMap(int floor){
 		currentFloor = floor;
+		
 		try{
+			Log.i("am", am.toString());
 			is = am.open(source[floor]);														//A BITMAP FACTORY IS USED IN CONJUNCTION WITH AN INPUTSTREAM TO HELP CONTROL THE SIZE OF THE IMAGE
 			bMap = BitmapFactory.decodeStream(is, null, op);									//THE BMF OPTIONS HELP CONTROL THE RESULTING IMAGE SIZE IN ANDROID
 			dMap = new BitmapDrawable(this.getResources(), bMap);
@@ -159,11 +166,13 @@ public class PathView extends View{
 	public void onDraw(Canvas canvas){
 		super.onDraw(canvas);
 		
+		
 		vWidth = getMeasuredWidth();
 		vHeight = getMeasuredHeight();														//ONMEASURE CALLED BEFORE ONDRAW - VARIABLES USED FOR CENTERING THE SCREEN
 		
 		canvas.setMatrix(matrix);															//APPLY THE TRANSFORMATION MATRIX TO THE CANVAS
 		
+		//loadFloorMap(1);
 		dMap.draw(canvas);																	//DRAW THE FLOOR PLAN TO THE CANVAS
 		path.reset();																		//RESET THE WALKING PATH
 		makePath();																			//REMAKE THE WALKING PATH

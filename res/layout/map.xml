@@ -1,31 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- OVERLAY ATTEMPT -->
-  <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+ <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
       android:id="@+id/mainFrame"
 		android:layout_width="fill_parent" android:layout_height="fill_parent">
-<HorizontalScrollView 
-	    android:layout_width="fill_parent"
-       	android:layout_height="fill_parent"
-       	>
-       	<ScrollView
-		    android:layout_width="fill_parent"
-        	android:layout_height="fill_parent"
-			>
-		    <TextView
-		        android:id="@+id/textView1"
-		        android:layout_width="fill_parent"
-		        android:layout_height="fill_parent"
-		        android:padding="5dp"
-		       	android:textSize="4pt"
-		    	android:text="Lorem ipsum."
-		      	android:background="#000000"
-		       	android:textColor="#aaffffff"
-		        />
-       	</ScrollView>
-	</HorizontalScrollView> 
-			
-	
-			
+
+
+  
+ 
+				
 			
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/pathTab"

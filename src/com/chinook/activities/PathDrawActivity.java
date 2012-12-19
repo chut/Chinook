@@ -134,7 +134,7 @@ public class PathDrawActivity extends ListActivity implements OnTouchListener{
       
     //GET START AND END NODEID FROM BUNDLE
         bundle = getIntent().getExtras();
-        //walkNodePath = (ArrayList<RouteStep>)bundle.getSerializable("routePut");
+        //walkNodePath = (ArrayList<RouteStep>)bundle.getSerializable("rouePut");
         //Log.v("routePut", walkNodePath.toString());
         
         //endnID = bundle.getString("EndnID");
@@ -181,7 +181,7 @@ public class PathDrawActivity extends ListActivity implements OnTouchListener{
 		
 		//TODO set this somehow
      //SETUP PATHVIEW OBJECT AND DISPLAY
-		//pv.makePathView(xPoints, yPoints, floor, am, sFloor, eFloor);
+		pv.makePathView(xPoints, yPoints, floor, am, sFloor, eFloor);
 		currentFloor = sFloor;
 		pv.setBackgroundColor(Color.WHITE);
 		pv.setOnTouchListener(this);

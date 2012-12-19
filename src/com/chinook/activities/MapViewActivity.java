@@ -37,6 +37,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -119,7 +120,7 @@ public class MapViewActivity extends Activity implements OnTouchListener{
         Resources res;
         String[] validPics;   
 	    boolean fromMap;    	
-		
+		boolean goOn = false;
 	    //
 	    //test shit
 	    SensorManager sman;
@@ -131,8 +132,10 @@ public class MapViewActivity extends Activity implements OnTouchListener{
 	    requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);	// this is required for indeterminate in title bar
 		setContentView(R.layout.map);
         
-		textView = (TextView) findViewById(R.id.textView1);
-		textView.setText("MAP VIEW - the native custom graphics view will go here\n\n");
+		//textView = (TextView) findViewById(R.id.textView1);
+		//textView.setText("MAP VIEW - the native custom graphics view will go here\n\n");
+		//textView.setVisibility(8);
+		am = getAssets();
 		
 		startID = AppPrefs.getStartID(this);
 		endID = AppPrefs.getEndID(this);
@@ -154,6 +157,9 @@ public class MapViewActivity extends Activity implements OnTouchListener{
     		textView.append("error passing data\n");
     	}
 		
+		SystemClock.sleep(3000);
+		
+//=========================================================================================================
 		//oncreate pieces from pathdrawactivity
 	    res = getResources();
 
@@ -191,12 +197,7 @@ public class MapViewActivity extends Activity implements OnTouchListener{
 //	            }
 	         
 	    		
-	    		//TODO set this somehow
-	         //SETUP PATHVIEW OBJECT AND DISPLAY
-	    		//pv.makePathView(xPoints, yPoints, floor, am, sFloor, eFloor);
-	    		currentFloor = sFloor;
-	    		pv.setBackgroundColor(Color.WHITE);
-	    		pv.setOnTouchListener(this);
+	    		
 
 	    	//BUTTON LISTENERS
 	    		next.setOnClickListener(
@@ -207,34 +208,11 @@ public class MapViewActivity extends Activity implements OnTouchListener{
 	    						outsideHelper = 1;
 	    						step();
 	    						
-//	    						if(walkNodePath.get(index).getNodeFloor() == 0){
-//	    							index = walkNodePath.size() - 3;
-//	    						}else step();
-//	    						
-//	    						if(index < walkNodePath.size() - 3){
-//	    							step();
-//	    						}
-	    						
 	    						
 //	    						Node stepNode = walkNodePath.get(index);
 //	    			        	double dAngle = stepNode.getNNodeAngle();
 //	    			        	String cardDir  = "Go to ";
 	    						
-	    						
-	    			        	//cardinal directions
-//	    						if(dAngle == 180){
-//	    							Log.v("cardinal", "north");
-//	    							cardDir = "Go North at ";
-//	    						}else if(dAngle == 0){
-//	    							Log.v("cardinal", "south");
-//	    							cardDir = "Go South at ";
-//	    						}else if(dAngle == -90){
-//	    							Log.v("cardinal", "east");
-//	    							cardDir = "Go East at ";
-//	    						}else if(dAngle == 90){
-//	    							Log.v("cardinal", "west");
-//	    							cardDir = "Go West at ";
-//	    						}
 	    						//the toast
 	    						//Toast.makeText(PathDrawActivity.this, cardDir + walkNodePath.get(index).getNodeDepartment(), Toast.LENGTH_SHORT).show();
 	    					}
@@ -252,21 +230,6 @@ public class MapViewActivity extends Activity implements OnTouchListener{
 //	    			        	double dAngle = stepNode.getNNodeAngle();
 //	    			        	String cardDir  = "Go to ";
 	    						
-	    						
-	    			        	//cardinal directions
-//	    						if(dAngle == 180){
-//	    							Log.v("cardinal", "north");
-//	    							cardDir = "Go North at ";
-//	    						}else if(dAngle == 0){
-//	    							Log.v("cardinal", "south");
-//	    							cardDir = "Go South at ";
-//	    						}else if(dAngle == -90){
-//	    							Log.v("cardinal", "east");
-//	    							cardDir = "Go East at ";
-//	    						}else if(dAngle == 90){
-//	    							Log.v("cardinal", "west");
-//	    							cardDir = "Go West at ";
-//	    						}
 	    						//the toast
 	    						//Toast.makeText(PathDrawActivity.this, cardDir + walkNodePath.get(index).getNodeDepartment(), Toast.LENGTH_SHORT).show();
 	    					}
@@ -297,8 +260,8 @@ public class MapViewActivity extends Activity implements OnTouchListener{
 
 	public void routeConvertData(Route routeObj) {
 		//textView.append("runResult = " + result + "\n");
-		textView.append(routeObj.toString() + "\n");
-		textView.append(routeObj.getMyMetrics().toString() + "\n");
+		//textView.append(routeObj.toString() + "\n");
+		//textView.append(routeObj.getMyMetrics().toString() + "\n");
 		
 		routePut = routeObj.getRouteStepList();	//get ArrayList<RouteStep>
 		
@@ -318,6 +281,28 @@ public class MapViewActivity extends Activity implements OnTouchListener{
 	
 	public void drawMap(){
 		
+		
+		for(int i = 0; i < routePut.size(); i++){
+			xPoints.add(routePut.get(i).getStepNode().getX());
+			yPoints.add(routePut.get(i).getStepNode().getY());
+			
+		}
+		sFloor = routePut.get(0).getStepNode().getFloorLevel();
+		floor = sFloor;
+		eFloor = routePut.get(routePut.size()-1).getStepNode().getFloorLevel();
+		
+		
+		
+		
+		//TODO set this somehow
+        //SETUP PATHVIEW OBJECT AND DISPLAY
+   		pv.makePathView(xPoints, yPoints, floor, am, sFloor, eFloor);
+   		currentFloor = sFloor;
+   		pv.setBackgroundColor(Color.WHITE);
+   		pv.setOnTouchListener(this);
+   		
+   		
+		goOn = true;
 	}
 	
 	
