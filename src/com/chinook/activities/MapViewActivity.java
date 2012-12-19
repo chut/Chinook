@@ -293,6 +293,7 @@ public class MapViewActivity extends Activity implements OnTouchListener{
 		
 		while(ifloor < routePut.size() && !broken){
 			if(routePut.get(ifloor).getStepNode().getIsConnector()){
+				Log.v("in-if", "found breaknode");
 				fBreakNode = routePut.get(ifloor);
 				broken = true;
 			}
@@ -302,16 +303,18 @@ public class MapViewActivity extends Activity implements OnTouchListener{
 		//Log.v("fbreaknode-index", Integer.toString(routePut.indexOf(fBreakNode)+1));
 		
 		if(fBreakNode != null){
+			Log.v("in-if", "in multifloor setup");
 			nextFloorNode = routePut.get(bNodeIndex + 1);
 			//multifloor = true;
 			bNodeIndex = routePut.indexOf(fBreakNode);
-		}bNodeIndex = routePut.size() - 1;
+			Log.v("in-if", "in multifloor setup  bnode:"+Integer.toString(bNodeIndex));
+		}else bNodeIndex = routePut.size() - 1;
 		
 		
 		
 		
 		
-		
+		Log.v("bnode", "                     bnode:"+Integer.toString(bNodeIndex));
 		for(int i = 0; i <= bNodeIndex; i++){
 			xPoints.add(routePut.get(i).getStepNode().getX());
 			yPoints.add(routePut.get(i).getStepNode().getY());
@@ -368,7 +371,7 @@ public class MapViewActivity extends Activity implements OnTouchListener{
 		public boolean step(){
 			if(index < 0) {
 			index = 0;
-		} else if(index >= routePut.size()-1) {
+		} else if(index >= routePut.size()) {
 			index = routePut.size()-1;
 		}
 				
