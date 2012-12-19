@@ -9,6 +9,7 @@ import com.chinook.app.Route;
 import com.chinook.app.RouteStep;
 import com.chinook.app.async_core.AsyncConstants;
 import com.chinook.app.io.AppIO;
+import com.chinook.app.io.IMapViewCallback;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -56,7 +57,7 @@ import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MapViewActivity extends Activity implements OnTouchListener{
+public class MapViewActivity extends Activity implements OnTouchListener, IMapViewCallback{
 	private TextView textView;
 	private String mode, startID, endID, soe, verbose;
 	

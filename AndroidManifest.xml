@@ -38,7 +38,22 @@
         <activity 
             android:name="MapViewActivity"
             android:label="@string/app_name"
+            />
+        
+        <activity 
+            android:name="TestActivity"
+            android:label="@string/app_name"
             android:screenOrientation="portrait"/>
+        
+        <activity 
+            android:name="PathDrawActivity"
+            android:label="@string/app_name"
+            />
+        
+        <activity 
+            android:name="PathView"
+            android:label="@string/app_name"
+            />
     </application>
 
 </manifest>
