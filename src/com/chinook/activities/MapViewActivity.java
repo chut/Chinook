@@ -160,7 +160,7 @@ public class MapViewActivity extends Activity implements OnTouchListener{
     		textView.append("error passing data\n");
     	}
 		
-		SystemClock.sleep(3000);
+		SystemClock.sleep(3000);	//TODO find better solution than sleep
 		
 //=========================================================================================================
 		//oncreate pieces from pathdrawactivity
@@ -372,10 +372,26 @@ public class MapViewActivity extends Activity implements OnTouchListener{
 		public boolean step(){
 			if(index < 0) {
 			index = 0;
-		} else if(index >= routePut.size()) {
+		} else if(index > routePut.size()) {
 			index = routePut.size()-1;
 		}
-				
+			
+			if(outsideHelper == 1){
+				boolean foundskip = false;
+				while(!foundskip){
+					if(!routePut.get(index).getIsNavPoint() && index < routePut.size()-2){
+						index++;
+					}else foundskip = true;
+				}
+			}else{
+				boolean foundskip = false;
+				while(!foundskip){
+					if(!routePut.get(index).getIsNavPoint() && index > 1){
+						index--;
+					}else foundskip = true;
+				}
+			}
+			
 			//System.out.println("Hello, world!");
 			
 			//bNodeIndex = routePut.indexOf(fBreakNode)+1;
@@ -384,9 +400,9 @@ public class MapViewActivity extends Activity implements OnTouchListener{
 			Node cNode = routePut.get(index).getStepNode();
 			int cNodeFloor = cNode.getFloorLevel();
 			
-			Log.v("floor", "nextnodefloor:"+Integer.toString(nextFloorNode.getStepNode().getFloorLevel()));
-			Log.v("floor", "breaknodefloor:"+Integer.toString(fBreakNode.getStepNode().getFloorLevel()));
-			Log.v("floor", "         floor:"+Integer.toString(floor));
+			//Log.v("floor", "nextnodefloor:"+Integer.toString(nextFloorNode.getStepNode().getFloorLevel()));
+			//Log.v("floor", "breaknodefloor:"+Integer.toString(fBreakNode.getStepNode().getFloorLevel()));
+			//Log.v("floor", "         floor:"+Integer.toString(floor));
 			
 			if(multifloor){
 				//Log.v("multi", "in the multifloor");
