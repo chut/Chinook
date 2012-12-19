@@ -16,10 +16,10 @@ public class Task_Route<E1, E2> extends TaskBase<Integer, E1, E2> {
 	
 	private final Context context;
 	private final Route route;
-	private final MapViewActivity callback; 	// element to be updated - i.e. ArrayList, TextView, etc...
+	private final IMapViewCallback callback; 	// element to be updated - i.e. ArrayList, TextView, etc...
 	
 	/* UI Thread */
-	public Task_Route(Context context, UIHandler handlerUI, Route route, MapViewActivity callback) {
+	public Task_Route(Context context, UIHandler handlerUI, Route route, IMapViewCallback callback) {
 		super(handlerUI);
 		this.context = context;
 		
