@@ -52,14 +52,20 @@ public class Entry extends Activity implements OnClickListener, OnItemSelectedLi
 	private ArrayList<NodeInfo> start_spinner_list_DATA;
 	private ArrayList<NodeInfo> end_spinner_list;
 	private ArrayList<NodeInfo> end_spinner_list_DATA;
-	private ArrayList<String> byBldg_spinner_list;
-	private ArrayList<String> byFloor_spinner_list;
-	private ArrayList<String> byType_spinner_list;
+	private ArrayList<String> start_byBldg_spinner_list;
+	private ArrayList<String> start_byFloor_spinner_list;
+	private ArrayList<String> start_byType_spinner_list;
+	private ArrayList<String> end_byBldg_spinner_list;
+	private ArrayList<String> end_byFloor_spinner_list;
+	private ArrayList<String> end_byType_spinner_list;
 	private ArrayAdapter<NodeInfo> start_spinner_adapter;
 	private ArrayAdapter<NodeInfo> end_spinner_adapter;
-	private ArrayAdapter<String> byBldg_spinner_adapter;
-	private ArrayAdapter<String> byFloor_spinner_adapter;
-	private ArrayAdapter<String> byType_spinner_adapter;
+	private ArrayAdapter<String> start_byBldg_spinner_adapter;
+	private ArrayAdapter<String> start_byFloor_spinner_adapter;
+	private ArrayAdapter<String> start_byType_spinner_adapter;
+	private ArrayAdapter<String> end_byBldg_spinner_adapter;
+	private ArrayAdapter<String> end_byFloor_spinner_adapter;
+	private ArrayAdapter<String> end_byType_spinner_adapter;
 
 	// auto-complete
 	private AutoCompleteTextView start_autoComplete;
@@ -263,47 +269,62 @@ public class Entry extends Activity implements OnClickListener, OnItemSelectedLi
 		end_spinner_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		end_spinner.setAdapter(end_spinner_adapter);
 		
-		byBldg_spinner_list = new ArrayList<String>();
-		byBldg_spinner_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, byBldg_spinner_list);
-		byBldg_spinner_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		start_byBldg_spinner_list = new ArrayList<String>();
+		start_byBldg_spinner_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, start_byBldg_spinner_list);
+		start_byBldg_spinner_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		
-		byFloor_spinner_list = new ArrayList<String>();
-		byFloor_spinner_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, byFloor_spinner_list);
-		byFloor_spinner_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		start_byFloor_spinner_list = new ArrayList<String>();
+		start_byFloor_spinner_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, start_byFloor_spinner_list);
+		start_byFloor_spinner_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		
-		byType_spinner_list = new ArrayList<String>();
-		byType_spinner_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, byType_spinner_list);
-		byType_spinner_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		start_byType_spinner_list = new ArrayList<String>();
+		start_byType_spinner_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, start_byType_spinner_list);
+		start_byType_spinner_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		
+		end_byBldg_spinner_list = new ArrayList<String>();
+		end_byBldg_spinner_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, end_byBldg_spinner_list);
+		end_byBldg_spinner_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		
+		end_byFloor_spinner_list = new ArrayList<String>();
+		end_byFloor_spinner_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, end_byFloor_spinner_list);
+		end_byFloor_spinner_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		
+		end_byType_spinner_list = new ArrayList<String>();
+		end_byType_spinner_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, end_byType_spinner_list);
+		end_byType_spinner_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		
 		start_byBldg_spinner = (Spinner) findViewById(R.id.startByBldgSpinner);
 		start_byBldg_spinner.setOnItemSelectedListener(this);
-		start_byBldg_spinner.setAdapter(byBldg_spinner_adapter);
+		start_byBldg_spinner.setAdapter(start_byBldg_spinner_adapter);
 		
 		start_byFloor_spinner = (Spinner) findViewById(R.id.startByFloorSpinner);
 		start_byFloor_spinner.setOnItemSelectedListener(this);
-		start_byFloor_spinner.setAdapter(byFloor_spinner_adapter);
+		start_byFloor_spinner.setAdapter(start_byFloor_spinner_adapter);
 		
 		start_byType_spinner = (Spinner) findViewById(R.id.startByTypeSpinner);
 		start_byType_spinner.setOnItemSelectedListener(this);
-		start_byType_spinner.setAdapter(byType_spinner_adapter);
+		start_byType_spinner.setAdapter(start_byType_spinner_adapter);
 		
 		end_byBldg_spinner = (Spinner) findViewById(R.id.endByBldgSpinner);
 		end_byBldg_spinner.setOnItemSelectedListener(this);
-		end_byBldg_spinner.setAdapter(byBldg_spinner_adapter);
+		end_byBldg_spinner.setAdapter(end_byBldg_spinner_adapter);
 		
 		end_byFloor_spinner = (Spinner) findViewById(R.id.endByFloorSpinner);
 		end_byFloor_spinner.setOnItemSelectedListener(this);
-		end_byFloor_spinner.setAdapter(byFloor_spinner_adapter);
+		end_byFloor_spinner.setAdapter(end_byFloor_spinner_adapter);
 		
 		end_byType_spinner = (Spinner) findViewById(R.id.endByTypeSpinner);
 		end_byType_spinner.setOnItemSelectedListener(this);
-		end_byType_spinner.setAdapter(byType_spinner_adapter);
+		end_byType_spinner.setAdapter(end_byType_spinner_adapter);
 		
 		// load spinner and auto-complete list data from database
 		Log.i("SPIN","before load");
-		appIO.updateListView_async(DatabaseConstants.QUERY_BUILDING_LIST, AppConstants.PROGRESS_BAR_INDETERMINATE, byBldg_spinner_list, byBldg_spinner_adapter, this);
-		appIO.updateListView_async(DatabaseConstants.QUERY_FLOOR_LIST, AppConstants.PROGRESS_BAR_INDETERMINATE, byFloor_spinner_list, byFloor_spinner_adapter, this, "camp");
-		appIO.updateListView_async(DatabaseConstants.QUERY_TYPE_LIST,	AppConstants.PROGRESS_BAR_INDETERMINATE, byType_spinner_list, byType_spinner_adapter, this, "camp");
+		appIO.updateListView_async(DatabaseConstants.QUERY_BUILDING_LIST, AppConstants.PROGRESS_BAR_INDETERMINATE, start_byBldg_spinner_list, start_byBldg_spinner_adapter, this);
+		appIO.updateListView_async(DatabaseConstants.QUERY_FLOOR_LIST, AppConstants.PROGRESS_BAR_INDETERMINATE, start_byFloor_spinner_list, start_byFloor_spinner_adapter, this, "camp");
+		appIO.updateListView_async(DatabaseConstants.QUERY_TYPE_LIST,	AppConstants.PROGRESS_BAR_INDETERMINATE, start_byType_spinner_list, start_byType_spinner_adapter, this, "camp");
+		appIO.updateListView_async(DatabaseConstants.QUERY_BUILDING_LIST, AppConstants.PROGRESS_BAR_INDETERMINATE, end_byBldg_spinner_list, end_byBldg_spinner_adapter, this);
+		appIO.updateListView_async(DatabaseConstants.QUERY_FLOOR_LIST, AppConstants.PROGRESS_BAR_INDETERMINATE, end_byFloor_spinner_list, end_byFloor_spinner_adapter, this, "camp");
+		appIO.updateListView_async(DatabaseConstants.QUERY_TYPE_LIST,	AppConstants.PROGRESS_BAR_INDETERMINATE, end_byType_spinner_list, end_byType_spinner_adapter, this, "camp");
 //		appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list, start_spinner_adapter, this, "", "camp", "", "list");
 //		appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list_DATA, start_spinner_adapter, this, "", "camp", "", "data");
 //		appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, end_spinner_list, end_spinner_adapter, this, "", "camp", "", "list");
@@ -434,15 +455,15 @@ public class Entry extends Activity implements OnClickListener, OnItemSelectedLi
 		case R.id.startByBldgSpinner:
 			if (!bFirst_startByBldgSpinner) {
 				//Toast.makeText(this, "startByFloorSpinner, value: " + byFloor_spinner_list.get(position) + ", startByTypeSpinner: " + byType_spinner_list.get(start_byType_spinner.getSelectedItemPosition()), Toast.LENGTH_SHORT).show();
-				Log.i("ENTRY", byBldg_spinner_list.get(start_byBldg_spinner.getSelectedItemPosition()).toLowerCase());
-				String bldgID = byBldg_spinner_list.get(start_byBldg_spinner.getSelectedItemPosition()).toLowerCase();
+				Log.i("ENTRY", start_byBldg_spinner_list.get(start_byBldg_spinner.getSelectedItemPosition()).toLowerCase());
+				String bldgID = start_byBldg_spinner_list.get(start_byBldg_spinner.getSelectedItemPosition()).toLowerCase();
 //				appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list, start_spinner_adapter, this, "", bldgID, "");
 //				appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list_DATA, start_spinner_adapter, this, "", bldgID, "");
 				//appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list, start_spinner_adapter, this, "", "camp", "", "list");
 				//appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list_DATA, start_spinner_adapter, this, "", "camp", "", "data");
 				
-				appIO.updateListView_async(DatabaseConstants.QUERY_FLOOR_LIST, AppConstants.PROGRESS_BAR_INDETERMINATE, byFloor_spinner_list, byFloor_spinner_adapter, this, bldgID);
-				appIO.updateListView_async(DatabaseConstants.QUERY_TYPE_LIST,	AppConstants.PROGRESS_BAR_INDETERMINATE, byType_spinner_list, byType_spinner_adapter, this, bldgID);
+				appIO.updateListView_async(DatabaseConstants.QUERY_FLOOR_LIST, AppConstants.PROGRESS_BAR_INDETERMINATE, start_byFloor_spinner_list, start_byFloor_spinner_adapter, this, bldgID);
+				appIO.updateListView_async(DatabaseConstants.QUERY_TYPE_LIST,	AppConstants.PROGRESS_BAR_INDETERMINATE, start_byType_spinner_list, start_byType_spinner_adapter, this, bldgID);
 
 				if (start_spinner.getSelectedItemPosition() > 0) {
 					bFirst_startRoomListSpinner = true;
@@ -457,9 +478,9 @@ public class Entry extends Activity implements OnClickListener, OnItemSelectedLi
 		case R.id.startByFloorSpinner:
 			if (!bFirst_startByFloorSpinner) {
 				//Toast.makeText(this, "startByFloorSpinner, value: " + byFloor_spinner_list.get(position) + ", startByTypeSpinner: " + byType_spinner_list.get(start_byType_spinner.getSelectedItemPosition()), Toast.LENGTH_SHORT).show();
-				String bldgID = byBldg_spinner_list.get(start_byBldg_spinner.getSelectedItemPosition()).toLowerCase();
-				String floorLevel = byFloor_spinner_list.get(start_byFloor_spinner.getSelectedItemPosition()).toLowerCase();
-				String type = byType_spinner_list.get(start_byType_spinner.getSelectedItemPosition()).toLowerCase();
+				String bldgID = start_byBldg_spinner_list.get(start_byBldg_spinner.getSelectedItemPosition()).toLowerCase();
+				String floorLevel = start_byFloor_spinner_list.get(start_byFloor_spinner.getSelectedItemPosition()).toLowerCase();
+				String type = start_byType_spinner_list.get(start_byType_spinner.getSelectedItemPosition()).toLowerCase();
 				Log.i("ENTRY","bldgID: " + bldgID);
 				Log.i("ENTRY","floorLevel: " + floorLevel);
 				Log.i("ENTRY","type: " + type);
@@ -476,9 +497,9 @@ public class Entry extends Activity implements OnClickListener, OnItemSelectedLi
 		case R.id.startByTypeSpinner:
 			if (!bFirst_startByTypeSpinner) {
 				//Toast.makeText(this, "startByTypeSpinner, value: " + byType_spinner_list.get(position), Toast.LENGTH_SHORT).show();
-				String bldgID = byBldg_spinner_list.get(start_byBldg_spinner.getSelectedItemPosition()).toLowerCase();
-				String floorLevel = byFloor_spinner_list.get(start_byFloor_spinner.getSelectedItemPosition()).toLowerCase();
-				String type = byType_spinner_list.get(start_byType_spinner.getSelectedItemPosition()).toLowerCase();
+				String bldgID = start_byBldg_spinner_list.get(start_byBldg_spinner.getSelectedItemPosition()).toLowerCase();
+				String floorLevel = start_byFloor_spinner_list.get(start_byFloor_spinner.getSelectedItemPosition()).toLowerCase();
+				String type = start_byType_spinner_list.get(start_byType_spinner.getSelectedItemPosition()).toLowerCase();
 				Log.i("ENTRY","bldgID: " + bldgID);
 				Log.i("ENTRY","floorLevel: " + floorLevel);
 				Log.i("ENTRY","type: " + type);
@@ -503,11 +524,11 @@ public class Entry extends Activity implements OnClickListener, OnItemSelectedLi
 		case R.id.endByBldgSpinner:
 			if (!bFirst_endByBldgSpinner) {
 				//Toast.makeText(this, "endByFloorSpinner, value: " + byFloor_spinner_list.get(position), Toast.LENGTH_SHORT).show();
-				String bldgID = byBldg_spinner_list.get(end_byBldg_spinner.getSelectedItemPosition()).toLowerCase();
+				String bldgID = end_byBldg_spinner_list.get(end_byBldg_spinner.getSelectedItemPosition()).toLowerCase();
 //				appIO.updateListView_async(DatabaseConstants.QUERY_NODES_BY_FLOOR_AND_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, end_spinner_list, end_spinner_adapter, this, byFloor_spinner_list.get(position), AppPrefs.getBrowseBldg(this), byType_spinner_list.get(end_byType_spinner.getSelectedItemPosition()).toLowerCase(), "list");
 //				appIO.updateListView_async(DatabaseConstants.QUERY_NODES_BY_FLOOR_AND_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, end_spinner_list_DATA, end_spinner_adapter, this, byFloor_spinner_list.get(position), AppPrefs.getBrowseBldg(this), byType_spinner_list.get(end_byType_spinner.getSelectedItemPosition()).toLowerCase(), "data");
-				appIO.updateListView_async(DatabaseConstants.QUERY_FLOOR_LIST, AppConstants.PROGRESS_BAR_INDETERMINATE, byFloor_spinner_list, byFloor_spinner_adapter, this, bldgID);
-				appIO.updateListView_async(DatabaseConstants.QUERY_TYPE_LIST,	AppConstants.PROGRESS_BAR_INDETERMINATE, byType_spinner_list, byType_spinner_adapter, this, bldgID);
+				appIO.updateListView_async(DatabaseConstants.QUERY_FLOOR_LIST, AppConstants.PROGRESS_BAR_INDETERMINATE, end_byFloor_spinner_list, end_byFloor_spinner_adapter, this, bldgID);
+				appIO.updateListView_async(DatabaseConstants.QUERY_TYPE_LIST,	AppConstants.PROGRESS_BAR_INDETERMINATE, end_byType_spinner_list, end_byType_spinner_adapter, this, bldgID);
 
 				if (end_spinner.getSelectedItemPosition() > 0) {
 					bFirst_endRoomListSpinner = true;
@@ -522,9 +543,9 @@ public class Entry extends Activity implements OnClickListener, OnItemSelectedLi
 		case R.id.endByFloorSpinner:
 			if (!bFirst_endByFloorSpinner) {
 				//Toast.makeText(this, "endByFloorSpinner, value: " + byFloor_spinner_list.get(position), Toast.LENGTH_SHORT).show();
-				String bldgID = byBldg_spinner_list.get(end_byBldg_spinner.getSelectedItemPosition()).toLowerCase();
-				String floorLevel = byFloor_spinner_list.get(end_byFloor_spinner.getSelectedItemPosition()).toLowerCase();
-				String type = byType_spinner_list.get(end_byType_spinner.getSelectedItemPosition()).toLowerCase();
+				String bldgID = end_byBldg_spinner_list.get(end_byBldg_spinner.getSelectedItemPosition()).toLowerCase();
+				String floorLevel = end_byFloor_spinner_list.get(end_byFloor_spinner.getSelectedItemPosition()).toLowerCase();
+				String type = end_byType_spinner_list.get(end_byType_spinner.getSelectedItemPosition()).toLowerCase();
 				Log.i("ENTRY","bldgID: " + bldgID);
 				Log.i("ENTRY","floorLevel: " + floorLevel);
 				Log.i("ENTRY","type: " + type);
@@ -540,9 +561,9 @@ public class Entry extends Activity implements OnClickListener, OnItemSelectedLi
 		case R.id.endByTypeSpinner:
 			if (!bFirst_endByTypeSpinner) {
 				//Toast.makeText(this, "endByTypeSpinner, value: " + byType_spinner_list.get(position), Toast.LENGTH_SHORT).show();
-				String bldgID = byBldg_spinner_list.get(end_byBldg_spinner.getSelectedItemPosition()).toLowerCase();
-				String floorLevel = byFloor_spinner_list.get(end_byFloor_spinner.getSelectedItemPosition()).toLowerCase();
-				String type = byType_spinner_list.get(end_byType_spinner.getSelectedItemPosition()).toLowerCase();
+				String bldgID = end_byBldg_spinner_list.get(end_byBldg_spinner.getSelectedItemPosition()).toLowerCase();
+				String floorLevel = end_byFloor_spinner_list.get(end_byFloor_spinner.getSelectedItemPosition()).toLowerCase();
+				String type = end_byType_spinner_list.get(end_byType_spinner.getSelectedItemPosition()).toLowerCase();
 				Log.i("ENTRY","bldgID: " + bldgID);
 				Log.i("ENTRY","floorLevel: " + floorLevel);
 				Log.i("ENTRY","type: " + type);
