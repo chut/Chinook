@@ -151,7 +151,7 @@ public class PathView extends View{
 		currentFloor = floor;
 		
 		try{
-			Log.i("am", am.toString());
+			//Log.i("am", am.toString());
 			is = am.open(source[floor]);														//A BITMAP FACTORY IS USED IN CONJUNCTION WITH AN INPUTSTREAM TO HELP CONTROL THE SIZE OF THE IMAGE
 			bMap = BitmapFactory.decodeStream(is, null, op);									//THE BMF OPTIONS HELP CONTROL THE RESULTING IMAGE SIZE IN ANDROID
 			dMap = new BitmapDrawable(this.getResources(), bMap);

@@ -125,6 +125,8 @@ public class MapViewActivity extends Activity implements OnTouchListener{
 	    //
 	    //test shit
 	    SensorManager sman;
+	    
+	    RouteStep nextFloorNode;
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -284,6 +286,11 @@ public class MapViewActivity extends Activity implements OnTouchListener{
 		int ifloor = 0;
 		boolean broken = false;
 		
+		sFloor = routePut.get(0).getStepNode().getFloorLevel();
+		floor = sFloor;
+		eFloor = routePut.get(routePut.size()-1).getStepNode().getFloorLevel();
+		
+		
 		while(ifloor < routePut.size() && !broken){
 			if(routePut.get(ifloor).getStepNode().getIsConnector()){
 				fBreakNode = routePut.get(ifloor);
@@ -291,16 +298,26 @@ public class MapViewActivity extends Activity implements OnTouchListener{
 			}
 		ifloor++;
 	 }
+		//Log.v("fbreaknode", fBreakNode.toString());
+		//Log.v("fbreaknode-index", Integer.toString(routePut.indexOf(fBreakNode)+1));
+		
+		if(fBreakNode != null){
+			nextFloorNode = routePut.get(bNodeIndex + 1);
+			//multifloor = true;
+			bNodeIndex = routePut.indexOf(fBreakNode);
+		}bNodeIndex = routePut.size() - 1;
 		
 		
-		for(int i = 0; i < routePut.indexOf(fBreakNode)+1; i++){
+		
+		
+		
+		
+		for(int i = 0; i <= bNodeIndex; i++){
 			xPoints.add(routePut.get(i).getStepNode().getX());
 			yPoints.add(routePut.get(i).getStepNode().getY());
 			
 		}
-		sFloor = routePut.get(0).getStepNode().getFloorLevel();
-		floor = sFloor;
-		eFloor = routePut.get(routePut.size()-1).getStepNode().getFloorLevel();
+		
 		
 		//routePut.get(1).getStepNode().getIsConnector();
 		
@@ -313,7 +330,7 @@ public class MapViewActivity extends Activity implements OnTouchListener{
    		pv.setOnTouchListener(this);
    		
    		
-		goOn = true;
+		//goOn = true;
 	}
 	
 	
@@ -349,40 +366,50 @@ public class MapViewActivity extends Activity implements OnTouchListener{
 		
 		//TODO this must be updated
 		public boolean step(){
+			if(index < 0) {
+			index = 0;
+		} else if(index >= routePut.size()-1) {
+			index = routePut.size()-1;
+		}
 				
 			//System.out.println("Hello, world!");
 			
-			
+			//bNodeIndex = routePut.indexOf(fBreakNode)+1;
 			
 			currentNodeFloor = routePut.get(index).getStepNode().getFloorLevel();
 			Node cNode = routePut.get(index).getStepNode();
 			int cNodeFloor = cNode.getFloorLevel();
 			
 			if(multifloor){
-				if(index <= bNodeIndex && floor != cNodeFloor){
+				//Log.v("multi", "in the multifloor");
+				if(index >= bNodeIndex && floor != nextFloorNode.getStepNode().getFloorLevel()){
+					Log.v("in-if","in if - 1   index:" + Integer.toString(index));
 					xPoints.clear();
 					yPoints.clear();
-					for(int i = 0; i <= bNodeIndex; i++){
-						xPoints.add(routePut.get(index).getStepNode().getX());
-						yPoints.add(routePut.get(index).getStepNode().getY());
+					for(int i = routePut.indexOf(nextFloorNode); i < routePut.size(); i++){
+						xPoints.add(routePut.get(i).getStepNode().getX());
+						yPoints.add(routePut.get(i).getStepNode().getY());
 					}
-					pv.updatePath(xPoints, yPoints, cNodeFloor, sFloor, eFloor);
-					floor = cNodeFloor;
-					pv.setCenterPoint(cNode);			
-				} else if(index > bNodeIndex && floor != cNodeFloor){
+					pv.updatePath(xPoints, yPoints, nextFloorNode.getStepNode().getFloorLevel(), sFloor, eFloor);
+					floor = nextFloorNode.getStepNode().getFloorLevel();
+					pv.setCenterPoint(nextFloorNode.getStepNode());			
+				} else if(index <= bNodeIndex && floor == nextFloorNode.getStepNode().getFloorLevel()){
+					Log.v("in-if","in if - 2    index:" + Integer.toString(index));
 					xPoints.clear();
 					yPoints.clear();
-					for(int i = bNodeIndex+1; i < walkNodePath.size(); i++){
-						xPoints.add(routePut.get(index).getStepNode().getX());
-						yPoints.add(routePut.get(index).getStepNode().getY());
+					for(int i = 0; i < bNodeIndex; i++){
+						xPoints.add(routePut.get(i).getStepNode().getX());
+						yPoints.add(routePut.get(i).getStepNode().getY());
 					}
-					pv.updatePath(xPoints, yPoints, cNodeFloor, sFloor, eFloor);
-					floor = cNodeFloor;
-					pv.setCenterPoint(cNode);
-				} else if(floor == cNodeFloor){
+					pv.updatePath(xPoints, yPoints, fBreakNode.getStepNode().getFloorLevel(), sFloor, eFloor);
+					floor = fBreakNode.getStepNode().getFloorLevel();
+					pv.setCenterPoint(fBreakNode.getStepNode());
+				} else if(floor == currentNodeFloor){
+					Log.v("in-if","in if - 3    index:" + Integer.toString(index));
 					pv.setCenterPoint(cNode);	
 				}
 			} else {
+				Log.v("in-if","in if - else    index:" + Integer.toString(index));
 				pv.setCenterPoint(cNode);
 			}
 			
