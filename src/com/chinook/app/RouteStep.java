@@ -1,6 +1,11 @@
 package com.chinook.app;
 
-public class RouteStep {
+import java.io.Serializable;
+
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class RouteStep implements Parcelable{
 
 	// fields
 	private Node stepNode;
@@ -57,5 +62,17 @@ public class RouteStep {
 
 	public boolean getIsNavPoint() {
 		return isNavPoint;
+	}
+
+	@Override
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		// TODO Auto-generated method stub
+		
 	}
 }

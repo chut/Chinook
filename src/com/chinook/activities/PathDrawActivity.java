@@ -1,8 +1,10 @@
-package com.salmonGUI.activities;
+package com.chinook.activities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
+
+import com.chinook.app.RouteStep;
 
 
 import android.app.ListActivity;
@@ -56,8 +58,8 @@ public class PathDrawActivity extends ListActivity implements OnTouchListener{
 	//Dijkstra dijkstra;
 	//Node sNode, eNode, bNode;
 	String startnID, endnID;
-	ArrayList<Node> fullNodePath;
-	ArrayList<Node> walkNodePath = new ArrayList<Node>();
+	//ArrayList<Node> fullNodePath;
+	ArrayList<RouteStep> walkNodePath = new ArrayList<RouteStep>();	//string correct type?
 	boolean multifloor;
 	int bNodeIndex;
 	int currentNodeFloor;
@@ -107,7 +109,7 @@ public class PathDrawActivity extends ListActivity implements OnTouchListener{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.map);
 		
-		res = getResources();
+		
 		
         //tabs
         tabs=(TabHost)findViewById(R.id.tabhost);
@@ -120,62 +122,66 @@ public class PathDrawActivity extends ListActivity implements OnTouchListener{
         spec.setIndicator("Map Path", res.getDrawable(R.drawable.ic_tab_map));
         tabs.addTab(spec);
 
-        
+        res = getResources();
 
 		next = (Button)findViewById(R.id.btnNext);
 		next.setBackgroundDrawable(res.getDrawable(R.drawable.smallright));
 		prev = (Button)findViewById(R.id.btnPrev);
 		prev.setBackgroundDrawable(res.getDrawable(R.drawable.smallleft));
-		//TODO remove
-		//help = (Button)findViewById(R.id.btnHelp);
-		//view = (Button)findViewById(R.id.btnView);
+
         pv = (PathView)findViewById(R.id.pathView);
         am = getAssets();
       
     //GET START AND END NODEID FROM BUNDLE
         bundle = getIntent().getExtras();
-        startnID = bundle.getString("StartnID");
-        endnID = bundle.getString("EndnID");
+        //walkNodePath = (ArrayList<RouteStep>)bundle.getSerializable("routePut");
+        //Log.v("routePut", walkNodePath.toString());
+        
+        //endnID = bundle.getString("EndnID");
         
     //GET NODES FROM HASHTABLE
-    	sNode = localHash.get(startnID);														
-		eNode = localHash.get(endnID);
+    	//sNode = localHash.get(startnID);														
+		//eNode = localHash.get(endnID);
         
 		//issue?
-		floor = sNode.getNodeFloor();
-		sFloor = floor;
-		eFloor = eNode.getNodeFloor();
+		//floor = sNode.getNodeFloor();
+		sFloor = 1;
+		eFloor = 1;
 		
-		calcPath(sNode);
+		//calcPath(sNode);
 		//
-		fullNodePath = dijkstra.getPath(eNode);
-		walkNodePath = stripIntermediateSteps(fullNodePath);
 		
+		//walkNodePath = ;	//TODO put path info here
+		
+		
+		//TODO is this code needed?
 	//WHEN CALCULATING AN INTERFLOOR PATH, WE NEED TO BREAK IT UP INTO INDIVIDUAL FLOORS
-        if(sFloor != eFloor){							
-
-        	bNode = dijkstra.getBreakNode();										//SET BNODE TO THE FIRST NODE ON THE SECOND FLOOR OF TRAVEL (WE CAN GET AT IT'S PREDECESSOR VIA .getPreviousNode()
-        	bNodeIndex = walkNodePath.indexOf(bNode.getPreviousNode());
-        	
-        	multifloor = true;
-        	
-        	for(int i = 0; i <= bNodeIndex; i++){
-        		xPoints.add(walkNodePath.get(i).getX());
-        		yPoints.add(walkNodePath.get(i).getY());
-        	}
-        	
-        } else {
-
-        	multifloor = false;
-        	
-        	for(Node it:walkNodePath){
-        		xPoints.add(it.getX());
-        		yPoints.add(it.getY());
-        	}
-        }
+//        if(sFloor != eFloor){							
+//
+//        	bNode = dijkstra.getBreakNode();										//SET BNODE TO THE FIRST NODE ON THE SECOND FLOOR OF TRAVEL (WE CAN GET AT IT'S PREDECESSOR VIA .getPreviousNode()
+//        	bNodeIndex = walkNodePath.indexOf(bNode.getPreviousNode());
+//        	
+//        	multifloor = true;
+//        	
+//        	for(int i = 0; i <= bNodeIndex; i++){
+//        		xPoints.add(walkNodePath.get(i).getX());
+//        		yPoints.add(walkNodePath.get(i).getY());
+//        	}
+//        	
+//        } else {
+//
+//        	multifloor = false;
+//        	
+//        	for(Node it:walkNodePath){
+//        		xPoints.add(it.getX());
+//        		yPoints.add(it.getY());
+//        	}
+//        }
      
+		
+		//TODO set this somehow
      //SETUP PATHVIEW OBJECT AND DISPLAY
-		pv.makePathView(xPoints, yPoints, floor, am, sFloor, eFloor);
+		//pv.makePathView(xPoints, yPoints, floor, am, sFloor, eFloor);
 		currentFloor = sFloor;
 		pv.setBackgroundColor(Color.WHITE);
 		pv.setOnTouchListener(this);
@@ -198,9 +204,11 @@ public class PathDrawActivity extends ListActivity implements OnTouchListener{
 //						}
 						
 						
-						Node stepNode = walkNodePath.get(index);
-			        	double dAngle = stepNode.getNNodeAngle();
-			        	String cardDir  = "Go to ";
+//						Node stepNode = walkNodePath.get(index);
+//			        	double dAngle = stepNode.getNNodeAngle();
+//			        	String cardDir  = "Go to ";
+						
+						
 			        	//cardinal directions
 //						if(dAngle == 180){
 //							Log.v("cardinal", "north");
@@ -216,7 +224,7 @@ public class PathDrawActivity extends ListActivity implements OnTouchListener{
 //							cardDir = "Go West at ";
 //						}
 						//the toast
-						Toast.makeText(PathDrawActivity.this, cardDir + walkNodePath.get(index).getNodeDepartment(), Toast.LENGTH_SHORT).show();
+						//Toast.makeText(PathDrawActivity.this, cardDir + walkNodePath.get(index).getNodeDepartment(), Toast.LENGTH_SHORT).show();
 					}
 				}
 		);	
@@ -227,9 +235,12 @@ public class PathDrawActivity extends ListActivity implements OnTouchListener{
 						index--;
 						outsideHelper = 0;
 						step();
-						Node stepNode = walkNodePath.get(index);
-			        	double dAngle = stepNode.getNNodeAngle();
-			        	String cardDir  = "Go to ";
+						
+//						Node stepNode = walkNodePath.get(index);
+//			        	double dAngle = stepNode.getNNodeAngle();
+//			        	String cardDir  = "Go to ";
+						
+						
 			        	//cardinal directions
 //						if(dAngle == 180){
 //							Log.v("cardinal", "north");
@@ -245,7 +256,7 @@ public class PathDrawActivity extends ListActivity implements OnTouchListener{
 //							cardDir = "Go West at ";
 //						}
 						//the toast
-						Toast.makeText(PathDrawActivity.this, cardDir + walkNodePath.get(index).getNodeDepartment(), Toast.LENGTH_SHORT).show();
+						//Toast.makeText(PathDrawActivity.this, cardDir + walkNodePath.get(index).getNodeDepartment(), Toast.LENGTH_SHORT).show();
 					}
 				}
 		);	
@@ -272,38 +283,40 @@ public class PathDrawActivity extends ListActivity implements OnTouchListener{
 //        pictures.put("F1-C1_0", res.getDrawable(R.drawable.f1_c1_0));
 
         
-        
+        //TODO all this must updated
        //populate
-        for(int i = 0; i < walkNodePath.size(); i++){
-        	Node tempNode = walkNodePath.get(i);
-        	double dAngle = tempNode.getNNodeAngle();
-        	String cardDir  = "Go to ";
-        	//cardinal directions
-//			if(dAngle == 180){
-//				Log.v("cardinal", "north");
-//				cardDir = "Go North at ";
-//			}else if(dAngle == 0){
-//				Log.v("cardinal", "south");
-//				cardDir = "Go South at ";
-//			}else if(dAngle == -90){
-//				Log.v("cardinal", "east");
-//				cardDir = "Go East at ";
-//			}else if(dAngle == 90){
-//				Log.v("cardinal", "west");
-//				cardDir = "Go West at ";
-//			}
-        	HashMap<String, String> temp = new HashMap<String, String>();
-        	temp.put("title",tempNode.getNodeDepartment());
-        	temp.put("floor", "Floor " + Integer.toString(tempNode.getNodeFloor()));
-        	temp.put("nID", tempNode.getNodeID());
-        	temp.put("num", Integer.toString(i+1));
-        	temp.put("card", cardDir);
-        	dirList.add(temp);
-        }
-       
-        //the actual adapter
-       SimpleAdapter custAdapter = new SimpleAdapter(this, dirList,R.layout.row,new String[] {"title", "floor", "nID", "num", "card"}, new int[] {R.id.toptext,R.id.bottomtext,R.id.nIDtext,R.id.listNumber, R.id.cardinalDirection});
-        setListAdapter(custAdapter);
+//        for(int i = 0; i < walkNodePath.size(); i++){
+//        	
+//        	Node tempNode = walkNodePath.get(i);
+//        	double dAngle = tempNode.getNNodeAngle();
+//        	String cardDir  = "Go to ";
+//        	
+//        	//cardinal directions
+////			if(dAngle == 180){
+////				Log.v("cardinal", "north");
+////				cardDir = "Go North at ";
+////			}else if(dAngle == 0){
+////				Log.v("cardinal", "south");
+////				cardDir = "Go South at ";
+////			}else if(dAngle == -90){
+////				Log.v("cardinal", "east");
+////				cardDir = "Go East at ";
+////			}else if(dAngle == 90){
+////				Log.v("cardinal", "west");
+////				cardDir = "Go West at ";
+////			}
+//        	HashMap<String, String> temp = new HashMap<String, String>();
+//        	temp.put("title",tempNode.getNodeDepartment());
+//        	temp.put("floor", "Floor " + Integer.toString(tempNode.getNodeFloor()));
+//        	temp.put("nID", tempNode.getNodeID());
+//        	temp.put("num", Integer.toString(i+1));
+//        	temp.put("card", cardDir);
+//        	dirList.add(temp);
+//        }
+//       
+//        //the actual adapter
+//       SimpleAdapter custAdapter = new SimpleAdapter(this, dirList,R.layout.row,new String[] {"title", "floor", "nID", "num", "card"}, new int[] {R.id.toptext,R.id.bottomtext,R.id.nIDtext,R.id.listNumber, R.id.cardinalDirection});
+//        setListAdapter(custAdapter);
         
 
 	    mainFrame =(FrameLayout)findViewById(R.id.mainFrame);
@@ -447,7 +460,11 @@ public class PathDrawActivity extends ListActivity implements OnTouchListener{
 //		}
 
 	//CALCULATE ALL PATHS FROM START NODE
-	protected void calcPath(Node start){
+	/*
+	 * This action is now performed by Ken's algorithm
+	 * 
+	 * 
+	 * protected void calcPath(Node start){
 		if(dijkstra == null){
 			dijkstra = new Dijkstra(start);
 			Log.v("dijkstra", dijkstra.toString());
@@ -455,7 +472,7 @@ public class PathDrawActivity extends ListActivity implements OnTouchListener{
 			dijkstra.reset();
 			dijkstra.restart(start);
 		}
-	}
+	}*/
 	
 	//HANDLES TOUCH EVENTS - TRANSLATING AND SCALING PATHVIEW OBJECT
 	public boolean onTouch(View v, MotionEvent e) {
@@ -490,103 +507,105 @@ public class PathDrawActivity extends ListActivity implements OnTouchListener{
 	
 	
 	//STRIPS INTERMEDIATE NODES FROM A GIVEN ARRAYLIST WHERE Node(n) ANGLE == Node(n+1) ANGLE
-	protected ArrayList<Node> stripIntermediateSteps(ArrayList<Node> listIn){
-		ArrayList<Node> out = new ArrayList<Node>();
-		Node currentNode, nextNode;
-		double runningDist = 0;
-		int i;
-		
-		currentNode = listIn.get(0);
-		out.add(currentNode);																//INITIALIZE FIRST NODE
-		
-		for(i = 0; i < listIn.size()-1; i++){												//LOOP THROUGH UP TO SECOND TO LAST NODE, ONLY ADDING CHANGES IN DIRECTION
-			currentNode = listIn.get(i);
-			nextNode = listIn.get(i+1);
-			
-			runningDist += currentNode.getNNodeDistance();
-			
-//				double nextAng = Math.abs(nextNode.getNNodeAngle());
-//				//Log.v("nextAng", Double.toString(nextAng));
-//				double curAng = Math.abs(currentNode.getNNodeAngle());
-//				//Log.v("currentAng", Double.toString(curAng));
+//	protected ArrayList<Node> stripIntermediateSteps(ArrayList<Node> listIn){
+//		ArrayList<Node> out = new ArrayList<Node>();
+//		Node currentNode, nextNode;
+//		double runningDist = 0;
+//		int i;
+//		
+//		currentNode = listIn.get(0);
+//		out.add(currentNode);																//INITIALIZE FIRST NODE
+//		
+//		for(i = 0; i < listIn.size()-1; i++){												//LOOP THROUGH UP TO SECOND TO LAST NODE, ONLY ADDING CHANGES IN DIRECTION
+//			currentNode = listIn.get(i);
+//			nextNode = listIn.get(i+1);
+//			
+//			runningDist += currentNode.getNNodeDistance();
+//			
+////				double nextAng = Math.abs(nextNode.getNNodeAngle());
+////				//Log.v("nextAng", Double.toString(nextAng));
+////				double curAng = Math.abs(currentNode.getNNodeAngle());
+////				//Log.v("currentAng", Double.toString(curAng));
+////				
+////				double angRange = Math.abs(nextAng - curAng);
+////				Log.v("AbsDiff", Double.toString(angRange));
 //				
-//				double angRange = Math.abs(nextAng - curAng);
-//				Log.v("AbsDiff", Double.toString(angRange));
-				
-				if(currentNode.getNNodeAngle() != nextNode.getNNodeAngle()) {														//angRange < 20
-					currentNode.setStepDist(runningDist);
-					out.add(nextNode);
-					runningDist = 0;
-				}
-			
-		}
-		
-		return out;
-		
-	}
+//				if(currentNode.getNNodeAngle() != nextNode.getNNodeAngle()) {														//angRange < 20
+//					currentNode.setStepDist(runningDist);
+//					out.add(nextNode);
+//					runningDist = 0;
+//				}
+//			
+//		}
+//		
+//		return out;
+//		
+//	}
 	
+	
+	//TODO this must be updated
 	public boolean step(){
 		//
 		//everything to end is questionable
-		if(floor == 0 && listTab == false){
-			if(currentNodeFloor == 0  && outsideHelper == 1){
-				if(eFloor == 0){
-					index = walkNodePath.size()-1;
-				}else if(walkNodePath.indexOf(bNode) == index){ 
-					index = index;				
-				}else index = walkNodePath.indexOf(bNode)-1;
-			}
-			
-			if(currentNodeFloor == 0  && outsideHelper == 0){
-				if(sFloor == 0){
-					index = 0;
-				}else if(walkNodePath.indexOf(bNode) == index){ 
-					index--;				
-				}else index = walkNodePath.indexOf(bNode)+1;
-			}
-		}
-		
-		//end
-		if(index < 0) {
-			index = 0;
-		} else if(index >= walkNodePath.size()) {
-			index = walkNodePath.size()-1;
-		}
-		
-		
-		
-		
-		currentNodeFloor = walkNodePath.get(index).getNodeFloor();
-		Node cNode = walkNodePath.get(index);
-		int cNodeFloor = cNode.getNodeFloor();
-		
-		if(multifloor){
-			if(index <= bNodeIndex && floor != cNodeFloor){
-				xPoints.clear();
-				yPoints.clear();
-				for(int i = 0; i <= bNodeIndex; i++){
-					xPoints.add(walkNodePath.get(i).getX());
-					yPoints.add(walkNodePath.get(i).getY());
-				}
-				pv.updatePath(xPoints, yPoints, cNodeFloor, sFloor, eFloor);
-				floor = cNodeFloor;
-				pv.setCenterPoint(cNode);			
-			} else if(index > bNodeIndex && floor != cNodeFloor){
-				xPoints.clear();
-				yPoints.clear();
-				for(int i = bNodeIndex+1; i < walkNodePath.size(); i++){
-					xPoints.add(walkNodePath.get(i).getX());
-					yPoints.add(walkNodePath.get(i).getY());
-				}
-				pv.updatePath(xPoints, yPoints, cNodeFloor, sFloor, eFloor);
-				floor = cNodeFloor;
-				pv.setCenterPoint(cNode);
-			} else if(floor == cNodeFloor){
-				pv.setCenterPoint(cNode);	
-			}
-		} else {
-			pv.setCenterPoint(cNode);
-		}
+//		if(floor == 0 && listTab == false){
+//			if(currentNodeFloor == 0  && outsideHelper == 1){
+//				if(eFloor == 0){
+//					index = walkNodePath.size()-1;
+//				}else if(walkNodePath.indexOf(bNode) == index){ 
+//					index = index;				
+//				}else index = walkNodePath.indexOf(bNode)-1;
+//			}
+//			
+//			if(currentNodeFloor == 0  && outsideHelper == 0){
+//				if(sFloor == 0){
+//					index = 0;
+//				}else if(walkNodePath.indexOf(bNode) == index){ 
+//					index--;				
+//				}else index = walkNodePath.indexOf(bNode)+1;
+//			}
+//		}
+//		
+//		//end
+//		if(index < 0) {
+//			index = 0;
+//		} else if(index >= walkNodePath.size()) {
+//			index = walkNodePath.size()-1;
+//		}
+//		
+//		
+//		
+//		
+//		currentNodeFloor = walkNodePath.get(index).getNodeFloor();
+//		Node cNode = walkNodePath.get(index);
+//		int cNodeFloor = cNode.getNodeFloor();
+//		
+//		if(multifloor){
+//			if(index <= bNodeIndex && floor != cNodeFloor){
+//				xPoints.clear();
+//				yPoints.clear();
+//				for(int i = 0; i <= bNodeIndex; i++){
+//					xPoints.add(walkNodePath.get(i).getX());
+//					yPoints.add(walkNodePath.get(i).getY());
+//				}
+//				pv.updatePath(xPoints, yPoints, cNodeFloor, sFloor, eFloor);
+//				floor = cNodeFloor;
+//				pv.setCenterPoint(cNode);			
+//			} else if(index > bNodeIndex && floor != cNodeFloor){
+//				xPoints.clear();
+//				yPoints.clear();
+//				for(int i = bNodeIndex+1; i < walkNodePath.size(); i++){
+//					xPoints.add(walkNodePath.get(i).getX());
+//					yPoints.add(walkNodePath.get(i).getY());
+//				}
+//				pv.updatePath(xPoints, yPoints, cNodeFloor, sFloor, eFloor);
+//				floor = cNodeFloor;
+//				pv.setCenterPoint(cNode);
+//			} else if(floor == cNodeFloor){
+//				pv.setCenterPoint(cNode);	
+//			}
+//		} else {
+//			pv.setCenterPoint(cNode);
+//		}
 		
 		return true;
 	}

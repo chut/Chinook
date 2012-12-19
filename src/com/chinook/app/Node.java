@@ -109,7 +109,7 @@ public class Node {
 	public Neighbor addNeighbor(Node nodeObj, int distanceToNeighbor) {
 		Neighbor x1 = new Neighbor(nodeObj, nodeObj.getNodeID(), distanceToNeighbor);
 		x1.setParentNode(this);
-		Log.i("ROUTE","   neighbor: " + x1.getNode().getNodeID() + ", nodeID: " + x1.getNodeID() + ", distance: " + x1.getDistance() + ", parent: " + x1.getParentNode().getNodeID());
+		//Log.i("ROUTE","   neighbor: " + x1.getNode().getNodeID() + ", nodeID: " + x1.getNodeID() + ", distance: " + x1.getDistance() + ", parent: " + x1.getParentNode().getNodeID());
 		neighborList.add(x1);
 		
 		
