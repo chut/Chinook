@@ -16,8 +16,7 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 	
-    <com.chinook.activities.PathView 
-        android:id="@+id/pathView"
+    <com.chinook.app.PathView    android:id="@+id/pathView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
     

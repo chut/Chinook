@@ -5,6 +5,7 @@ import java.util.Date;
 
 
 import com.chinook.app.Node;
+import com.chinook.app.PathView;
 import com.chinook.app.Route;
 import com.chinook.app.RouteStep;
 import com.chinook.app.async_core.AsyncConstants;
