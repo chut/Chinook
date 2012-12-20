@@ -353,7 +353,7 @@ public class MapViewActivity extends Activity implements OnTouchListener, IMapVi
 	
 	int mapdex = 0;
 	
-	public void updateMap(RouteStep cNode){
+	public void updateMap(RouteStep cNode, int dirHelper){
 //		if(nextFloorNode.getStepNode().getFloorLevel() != eFloor){
 //			//bNodeIndex = routePut.indexOf(routePut.get(routePut.indexOf(fBreakNode)+1).getStepNode());
 //			
@@ -366,10 +366,10 @@ public class MapViewActivity extends Activity implements OnTouchListener, IMapVi
 		int xyStart;
 		int xyEnd;
 		
-		nextFloorNode = breakNodes.get(breakNodes.indexOf(cNode)+1);
-		Log.v("nextFloor", nextFloorNode.getStepNode().getNodeID());
+		//nextFloorNode = breakNodes.get(breakNodes.indexOf(cNode)+1);
+		//Log.v("nextFloor", nextFloorNode.getStepNode().getNodeID());
 		
-		//if(breakNodes.indexOf(cNode) == mapdex){
+		if(dirHelper == 1){
 			RouteStep nextBreak = breakNodes.get(breakNodes.indexOf(cNode)+1);	//end of route
 			//nextFloorNode is start of route
 			
@@ -378,13 +378,27 @@ public class MapViewActivity extends Activity implements OnTouchListener, IMapVi
 				yPoints.add(routePut.get(i).getStepNode().getY());
 				
 			}
-			floor = nextFloorNode.getStepNode().getFloorLevel();
+			floor = cNode.getStepNode().getFloorLevel();
 			
 			pv.updatePath(xPoints, yPoints, floor, sFloor, eFloor);
 			pv.setCenterPoint(cNode.getStepNode());
 			
 			
-		//}
+		}else{
+			RouteStep nextBreak = breakNodes.get(breakNodes.indexOf(cNode)-1);	//end of route
+			//nextFloorNode is start of route
+			
+			for(int i = routePut.indexOf(nextBreak); i <= routePut.indexOf(cNode); i++){
+				xPoints.add(routePut.get(i).getStepNode().getX());
+				yPoints.add(routePut.get(i).getStepNode().getY());
+				
+			}
+			floor = cNode.getStepNode().getFloorLevel();
+			
+			pv.updatePath(xPoints, yPoints, floor, sFloor, eFloor);
+			pv.setCenterPoint(cNode.getStepNode());
+			
+		}
 		
 		
 		
@@ -456,7 +470,7 @@ public class MapViewActivity extends Activity implements OnTouchListener, IMapVi
 			Log.v("bnodeindex", Integer.toString(breakNodes.indexOf(cNode)));
 			
 			if(breakNodes.indexOf(cNode) != -1 && floor != cNode.getStepNode().getFloorLevel()){
-				updateMap(cNode);
+				updateMap(cNode, outsideHelper);
 			}else pv.setCenterPoint(cNode.getStepNode());
 			
 			
