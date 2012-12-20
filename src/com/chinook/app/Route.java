@@ -506,13 +506,13 @@ public class Route {
 		//System.out.println("\n***Begin algorithm*** \n");
 		//Log.i("ROUTE", "***Begin algorithm***");
 		while ((unsettledBucket.size() != 0) && (!endNodeSettled)) {	// OPTIMIZATION ** endNode settled
-			//Log.i("CALC","top of loop - " + currentNode.getNodeID()); 
+			Log.i("CALC","top of loop - " + currentNode.getNodeID()); 
 			//test_printBuckets();
 			
 			myMetrics.getMetricsByID(routeID).addAlgorithmLoop();
 			
 			currentNode = extractMinimum(currentNode);
-			//Log.i("CALC","   extracted: " + currentNode.getNodeID());
+			Log.i("CALC","   extracted: " + currentNode.getNodeID());
 			settledBucket.add(currentNode);
 			
 			if (currentNode.getNodeID().equals(endNode.getNodeID())) {
@@ -999,7 +999,7 @@ public class Route {
 	 * 					previous project into this project
 	 *********************************************************/
 	private Node extractMinimum(Node currentDijkstraNode) {
-		//Log.i("CALC","   begin extractMinimum: " + currentDijkstraNode.getNodeID());
+		Log.i("CALC","   begin extractMinimum: " + currentDijkstraNode.getNodeID());
 		
 		// initialize local variables
 		Node shortNode = null;
@@ -1012,19 +1012,19 @@ public class Route {
 		
 		while (litr.hasNext() && !foundEndFloor) {
 			Node loopNode = litr.next();
-			//Log.i("CALC","      loopNode: " + loopNode.getNodeID());
+			Log.i("CALC","      loopNode: " + loopNode.getNodeID());
 			
 			// if endNode is on a different floor than currentDijkstraNode
 			if (!(currentDijkstraNode.getBuildingID().equals(endNode.getBuildingID())) || !(currentDijkstraNode.getFloorID().equals(endNode.getFloorID()))) {
-				//Log.i("CALC","      endNode: " + endNode.getNodeID() + ", is on a different floor than currentDijkstraNode: " + currentDijkstraNode.getNodeID());
+				Log.i("CALC","      endNode: " + endNode.getNodeID() + ", is on a different floor than currentDijkstraNode: " + currentDijkstraNode.getNodeID());
 				
 				// if currentDijkstraNode is a connector
 				if (currentDijkstraNode.getIsConnector()) {
-					//Log.i("CALC","      Is a connector - currentDijkstraNode: " + currentDijkstraNode.getNodeID());
+					Log.i("CALC","      Is a connector - currentDijkstraNode: " + currentDijkstraNode.getNodeID());
 										
 					// if loopNode is on same floor as endNode
 					if ((loopNode.getBuildingID().equals(endNode.getBuildingID())) && (loopNode.getFloorID().equals(endNode.getFloorID()))) {
-						//Log.i("CALC","      loopNode: " + loopNode.getNodeID() + ", is on same floor than endNode: " + endNode.getNodeID());
+						Log.i("CALC","      loopNode: " + loopNode.getNodeID() + ", is on same floor than endNode: " + endNode.getNodeID());
 												
 						// TODO ** smart node floor check
 						shortNode = loopNode;
@@ -1032,7 +1032,7 @@ public class Route {
 					
 					} else {
 						// loopNode is NOT on same floor as endNode
-						//Log.i("CALC","      loopNode: " + loopNode.getNodeID() + ", is NOT on same floor than endNode: " + endNode.getNodeID());
+						Log.i("CALC","      loopNode: " + loopNode.getNodeID() + ", is NOT on same floor than endNode: " + endNode.getNodeID());
 						
 						// this is where we would handle finding floor near endNode
 						// for now, just handle this as a regular node
@@ -1046,43 +1046,43 @@ public class Route {
 						
 				} else {
 					// currentDijkstraNode is NOT a connector
-					//Log.i("CALC","      Is NOT a connector - currentDijkstraNode: " + currentDijkstraNode.getNodeID());
+					Log.i("CALC","      Is NOT a connector - currentDijkstraNode: " + currentDijkstraNode.getNodeID());
 					
 					if (loopNode.getShortestDist() <= iShortest) {
-						//Log.i("CALC","      loopNode: " + loopNode.getNodeID() + ", getShortestDist() <= iShortest");
+						Log.i("CALC","      loopNode: " + loopNode.getNodeID() + ", getShortestDist() <= iShortest");
 						
 						// if loopNode is a connector
 						if (loopNode.getIsConnector()) {
-							//Log.i("CALC","      loopNode: " + loopNode.getNodeID() + ", is a connector");
+							Log.i("CALC","      loopNode: " + loopNode.getNodeID() + ", is a connector");
 							
 							// TODO ** weighted connector nodes
 							// TODO ** stairs or elevator
 							if (!stairsOrElevator.equals("either") && !currentDijkstraNode.getNodeID().equals(startNode.getNodeID()) && !bIgnoreDeferredSetting) {
 								//System.out.println("stairsOrElevator: " + stairsOrElevator);
 								if (stairsOrElevator.equals("stairs")) {
-									//Log.i("CALC","      stairs");
+									Log.i("CALC","      stairs");
 									if (loopNode.getNodeType().equals("stairs")) {
-										//Log.i("CALC","      set shortNode");
+										Log.i("CALC","      set shortNode");
 										iShortest = loopNode.getShortestDist();
 										shortNodeTieBreaker = loopNode;
 										shortNode = loopNode;
 									} else {
 										// connector node is not stairs, remove it from unsettledBucket and add it to deferredBucket
-										//Log.i("CALC","      deffer");
+										Log.i("CALC","      deffer");
 										addNodeToDeferred(loopNode);
 										litr.remove();
 									}
 									
 								} else if (stairsOrElevator.equals("elevator")) {
-									//Log.i("CALC","      elevator");
+									Log.i("CALC","      elevator");
 									if (loopNode.getNodeType().equals("elevator")) {
-										//Log.i("CALC","      set shortNode");
+										Log.i("CALC","      set shortNode");
 										iShortest = loopNode.getShortestDist();
 										shortNodeTieBreaker = loopNode;
 										shortNode = loopNode;
 									} else {
 										// connector node is not elevator, remove it from unsettledBucket and add it to deferredBucket
-										//Log.i("CALC","      deffer");
+										Log.i("CALC","      deffer");
 										addNodeToDeferred(loopNode);
 										litr.remove();
 									}
@@ -1090,14 +1090,14 @@ public class Route {
 								} else {
 									// stairsOrElevator is set to something it should not
 									// so act as if this setting is set to "either"
-									//Log.i("CALC","      unknown");
+									Log.i("CALC","      unknown");
 									iShortest = loopNode.getShortestDist();
 									shortNodeTieBreaker = loopNode;
 									shortNode = loopNode;
 								}
 							} else {
 								// stairsOrElevator is set to "either", or bIgnoreDeferredSetting == true
-								//Log.i("CALC","      either");
+								Log.i("CALC","      either");
 								iShortest = loopNode.getShortestDist();
 								shortNodeTieBreaker = loopNode;
 								shortNode = loopNode;
@@ -1105,7 +1105,7 @@ public class Route {
 							
 						} else {
 							// loopNode is NOT a connector
-							//Log.i("CALC","      loopNode: " + loopNode.getNodeID() + ", is NOT a connector");
+							Log.i("CALC","      loopNode: " + loopNode.getNodeID() + ", is NOT a connector");
 							
 							iShortest = loopNode.getShortestDist();
 							shortNode = loopNode;
@@ -1118,11 +1118,11 @@ public class Route {
 				
 			} else {
 				// endNode is on same floor as currentDijkstraNode
-				//Log.i("CALC","      endNode: " + endNode.getNodeID() + ", is on a SAME floor as currentDijkstraNode: " + currentDijkstraNode.getNodeID());
+				Log.i("CALC","      endNode: " + endNode.getNodeID() + ", is on a SAME floor as currentDijkstraNode: " + currentDijkstraNode.getNodeID());
 				
 				// if loopNode is NOT on same floor as endNode
 				if ((!loopNode.getBuildingID().equals(endNode.getBuildingID())) || (!loopNode.getFloorID().equals(endNode.getFloorID()))) {
-					//Log.i("CALC","      loopNode: " + loopNode.getNodeID() + ", is NOT on same floor as endNode: " + endNode.getNodeID());
+					Log.i("CALC","      loopNode: " + loopNode.getNodeID() + ", is NOT on same floor as endNode: " + endNode.getNodeID());
 					
 					// TODO ** same floor only (defer nodes on other floors)
 					addNodeToDeferred(loopNode);
@@ -1130,14 +1130,14 @@ public class Route {
 					
 				} else {
 					// loopNode is on same floor as endNode
-					//Log.i("CALC","      loopNode: " + loopNode.getNodeID() + ", is on SAME floor as endNode: " + endNode.getNodeID());
+					Log.i("CALC","      loopNode: " + loopNode.getNodeID() + ", is on SAME floor as endNode: " + endNode.getNodeID());
 					
 					if (loopNode.getShortestDist() <= iShortest) {
-						//Log.i("CALC","      loopNode: " + loopNode.getNodeID() + ", getShortestDist() <= iShortest");
+						Log.i("CALC","      loopNode: " + loopNode.getNodeID() + ", getShortestDist() <= iShortest");
 						
 						// if loopNode == endNode
 						if (loopNode.getNodeID().equals(endNode.getNodeID())) {
-							//Log.i("CALC","      loopNode: " + loopNode.getNodeID() + ", == endNode: " + endNode.getNodeID());
+							Log.i("CALC","      loopNode: " + loopNode.getNodeID() + ", == endNode: " + endNode.getNodeID());
 							
 							// TODO ** weighted endNode
 							iShortest = loopNode.getShortestDist();
@@ -1146,7 +1146,7 @@ public class Route {
 							
 						} else {
 							// loopNode is NOT endNode
-						    //Log.i("CALC","      loopNode: " + loopNode.getNodeID() + ", != endNode: " + endNode.getNodeID());
+						    Log.i("CALC","      loopNode: " + loopNode.getNodeID() + ", != endNode: " + endNode.getNodeID());
 							
 							iShortest = loopNode.getShortestDist();
 							shortNode = loopNode;
@@ -1159,10 +1159,10 @@ public class Route {
 			}
 			
 		}	// end while (litr.hasNext())
-		//Log.i("CALC","      end while (litr.hasNext() - shortNode: " + shortNode);
+		Log.i("CALC","      end while (litr.hasNext() - shortNode: " + shortNode);
 		
 		if (shortNode == null) {
-			//Log.i("CALC","shortNode == NULL");
+			Log.i("CALC","shortNode == NULL");
 			
 			// add all the deferred nodes back into the unsettled bucket
 			//deferredBucket.addAll(unsettledBucket);
@@ -1174,7 +1174,7 @@ public class Route {
 				shortNode = shortNodeTieBreaker;
 			}
 		}
-		//Log.i("CALC","      after tie breaker");
+		Log.i("CALC","      after tie breaker");
 
 		
 		// if we needed to ignore any settings that would defer a connector node, we can turn those settings back on if we have reached a non-connector node
@@ -1182,17 +1182,17 @@ public class Route {
 			//System.out.println("shortNode: " + shortNode.getNodeID() + " - isConnector: " + shortNode.getIsConnector() + " - reseting bIgnoreDeferredSetting to false");
 			bIgnoreDeferredSetting = false;	
 		}
-		//Log.i("CALC","      after reset ignore deffered");
+		Log.i("CALC","      after reset ignore deffered");
 		
 		// remove the Node from unsettledBucket and return it
 		//System.out.println("extracting: " + shortNode.getNodeID());
-		//Log.i("CALC","      removing shortNode: " + shortNode);
-		//Log.i("CALC","      removing shortNode: " + shortNode.getNodeID());
+		Log.i("CALC","      removing shortNode: " + shortNode);
+		Log.i("CALC","      removing shortNode: " + shortNode.getNodeID());
 		unsettledBucket.remove(shortNode);
 		
 		//System.out.println("--Out of relaxNeighbors \n");
 		//test_printBuckets();
-		//Log.i("CALC","      end extractMinimum");
+		Log.i("CALC","      end extractMinimum");
 		return shortNode;
 	}
 	
