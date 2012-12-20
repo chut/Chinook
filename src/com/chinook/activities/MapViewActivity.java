@@ -373,8 +373,8 @@ public class MapViewActivity extends Activity implements OnTouchListener, IMapVi
 		
 		if(dirHelper == 1){
 			if((breakNodes.size()-1) == breakNodes.indexOf(cNode)){
-				
-			}else{
+				cNode = routePut.get(routePut.indexOf(cNode)-1);
+			}
 			RouteStep nextBreak = breakNodes.get(breakNodes.indexOf(cNode)+1);	//end of route
 			//nextFloorNode is start of route
 			
@@ -388,12 +388,12 @@ public class MapViewActivity extends Activity implements OnTouchListener, IMapVi
 			Log.v("mapimg", mapFloor);
 			pv.updatePath(xPoints, yPoints, floor, sFloor, eFloor, mapFloor);
 			pv.setCenterPoint(cNode.getStepNode());
-			}
+			
 			
 		}else{
 			if(0 == breakNodes.indexOf(cNode)){
-				
-			}else{
+				cNode = routePut.get(0);
+			}
 			RouteStep nextBreak = breakNodes.get(breakNodes.indexOf(cNode)-1);	//end of route
 			//nextFloorNode is start of route
 			
@@ -408,7 +408,7 @@ public class MapViewActivity extends Activity implements OnTouchListener, IMapVi
 			Log.v("mapimg", mapFloor);
 			pv.updatePath(xPoints, yPoints, floor, sFloor, eFloor, mapFloor);
 			pv.setCenterPoint(cNode.getStepNode());
-			}
+			
 			
 		}
 		
