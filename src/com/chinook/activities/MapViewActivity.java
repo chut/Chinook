@@ -320,7 +320,7 @@ public class MapViewActivity extends Activity implements OnTouchListener, IMapVi
 		if(fBreakNode != null){
 			bNodeIndex = routePut.indexOf(fBreakNode);
 			Log.v("in-if", "in multifloor setup");
-			nextFloorNode = routePut.get(bNodeIndex + 1);
+			//nextFloorNode = routePut.get(bNodeIndex + 1);
 			multifloor = true;
 			
 			Log.v("in-if", "in multifloor setup  bnode:"+Integer.toString(bNodeIndex));
@@ -372,10 +372,12 @@ public class MapViewActivity extends Activity implements OnTouchListener, IMapVi
 		//Log.v("nextFloor", nextFloorNode.getStepNode().getNodeID());
 		
 		if(dirHelper == 1){
-			if((breakNodes.size()-1) == breakNodes.indexOf(cNode)){
-				cNode = routePut.get(routePut.indexOf(cNode)-1);
+			RouteStep nextBreak = null;
+			if((breakNodes.size()-1) <= breakNodes.indexOf(cNode)){
+				//cNode = routePut.get(routePut.indexOf(cNode)-1);
+				
 			}
-			RouteStep nextBreak = breakNodes.get(breakNodes.indexOf(cNode)+1);	//end of route
+			nextBreak = breakNodes.get(breakNodes.indexOf(cNode)+1);	//end of route
 			//nextFloorNode is start of route
 			
 			for(int i = routePut.indexOf(cNode); i <= routePut.indexOf(nextBreak); i++){
@@ -392,7 +394,7 @@ public class MapViewActivity extends Activity implements OnTouchListener, IMapVi
 			
 		}else{
 			if(0 == breakNodes.indexOf(cNode)){
-				cNode = routePut.get(0);
+				//cNode = routePut.get(0);
 			}
 			RouteStep nextBreak = breakNodes.get(breakNodes.indexOf(cNode)-1);	//end of route
 			//nextFloorNode is start of route
@@ -485,7 +487,7 @@ public class MapViewActivity extends Activity implements OnTouchListener, IMapVi
 			Log.v("bnodeindex", Integer.toString(breakNodes.indexOf(cNode)));
 			
 			//update map
-			if(breakNodes.indexOf(cNode) != -1 && !mapFloor.equals(cNode.getStepNode().getMapImg())){
+			if(breakNodes.indexOf(cNode) != -1 && !mapFloor.equals(cNode.getStepNode().getMapImg()) && routePut.indexOf(cNode) != routePut.size()-1 && routePut.indexOf(cNode) != 0){
 				updateMap(cNode, outsideHelper);
 			}else pv.setCenterPoint(cNode.getStepNode());
 						
