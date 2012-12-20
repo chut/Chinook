@@ -64,6 +64,7 @@ public class SQLiteHelper extends SQLiteOpenHelper{
 		if (tabledata != null) {
 			Log.i("SQLITE","creating table");
 			for (String record : tabledata) {
+				//Log.i("DBROW",record);
 				fields = record.split(",");
 				// fields[0] = nodeID		
 				// fields[1] = nodeLabel	
@@ -81,6 +82,7 @@ public class SQLiteHelper extends SQLiteOpenHelper{
 				// fields[13] = mapImg		
 				// fields[14] = neighborNode	
 				// fields[15] = distance		
+				// fields[16] = mapScale		
 				
 				//insert record row
 		        values.clear();
@@ -98,6 +100,7 @@ public class SQLiteHelper extends SQLiteOpenHelper{
 		        values.put(DatabaseConstants.KEY_FLOOR_ID, fields[11]);
 		        values.put(DatabaseConstants.KEY_FLOOR_LEVEL, Integer.parseInt(fields[12]));//
 		        values.put(DatabaseConstants.KEY_FLOOR_MAP, fields[13]);
+		        values.put(DatabaseConstants.KEY_FLOOR_SCALE, Integer.parseInt(fields[16]));
 		        values.put(DatabaseConstants.KEY_NEIGHBOR_NODE, fields[14]);
 		        values.put(DatabaseConstants.KEY_NEIGHBOR_DISTANCE, Integer.parseInt(fields[15]));//
 		        

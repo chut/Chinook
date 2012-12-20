@@ -12,6 +12,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.database.Cursor;
+import android.util.Log;
 
 import com.chinook.app.io.DatabaseConstants;
 import com.chinook.app.io.IDatabaseProvider;
@@ -60,7 +61,7 @@ public class HTTP_Apache implements IDatabaseProvider {
 			return this;
 		}
 		
-		System.out.println("url: " + url);
+		Log.i("SQLITE", "HTTP url: " + url);
 		httpget = new HttpGet(url);
 		
 		try {
@@ -109,6 +110,7 @@ public class HTTP_Apache implements IDatabaseProvider {
 				}
 				
 				System.out.println("resultArray.size: " + resultArray.size());
+				if (resultArray.size() > 0) Log.i("SQLITE","HTTP: " + resultArray.get(0));
 				//return resultArray;
 				// TODO fix this!!!!!
 				return this;
