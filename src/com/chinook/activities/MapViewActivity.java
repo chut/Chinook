@@ -479,54 +479,11 @@ public class MapViewActivity extends Activity implements OnTouchListener, IMapVi
 			Log.v("cnode-step", cNode.getStepNode().getNodeID());
 			Log.v("bnodeindex", Integer.toString(breakNodes.indexOf(cNode)));
 			
+			//update map
 			if(breakNodes.indexOf(cNode) != -1 && !mapFloor.equals(cNode.getStepNode().getMapImg())){
 				updateMap(cNode, outsideHelper);
 			}else pv.setCenterPoint(cNode.getStepNode());
-			
-			
-			//update map
-			
-			
-			
-			
-			
-			//Log.v("floor", "nextnodefloor:"+Integer.toString(nextFloorNode.getStepNode().getFloorLevel()));
-			//Log.v("floor", "breaknodefloor:"+Integer.toString(fBreakNode.getStepNode().getFloorLevel()));
-			//Log.v("floor", "         floor:"+Integer.toString(floor));
-			
-//			if(multifloor){
-//				//Log.v("multi", "in the multifloor");
-//				if(index >= bNodeIndex && floor != nextFloorNode.getStepNode().getFloorLevel()){
-//					Log.v("in-if","in if - 1   index:" + Integer.toString(index));
-//					xPoints.clear();
-//					yPoints.clear();
-//					for(int i = routePut.indexOf(nextFloorNode); i < routePut.size(); i++){
-//						xPoints.add(routePut.get(i).getStepNode().getX());
-//						yPoints.add(routePut.get(i).getStepNode().getY());
-//					}
-//					pv.updatePath(xPoints, yPoints, nextFloorNode.getStepNode().getFloorLevel(), sFloor, eFloor);
-//					floor = nextFloorNode.getStepNode().getFloorLevel();
-//					pv.setCenterPoint(nextFloorNode.getStepNode());			
-//				} else if(index <= bNodeIndex && floor == nextFloorNode.getStepNode().getFloorLevel()){
-//					Log.v("in-if","in if - 2    index:" + Integer.toString(index));
-//					xPoints.clear();
-//					yPoints.clear();
-//					for(int i = 0; i < bNodeIndex; i++){
-//						xPoints.add(routePut.get(i).getStepNode().getX());
-//						yPoints.add(routePut.get(i).getStepNode().getY());
-//					}
-//					pv.updatePath(xPoints, yPoints, fBreakNode.getStepNode().getFloorLevel(), sFloor, eFloor);
-//					floor = fBreakNode.getStepNode().getFloorLevel();
-//					pv.setCenterPoint(fBreakNode.getStepNode());
-//				} else if(floor == currentNodeFloor){
-//					Log.v("in-if","in if - 3    index:" + Integer.toString(index));
-//					pv.setCenterPoint(cNode);	
-//				}
-//			} else {
-//				Log.v("in-if","in if - else    index:" + Integer.toString(index));
-//				pv.setCenterPoint(cNode);
-//			}
-			
+						
 			return true;
 		}
 		
