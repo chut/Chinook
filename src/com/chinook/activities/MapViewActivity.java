@@ -65,7 +65,7 @@ public class MapViewActivity extends Activity implements OnTouchListener, IMapVi
 	private AppIO appIO;
 	private Route r2;
 	ArrayList<RouteStep> routePut;
-	
+	ArrayList<RouteStep> breakNodes = new ArrayList<RouteStep>();
 	
 	//things from pathdrawactivity
 	PathView pv;
@@ -292,17 +292,28 @@ public class MapViewActivity extends Activity implements OnTouchListener, IMapVi
 		floor = sFloor;
 		eFloor = routePut.get(routePut.size()-1).getStepNode().getFloorLevel();
 		
-		
-		while(ifloor < routePut.size() && !broken){
+		breakNodes.add(routePut.get(0));
+		while(ifloor < routePut.size()){
 			if(routePut.get(ifloor).getStepNode().getIsConnector()){
-				Log.v("in-if", "found breaknode");
+				//Log.v("in-if", "found breaknode");
 				fBreakNode = routePut.get(ifloor);
-				broken = true;
+				//Log.v("breakNodeContents", breakNodes.toString());
+				breakNodes.add(fBreakNode);
+				//broken = true;
 			}
 		ifloor++;
-	 }
+		}
+		breakNodes.add(routePut.get(routePut.size()-1));
+		
+		for(int i = 0; i < breakNodes.size(); i++){
+			Log.v("breakNodes", breakNodes.get(i).getStepNode().getNodeID());
+		}
+		
 		//Log.v("fbreaknode", fBreakNode.toString());
 		//Log.v("fbreaknode-index", Integer.toString(routePut.indexOf(fBreakNode)+1));
+		//
+		
+		fBreakNode = breakNodes.get(1);
 		
 		if(fBreakNode != null){
 			bNodeIndex = routePut.indexOf(fBreakNode);
@@ -311,10 +322,9 @@ public class MapViewActivity extends Activity implements OnTouchListener, IMapVi
 			multifloor = true;
 			
 			Log.v("in-if", "in multifloor setup  bnode:"+Integer.toString(bNodeIndex));
-		}else bNodeIndex = routePut.size() - 1;
+		}else bNodeIndex = routePut.size() - 1;	
 		
-		
-		
+
 		
 		
 		//Log.v("bnode", "                     bnode:"+Integer.toString(bNodeIndex));
@@ -323,6 +333,8 @@ public class MapViewActivity extends Activity implements OnTouchListener, IMapVi
 			yPoints.add(routePut.get(i).getStepNode().getY());
 			
 		}
+		
+		
 		
 		
 		//routePut.get(1).getStepNode().getIsConnector();
@@ -339,7 +351,44 @@ public class MapViewActivity extends Activity implements OnTouchListener, IMapVi
 		//goOn = true;
 	}
 	
+	int mapdex = 0;
 	
+	public void updateMap(RouteStep cNode){
+//		if(nextFloorNode.getStepNode().getFloorLevel() != eFloor){
+//			//bNodeIndex = routePut.indexOf(routePut.get(routePut.indexOf(fBreakNode)+1).getStepNode());
+//			
+//		}
+		
+		xPoints.clear();
+		yPoints.clear();
+		
+		Log.v("cnode", cNode.getStepNode().getNodeID());
+		int xyStart;
+		int xyEnd;
+		
+		nextFloorNode = breakNodes.get(breakNodes.indexOf(cNode)+1);
+		Log.v("nextFloor", nextFloorNode.getStepNode().getNodeID());
+		
+		//if(breakNodes.indexOf(cNode) == mapdex){
+			RouteStep nextBreak = breakNodes.get(breakNodes.indexOf(cNode)+1);	//end of route
+			//nextFloorNode is start of route
+			
+			for(int i = routePut.indexOf(cNode); i <= routePut.indexOf(nextBreak); i++){
+				xPoints.add(routePut.get(i).getStepNode().getX());
+				yPoints.add(routePut.get(i).getStepNode().getY());
+				
+			}
+			floor = nextFloorNode.getStepNode().getFloorLevel();
+			
+			pv.updatePath(xPoints, yPoints, floor, sFloor, eFloor);
+			pv.setCenterPoint(cNode.getStepNode());
+			
+			
+		//}
+		
+		
+		
+	}
 	
 	//HANDLES TOUCH EVENTS - TRANSLATING AND SCALING PATHVIEW OBJECT
 		public boolean onTouch(View v, MotionEvent e) {
@@ -399,45 +448,59 @@ public class MapViewActivity extends Activity implements OnTouchListener, IMapVi
 			//bNodeIndex = routePut.indexOf(fBreakNode)+1;
 			
 			currentNodeFloor = routePut.get(index).getStepNode().getFloorLevel();
-			Node cNode = routePut.get(index).getStepNode();
-			int cNodeFloor = cNode.getFloorLevel();
+			RouteStep cNode = routePut.get(index);
+			//int cNodeFloor = cNode.getFloorLevel();
+			
+			Log.v("cnode-step", cNode.getStepNode().getNodeID());
+			Log.v("bnodeindex", Integer.toString(breakNodes.indexOf(cNode)));
+			
+			if(breakNodes.indexOf(cNode) != -1 && floor != cNode.getStepNode().getFloorLevel()){
+				updateMap(cNode);
+			}else pv.setCenterPoint(cNode.getStepNode());
+			
+			
+			//update map
+			
+			
+			
+			
 			
 			//Log.v("floor", "nextnodefloor:"+Integer.toString(nextFloorNode.getStepNode().getFloorLevel()));
 			//Log.v("floor", "breaknodefloor:"+Integer.toString(fBreakNode.getStepNode().getFloorLevel()));
 			//Log.v("floor", "         floor:"+Integer.toString(floor));
 			
-			if(multifloor){
-				//Log.v("multi", "in the multifloor");
-				if(index >= bNodeIndex && floor != nextFloorNode.getStepNode().getFloorLevel()){
-					Log.v("in-if","in if - 1   index:" + Integer.toString(index));
-					xPoints.clear();
-					yPoints.clear();
-					for(int i = routePut.indexOf(nextFloorNode); i < routePut.size(); i++){
-						xPoints.add(routePut.get(i).getStepNode().getX());
-						yPoints.add(routePut.get(i).getStepNode().getY());
-					}
-					pv.updatePath(xPoints, yPoints, nextFloorNode.getStepNode().getFloorLevel(), sFloor, eFloor);
-					floor = nextFloorNode.getStepNode().getFloorLevel();
-					pv.setCenterPoint(nextFloorNode.getStepNode());			
-				} else if(index <= bNodeIndex && floor == nextFloorNode.getStepNode().getFloorLevel()){
-					Log.v("in-if","in if - 2    index:" + Integer.toString(index));
-					xPoints.clear();
-					yPoints.clear();
-					for(int i = 0; i < bNodeIndex; i++){
-						xPoints.add(routePut.get(i).getStepNode().getX());
-						yPoints.add(routePut.get(i).getStepNode().getY());
-					}
-					pv.updatePath(xPoints, yPoints, fBreakNode.getStepNode().getFloorLevel(), sFloor, eFloor);
-					floor = fBreakNode.getStepNode().getFloorLevel();
-					pv.setCenterPoint(fBreakNode.getStepNode());
-				} else if(floor == currentNodeFloor){
-					Log.v("in-if","in if - 3    index:" + Integer.toString(index));
-					pv.setCenterPoint(cNode);	
-				}
-			} else {
-				Log.v("in-if","in if - else    index:" + Integer.toString(index));
-				pv.setCenterPoint(cNode);
-			}
+//			if(multifloor){
+//				//Log.v("multi", "in the multifloor");
+//				if(index >= bNodeIndex && floor != nextFloorNode.getStepNode().getFloorLevel()){
+//					Log.v("in-if","in if - 1   index:" + Integer.toString(index));
+//					xPoints.clear();
+//					yPoints.clear();
+//					for(int i = routePut.indexOf(nextFloorNode); i < routePut.size(); i++){
+//						xPoints.add(routePut.get(i).getStepNode().getX());
+//						yPoints.add(routePut.get(i).getStepNode().getY());
+//					}
+//					pv.updatePath(xPoints, yPoints, nextFloorNode.getStepNode().getFloorLevel(), sFloor, eFloor);
+//					floor = nextFloorNode.getStepNode().getFloorLevel();
+//					pv.setCenterPoint(nextFloorNode.getStepNode());			
+//				} else if(index <= bNodeIndex && floor == nextFloorNode.getStepNode().getFloorLevel()){
+//					Log.v("in-if","in if - 2    index:" + Integer.toString(index));
+//					xPoints.clear();
+//					yPoints.clear();
+//					for(int i = 0; i < bNodeIndex; i++){
+//						xPoints.add(routePut.get(i).getStepNode().getX());
+//						yPoints.add(routePut.get(i).getStepNode().getY());
+//					}
+//					pv.updatePath(xPoints, yPoints, fBreakNode.getStepNode().getFloorLevel(), sFloor, eFloor);
+//					floor = fBreakNode.getStepNode().getFloorLevel();
+//					pv.setCenterPoint(fBreakNode.getStepNode());
+//				} else if(floor == currentNodeFloor){
+//					Log.v("in-if","in if - 3    index:" + Integer.toString(index));
+//					pv.setCenterPoint(cNode);	
+//				}
+//			} else {
+//				Log.v("in-if","in if - else    index:" + Integer.toString(index));
+//				pv.setCenterPoint(cNode);
+//			}
 			
 			return true;
 		}
