@@ -66,6 +66,8 @@ public class MapViewActivity extends Activity implements OnTouchListener, IMapVi
 	private Route r2;
 	ArrayList<RouteStep> routePut;
 	ArrayList<RouteStep> breakNodes = new ArrayList<RouteStep>();
+	String mapFloor;
+	
 	
 	//things from pathdrawactivity
 	PathView pv;
@@ -339,10 +341,10 @@ public class MapViewActivity extends Activity implements OnTouchListener, IMapVi
 		
 		//routePut.get(1).getStepNode().getIsConnector();
 		
-		
+		mapFloor = routePut.get(bNodeIndex).getStepNode().getMapImg();
 		//TODO set this somehow
         //SETUP PATHVIEW OBJECT AND DISPLAY
-   		pv.makePathView(xPoints, yPoints, floor, am, sFloor, eFloor);
+   		pv.makePathView(xPoints, yPoints, floor, am, sFloor, eFloor, mapFloor);
    		currentFloor = sFloor;
    		pv.setBackgroundColor(Color.WHITE);
    		pv.setOnTouchListener(this);
@@ -380,7 +382,9 @@ public class MapViewActivity extends Activity implements OnTouchListener, IMapVi
 			}
 			floor = cNode.getStepNode().getFloorLevel();
 			
-			pv.updatePath(xPoints, yPoints, floor, sFloor, eFloor);
+			mapFloor = cNode.getStepNode().getMapImg().toLowerCase();
+			Log.v("mapimg", mapFloor);
+			pv.updatePath(xPoints, yPoints, floor, sFloor, eFloor, mapFloor);
 			pv.setCenterPoint(cNode.getStepNode());
 			
 			
@@ -395,7 +399,9 @@ public class MapViewActivity extends Activity implements OnTouchListener, IMapVi
 			}
 			floor = cNode.getStepNode().getFloorLevel();
 			
-			pv.updatePath(xPoints, yPoints, floor, sFloor, eFloor);
+			String mapFloor = cNode.getStepNode().getMapImg().toLowerCase();
+			Log.v("mapimg", mapFloor);
+			pv.updatePath(xPoints, yPoints, floor, sFloor, eFloor, mapFloor);
 			pv.setCenterPoint(cNode.getStepNode());
 			
 		}
@@ -469,7 +475,7 @@ public class MapViewActivity extends Activity implements OnTouchListener, IMapVi
 			Log.v("cnode-step", cNode.getStepNode().getNodeID());
 			Log.v("bnodeindex", Integer.toString(breakNodes.indexOf(cNode)));
 			
-			if(breakNodes.indexOf(cNode) != -1 && floor != cNode.getStepNode().getFloorLevel()){
+			if(breakNodes.indexOf(cNode) != -1 && !mapFloor.equals(cNode.getStepNode().getMapImg())){
 				updateMap(cNode, outsideHelper);
 			}else pv.setCenterPoint(cNode.getStepNode());
 			

@@ -115,8 +115,8 @@ public class PathView extends View{
 	}
 	
 	//SETS INSTANCE ARRAYS, ASSET MANAGER, AND DRAWS THE VIEW
-	public void makePathView(ArrayList<Integer> xArray, ArrayList<Integer> yArray, int floor, AssetManager am, int startFloor, int endFloor) {
-
+	public void makePathView(ArrayList<Integer> xArray, ArrayList<Integer> yArray, int floor, AssetManager am, int startFloor, int endFloor, String mapFloor) {
+		currentFloor = floor;
 		this.xArray = xArray;																	
 		this.yArray = yArray;
 		this.am = am;
@@ -127,12 +127,13 @@ public class PathView extends View{
 		Log.i("makePathView", yArray.toString());
 		Log.i("makePathView", Integer.toString(floor));
 		
-		loadFloorMap(floor);
+		loadFloorMap(mapFloor);
 		invalidate();																			//CALLED TO TELL VM TO REDRAW
 	}
 	
 	//CLEARS THE CURRENT PATH AND UPDATES IT
-	public void updatePath(ArrayList<Integer> x, ArrayList<Integer> y, int floor, int startFloor, int endFloor){			
+	public void updatePath(ArrayList<Integer> x, ArrayList<Integer> y, int floor, int startFloor, int endFloor, String mapFloor){			
+		currentFloor = floor;
 		this.xArray = null;																			//nulled to attempt to have gc remove old array objects
 		this.yArray = null;
 		this.path.reset();
@@ -141,17 +142,17 @@ public class PathView extends View{
 		this.STARTMAP = (floor == startFloor);
 		this.ENDMAP = (floor == endFloor);
 		
-		loadFloorMap(floor);
+		loadFloorMap(mapFloor);
 		invalidate();																			//CALLED TO TELL VM TO REDRAW
 	}
 	
 	//LOAD FLOOR PLAN BASED ON FLOOR NUMBER
-	private void loadFloorMap(int floor){
-		currentFloor = floor;
+	private void loadFloorMap(String floor){
+		//currentFloor = floor;
 		
 		try{
 			//Log.i("am", am.toString());
-			is = am.open(source[floor]);														//A BITMAP FACTORY IS USED IN CONJUNCTION WITH AN INPUTSTREAM TO HELP CONTROL THE SIZE OF THE IMAGE
+			is = am.open(floor.toLowerCase());	//source[floor]);														//A BITMAP FACTORY IS USED IN CONJUNCTION WITH AN INPUTSTREAM TO HELP CONTROL THE SIZE OF THE IMAGE
 			bMap = BitmapFactory.decodeStream(is, null, op);									//THE BMF OPTIONS HELP CONTROL THE RESULTING IMAGE SIZE IN ANDROID
 			dMap = new BitmapDrawable(this.getResources(), bMap);
 			bounds = new Rect(0, 0, dMap.getIntrinsicWidth(), dMap.getIntrinsicHeight());
@@ -201,7 +202,7 @@ public class PathView extends View{
 			y = yArray.get(i);
 			path.lineTo(x, y);
 			if(currentFloor != 0){
-				path.addCircle(x, y, 5, Path.Direction.CW);
+			path.addCircle(x, y, 5, Path.Direction.CW);
 			}
 			path.moveTo(x, y);
 		}
