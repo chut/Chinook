@@ -423,8 +423,9 @@ public class MapViewActivity extends Activity implements OnTouchListener, IMapVi
 		public boolean step(){
 			if(index < 0) {
 			index = 0;
-		} else if(index > routePut.size()) {
+		}else if(index > routePut.size()-1) {
 			index = routePut.size()-1;
+			Toast.makeText(MapViewActivity.this, "You are at destination", Toast.LENGTH_SHORT).show();
 		}
 			
 			if(outsideHelper == 1){
