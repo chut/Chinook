@@ -636,10 +636,15 @@ public class Route {
 			// if neighbor is not in settledBucket
 			if (inSettled == -1) {
 				//System.out.println("   " + n1.getNode().getNodeID()	+ " is not in settledBucket");
+				
 				// if node and neighbor are on same floor/map, then calculate distance based upon pixel coordinates
 				int neighborDistance = -1;
 				if ((myNode.getBuildingID().equals(myNode.getNeighborList().get(i).getNode().getBuildingID())) && (myNode.getFloorLevel() == myNode.getNeighborList().get(i).getNode().getFloorLevel())) {
 					neighborDistance = calculateDistance(myNode.getX(), myNode.getNeighborList().get(i).getNode().getX(), myNode.getY(), myNode.getNeighborList().get(i).getNode().getY());
+					
+					//different maps have different scales - scale the raw distance using the mapScale from database
+					neighborDistance = (myNode.getMapScale() * neighborDistance)/100;
+					
 					myNode.getNeighborList().get(i).setDistance(neighborDistance);
 				} else {
 					// otherwise, use the distance value from the database
@@ -647,7 +652,7 @@ public class Route {
 					
 				}
 				// if a shorter distance exists to neighbor
-				Log.i("ROUTE","Node: " + myNode.getNodeID() + ", Neighbor: " + myNode.getNeighborList().get(i).getNodeID() + ", distance: " + neighborDistance);
+				//Log.i("ROUTE","Node: " + myNode.getNodeID() + ", Neighbor: " + myNode.getNeighborList().get(i).getNodeID() + ", distance: " + neighborDistance);
 				if (myNode.getNeighborList().get(i).getNode().getShortestDist() > (myNode.getShortestDist() + neighborDistance)) {
 				//if (myNode.getNeighborList().get(i).getNode().getShortestDist() > (myNode.getShortestDist() + myNode.getNeighborList().get(i).getDistance())) {
 
@@ -815,6 +820,7 @@ public class Route {
 				String cursor_mapImg;				
 				String cursor_neighborNode;			
 				int cursor_distance;				
+				int cursor_mapScale;				
 				
 				// load all nodes on floor from resultList
 				starttime = System.currentTimeMillis();				
@@ -847,7 +853,7 @@ public class Route {
 //					cursor_neighborNode = dbConn.getCursor().getString(5);				// columnIndex 5 = neighborNode
 //					cursor_distance = dbConn.getCursor().getInt(6);						// columnIndex 6 = distance
 					
-					//Log.i("ROUTE",(i+1) + ": " + myResultsList.get(i));
+					//Log.i("NODES",(i+1) + ": " + myResultsList.get(i));
 					fieldsList = myResultsList.get(i).split(",");
 					cursor_NodeID = fieldsList[0];	 									// columnIndex 0 = nodeID
 					cursor_nodeLabel = fieldsList[1];									// columnIndex 1 = nodeLabel
@@ -863,8 +869,9 @@ public class Route {
 					cursor_floorID = fieldsList[11];									// columnIndex 11 = floorID
 					cursor_floorLevel = Integer.parseInt(fieldsList[12]);				// columnIndex 12 = floorLevel
 					cursor_mapImg = fieldsList[13];										// columnIndex 13 = mapImg
-					cursor_neighborNode = fieldsList[14];								// columnIndex 14 = neighborNode
-					cursor_distance = Integer.parseInt(fieldsList[15]);					// columnIndex 15 = distance
+					cursor_mapScale = Integer.parseInt(fieldsList[14]);					// columnIndex 14 = mapScale
+					cursor_neighborNode = fieldsList[15];								// columnIndex 15 = neighborNode
+					cursor_distance = Integer.parseInt(fieldsList[16]);					// columnIndex 16 = distance
 					
 					// TODO fix - ext database columnIndexes will be different
 				
@@ -879,6 +886,7 @@ public class Route {
 											cursor_typeName,
 											cursor_isConnector,
 											cursor_mapImg,
+											cursor_mapScale,
 											cursor_photoImg,
 											cursor_x,
 											cursor_y,
@@ -991,7 +999,7 @@ public class Route {
 	 * 					previous project into this project
 	 *********************************************************/
 	private Node extractMinimum(Node currentDijkstraNode) {
-		////Log.i("CALC","   begin extractMinimum: " + currentDijkstraNode.getNodeID());
+		//Log.i("CALC","   begin extractMinimum: " + currentDijkstraNode.getNodeID());
 		
 		// initialize local variables
 		Node shortNode = null;
@@ -1004,19 +1012,19 @@ public class Route {
 		
 		while (litr.hasNext() && !foundEndFloor) {
 			Node loopNode = litr.next();
-			////Log.i("CALC","      loopNode: " + loopNode.getNodeID());
+			//Log.i("CALC","      loopNode: " + loopNode.getNodeID());
 			
 			// if endNode is on a different floor than currentDijkstraNode
 			if (!(currentDijkstraNode.getBuildingID().equals(endNode.getBuildingID())) || !(currentDijkstraNode.getFloorID().equals(endNode.getFloorID()))) {
-				////Log.i("CALC","      endNode: " + endNode.getNodeID() + ", is on a different floor than currentDijkstraNode: " + currentDijkstraNode.getNodeID());
+				//Log.i("CALC","      endNode: " + endNode.getNodeID() + ", is on a different floor than currentDijkstraNode: " + currentDijkstraNode.getNodeID());
 				
 				// if currentDijkstraNode is a connector
 				if (currentDijkstraNode.getIsConnector()) {
-					////Log.i("CALC","      Is a connector - currentDijkstraNode: " + currentDijkstraNode.getNodeID());
+					//Log.i("CALC","      Is a connector - currentDijkstraNode: " + currentDijkstraNode.getNodeID());
 										
 					// if loopNode is on same floor as endNode
 					if ((loopNode.getBuildingID().equals(endNode.getBuildingID())) && (loopNode.getFloorID().equals(endNode.getFloorID()))) {
-						////Log.i("CALC","      loopNode: " + loopNode.getNodeID() + ", is on same floor than endNode: " + endNode.getNodeID());
+						//Log.i("CALC","      loopNode: " + loopNode.getNodeID() + ", is on same floor than endNode: " + endNode.getNodeID());
 												
 						// TODO ** smart node floor check
 						shortNode = loopNode;
@@ -1024,7 +1032,7 @@ public class Route {
 					
 					} else {
 						// loopNode is NOT on same floor as endNode
-						////Log.i("CALC","      loopNode: " + loopNode.getNodeID() + ", is NOT on same floor than endNode: " + endNode.getNodeID());
+						//Log.i("CALC","      loopNode: " + loopNode.getNodeID() + ", is NOT on same floor than endNode: " + endNode.getNodeID());
 						
 						// this is where we would handle finding floor near endNode
 						// for now, just handle this as a regular node
@@ -1038,43 +1046,43 @@ public class Route {
 						
 				} else {
 					// currentDijkstraNode is NOT a connector
-					////Log.i("CALC","      Is NOT a connector - currentDijkstraNode: " + currentDijkstraNode.getNodeID());
+					//Log.i("CALC","      Is NOT a connector - currentDijkstraNode: " + currentDijkstraNode.getNodeID());
 					
 					if (loopNode.getShortestDist() <= iShortest) {
-						////Log.i("CALC","      loopNode: " + loopNode.getNodeID() + ", getShortestDist() <= iShortest");
+						//Log.i("CALC","      loopNode: " + loopNode.getNodeID() + ", getShortestDist() <= iShortest");
 						
 						// if loopNode is a connector
 						if (loopNode.getIsConnector()) {
-							////Log.i("CALC","      loopNode: " + loopNode.getNodeID() + ", is a connector");
+							//Log.i("CALC","      loopNode: " + loopNode.getNodeID() + ", is a connector");
 							
 							// TODO ** weighted connector nodes
 							// TODO ** stairs or elevator
 							if (!stairsOrElevator.equals("either") && !currentDijkstraNode.getNodeID().equals(startNode.getNodeID()) && !bIgnoreDeferredSetting) {
 								//System.out.println("stairsOrElevator: " + stairsOrElevator);
 								if (stairsOrElevator.equals("stairs")) {
-									////Log.i("CALC","      stairs");
+									//Log.i("CALC","      stairs");
 									if (loopNode.getNodeType().equals("stairs")) {
-										////Log.i("CALC","      set shortNode");
+										//Log.i("CALC","      set shortNode");
 										iShortest = loopNode.getShortestDist();
 										shortNodeTieBreaker = loopNode;
 										shortNode = loopNode;
 									} else {
 										// connector node is not stairs, remove it from unsettledBucket and add it to deferredBucket
-										////Log.i("CALC","      deffer");
+										//Log.i("CALC","      deffer");
 										addNodeToDeferred(loopNode);
 										litr.remove();
 									}
 									
 								} else if (stairsOrElevator.equals("elevator")) {
-									////Log.i("CALC","      elevator");
+									//Log.i("CALC","      elevator");
 									if (loopNode.getNodeType().equals("elevator")) {
-										////Log.i("CALC","      set shortNode");
+										//Log.i("CALC","      set shortNode");
 										iShortest = loopNode.getShortestDist();
 										shortNodeTieBreaker = loopNode;
 										shortNode = loopNode;
 									} else {
 										// connector node is not elevator, remove it from unsettledBucket and add it to deferredBucket
-										////Log.i("CALC","      deffer");
+										//Log.i("CALC","      deffer");
 										addNodeToDeferred(loopNode);
 										litr.remove();
 									}
@@ -1110,11 +1118,11 @@ public class Route {
 				
 			} else {
 				// endNode is on same floor as currentDijkstraNode
-				////Log.i("CALC","      endNode: " + endNode.getNodeID() + ", is on a SAME floor as currentDijkstraNode: " + currentDijkstraNode.getNodeID());
+				//Log.i("CALC","      endNode: " + endNode.getNodeID() + ", is on a SAME floor as currentDijkstraNode: " + currentDijkstraNode.getNodeID());
 				
 				// if loopNode is NOT on same floor as endNode
 				if ((!loopNode.getBuildingID().equals(endNode.getBuildingID())) || (!loopNode.getFloorID().equals(endNode.getFloorID()))) {
-					////Log.i("CALC","      loopNode: " + loopNode.getNodeID() + ", is NOT on same floor as endNode: " + endNode.getNodeID());
+					//Log.i("CALC","      loopNode: " + loopNode.getNodeID() + ", is NOT on same floor as endNode: " + endNode.getNodeID());
 					
 					// TODO ** same floor only (defer nodes on other floors)
 					addNodeToDeferred(loopNode);
@@ -1122,14 +1130,14 @@ public class Route {
 					
 				} else {
 					// loopNode is on same floor as endNode
-					////Log.i("CALC","      loopNode: " + loopNode.getNodeID() + ", is on SAME floor as endNode: " + endNode.getNodeID());
+					//Log.i("CALC","      loopNode: " + loopNode.getNodeID() + ", is on SAME floor as endNode: " + endNode.getNodeID());
 					
 					if (loopNode.getShortestDist() <= iShortest) {
-						////Log.i("CALC","      loopNode: " + loopNode.getNodeID() + ", getShortestDist() <= iShortest");
+						//Log.i("CALC","      loopNode: " + loopNode.getNodeID() + ", getShortestDist() <= iShortest");
 						
 						// if loopNode == endNode
 						if (loopNode.getNodeID().equals(endNode.getNodeID())) {
-							////Log.i("CALC","      loopNode: " + loopNode.getNodeID() + ", == endNode: " + endNode.getNodeID());
+							//Log.i("CALC","      loopNode: " + loopNode.getNodeID() + ", == endNode: " + endNode.getNodeID());
 							
 							// TODO ** weighted endNode
 							iShortest = loopNode.getShortestDist();
@@ -1138,7 +1146,7 @@ public class Route {
 							
 						} else {
 							// loopNode is NOT endNode
-						    ////Log.i("CALC","      loopNode: " + loopNode.getNodeID() + ", != endNode: " + endNode.getNodeID());
+						    //Log.i("CALC","      loopNode: " + loopNode.getNodeID() + ", != endNode: " + endNode.getNodeID());
 							
 							iShortest = loopNode.getShortestDist();
 							shortNode = loopNode;
@@ -1151,7 +1159,7 @@ public class Route {
 			}
 			
 		}	// end while (litr.hasNext())
-		////Log.i("CALC","      end while (litr.hasNext() - shortNode: " + shortNode);
+		//Log.i("CALC","      end while (litr.hasNext() - shortNode: " + shortNode);
 		
 		if (shortNode == null) {
 			//Log.i("CALC","shortNode == NULL");
@@ -1178,8 +1186,8 @@ public class Route {
 		
 		// remove the Node from unsettledBucket and return it
 		//System.out.println("extracting: " + shortNode.getNodeID());
-		////Log.i("CALC","      removing shortNode: " + shortNode);
-		////Log.i("CALC","      removing shortNode: " + shortNode.getNodeID());
+		//Log.i("CALC","      removing shortNode: " + shortNode);
+		//Log.i("CALC","      removing shortNode: " + shortNode.getNodeID());
 		unsettledBucket.remove(shortNode);
 		
 		//System.out.println("--Out of relaxNeighbors \n");
@@ -1245,44 +1253,44 @@ public class Route {
 	 *********************************************************/
 	private void test_printBuckets() {
 		String testLabel;
-		//Log.i("BUCKET","*******************");
-		//Log.i("BUCKET","*  settledBucket  *");
-		//Log.i("BUCKET","*******************");
+		Log.i("BUCKET","*******************");
+		Log.i("BUCKET","*  settledBucket  *");
+		Log.i("BUCKET","*******************");
 		for (int i = 0; i < settledBucket.size(); i++) {
 			if (settledBucket.get(i).getPredecessor() == null) {
 				testLabel = "null";
 			} else {
 				testLabel = settledBucket.get(i).getPredecessor().getNodeID();
 			}
-			//Log.i("BUCKET","* Node: " + settledBucket.get(i).getNodeID() + "; shortestDist: " + settledBucket.get(i).getShortestDist() + "; predecessor: " + testLabel);
+			Log.i("BUCKET","* Node: " + settledBucket.get(i).getNodeID() + "; shortestDist: " + settledBucket.get(i).getShortestDist() + "; predecessor: " + testLabel);
 		}
-		//Log.i("BUCKET","********************\n");
+		Log.i("BUCKET","********************\n");
 		
-		//Log.i("BUCKET","*********************");
-		//Log.i("BUCKET","*  unsettledBucket  *");
-		//Log.i("BUCKET","*********************");
+		Log.i("BUCKET","*********************");
+		Log.i("BUCKET","*  unsettledBucket  *");
+		Log.i("BUCKET","*********************");
 		for (int i = 0; i < unsettledBucket.size(); i++) {
 			if (unsettledBucket.get(i).getPredecessor() == null) {
 				testLabel = "null";
 			} else {
 				testLabel = unsettledBucket.get(i).getPredecessor().getNodeID();
 			}
-			//Log.i("BUCKET","* Node: " + unsettledBucket.get(i).getNodeID() + "; shortestDist: " + unsettledBucket.get(i).getShortestDist() + "; predecessor: " + testLabel);
+			Log.i("BUCKET","* Node: " + unsettledBucket.get(i).getNodeID() + "; shortestDist: " + unsettledBucket.get(i).getShortestDist() + "; predecessor: " + testLabel);
 		}
-		//Log.i("BUCKET","*********************\n");
+		Log.i("BUCKET","*********************\n");
 		
-		//Log.i("BUCKET","*********************");
-		//Log.i("BUCKET","*  deferredBucket  *");
-		//Log.i("BUCKET","*********************");
+		Log.i("BUCKET","*********************");
+		Log.i("BUCKET","*  deferredBucket  *");
+		Log.i("BUCKET","*********************");
 		for (int i = 0; i < deferredBucket.size(); i++) {
 			if (deferredBucket.get(i).getPredecessor() == null) {
 				testLabel = "null";
 			} else {
 				testLabel = deferredBucket.get(i).getPredecessor().getNodeID();
 			}
-			//Log.i("BUCKET","* Node: " + deferredBucket.get(i).getNodeID() + "; shortestDist: " + deferredBucket.get(i).getShortestDist() + "; predecessor: " + testLabel);
+			Log.i("BUCKET","* Node: " + deferredBucket.get(i).getNodeID() + "; shortestDist: " + deferredBucket.get(i).getShortestDist() + "; predecessor: " + testLabel);
 		}
-		//Log.i("BUCKET","*********************\n");
+		Log.i("BUCKET","*********************\n");
 	}
 	
 	private void createRouteStepList() {

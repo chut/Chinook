@@ -26,6 +26,7 @@ public class DatabaseConstants {
 	public static final String KEY_FLOOR_ID = "floorID";
 	public static final String KEY_FLOOR_LEVEL = "floorLevel";
 	public static final String KEY_FLOOR_MAP = "mapImg";
+	public static final String KEY_FLOOR_SCALE = "mapScale";
 	
 	public static final String KEY_NEIGHBOR_NODE = "neighborNode";
 	public static final String KEY_NEIGHBOR_DISTANCE = "distance";
@@ -45,6 +46,7 @@ public class DatabaseConstants {
 			+ KEY_FLOOR_ID + " text,"
 			+ KEY_FLOOR_LEVEL + " integer,"
 			+ KEY_FLOOR_MAP + " text,"
+			+ KEY_FLOOR_SCALE + " integer,"
 			+ KEY_NEIGHBOR_NODE + " text,"
 			+ KEY_NEIGHBOR_DISTANCE + " integer);";
 	
@@ -63,6 +65,7 @@ public class DatabaseConstants {
 			KEY_FLOOR_ID,
 			KEY_FLOOR_LEVEL,
 			KEY_FLOOR_MAP,
+			KEY_FLOOR_SCALE,
 			KEY_NEIGHBOR_NODE,
 			KEY_NEIGHBOR_DISTANCE
 		};

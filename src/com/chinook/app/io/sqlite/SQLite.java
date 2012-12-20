@@ -540,7 +540,7 @@ public class SQLite implements IDatabaseProvider {
 		//Log.i("SQLITE","cursor: " + cursor.getColumnCount());
 		// create an ArrayList<String> from cursor results
 		if (this.cursor != null) {
-			final int numCols = 16;
+			final int numCols = 17;
 			StringBuilder sbRow;
 			while (this.cursor.moveToNext()) {
 				sbRow = new StringBuilder(128);
