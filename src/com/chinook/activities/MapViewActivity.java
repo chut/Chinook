@@ -164,7 +164,7 @@ public class MapViewActivity extends Activity implements OnTouchListener, IMapVi
     		textView.append("error passing data\n");
     	}
 		
-		SystemClock.sleep(3000);	//TODO find better solution than sleep
+		SystemClock.sleep(7000);	//TODO find better solution than sleep
 		
 //=========================================================================================================
 		//oncreate pieces from pathdrawactivity
@@ -378,7 +378,6 @@ public class MapViewActivity extends Activity implements OnTouchListener, IMapVi
 			for(int i = routePut.indexOf(cNode); i <= routePut.indexOf(nextBreak); i++){
 				xPoints.add(routePut.get(i).getStepNode().getX());
 				yPoints.add(routePut.get(i).getStepNode().getY());
-				
 			}
 			floor = cNode.getStepNode().getFloorLevel();
 			
@@ -405,6 +404,9 @@ public class MapViewActivity extends Activity implements OnTouchListener, IMapVi
 			pv.setCenterPoint(cNode.getStepNode());
 			
 		}
+		
+		Log.v("updatex", xPoints.toString());
+		Log.v("updatey", yPoints.toString());
 		
 		
 		
