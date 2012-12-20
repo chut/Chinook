@@ -1072,7 +1072,7 @@ public class Route {
 											shortNode = loopNode;
 										} else {
 											// connector node is not stairs, remove it from unsettledBucket and add it to deferredBucket
-											//Log.i("CALC","     currDijkNode: " + currentDijkstraNode.getNodeID() + " NotConn, loopNode: " + loopNode.getNodeID() + " isConn, soe=stairs, not stairs, deffer: " + loopNode.getNodeID());
+											Log.i("CALC","     currDijkNode: " + currentDijkstraNode.getNodeID() + " NotConn, loopNode: " + loopNode.getNodeID() + " isConn, soe=stairs, not stairs, deffer: " + loopNode.getNodeID());
 											addNodeToDeferred(loopNode);
 											litr.remove();
 										}
@@ -1086,7 +1086,7 @@ public class Route {
 											shortNode = loopNode;
 										} else {
 											// connector node is not elevator, remove it from unsettledBucket and add it to deferredBucket
-											//Log.i("CALC","     currDijkNode: " + currentDijkstraNode.getNodeID() + " NotConn, loopNode: " + loopNode.getNodeID() + " isConn, soe=elevator, not elevator, deffer: " + loopNode.getNodeID());
+											Log.i("CALC","     currDijkNode: " + currentDijkstraNode.getNodeID() + " NotConn, loopNode: " + loopNode.getNodeID() + " isConn, soe=elevator, not elevator, deffer: " + loopNode.getNodeID());
 											addNodeToDeferred(loopNode);
 											litr.remove();
 										}
@@ -1133,11 +1133,14 @@ public class Route {
 				
 				// if loopNode is NOT on same floor as endNode
 				if ((!loopNode.getBuildingID().equals(endNode.getBuildingID())) || (!loopNode.getFloorID().equals(endNode.getFloorID()))) {
-					//Log.i("CALC","      endNode: " + endNode.getNodeID() + " same floor as currDijkNode: " + currentDijkstraNode.getNodeID() + ", loopNode: " + loopNode.getNodeID() + ", NOT same floor as endNode: " + endNode.getNodeID() + " - deffer: " + loopNode.getNodeID());
+					Log.i("CALC","      endNode: " + endNode.getNodeID() + " same floor as currDijkNode: " + currentDijkstraNode.getNodeID() + ", loopNode: " + loopNode.getNodeID() + ", NOT same floor as endNode: " + endNode.getNodeID() + " - deffer: " + loopNode.getNodeID());
 					
 					// TODO ** same floor only (defer nodes on other floors)
-					addNodeToDeferred(loopNode);
-					litr.remove();
+//					addNodeToDeferred(loopNode);
+//					litr.remove();
+					iShortest = loopNode.getShortestDist();
+					shortNodeTieBreaker = loopNode;
+					shortNode = loopNode;
 					
 				} else {
 					// loopNode is on same floor as endNode
