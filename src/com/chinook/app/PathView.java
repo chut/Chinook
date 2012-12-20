@@ -201,9 +201,9 @@ public class PathView extends View{
 			x = xArray.get(i);
 			y = yArray.get(i);
 			path.lineTo(x, y);
-			if(currentFloor != 0){
+			//if(currentFloor != 0){
 			path.addCircle(x, y, 5, Path.Direction.CW);
-			}
+			//}
 			path.moveTo(x, y);
 		}
 		

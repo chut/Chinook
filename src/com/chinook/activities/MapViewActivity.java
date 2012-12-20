@@ -370,7 +370,9 @@ public class MapViewActivity extends Activity implements OnTouchListener, IMapVi
 		
 		//nextFloorNode = breakNodes.get(breakNodes.indexOf(cNode)+1);
 		//Log.v("nextFloor", nextFloorNode.getStepNode().getNodeID());
+		if((breakNodes.size()-1) == breakNodes.indexOf(cNode)){
 		
+		}else{
 		if(dirHelper == 1){
 			RouteStep nextBreak = breakNodes.get(breakNodes.indexOf(cNode)+1);	//end of route
 			//nextFloorNode is start of route
@@ -407,7 +409,7 @@ public class MapViewActivity extends Activity implements OnTouchListener, IMapVi
 		
 		Log.v("updatex", xPoints.toString());
 		Log.v("updatey", yPoints.toString());
-		
+		}
 		
 		
 	}
