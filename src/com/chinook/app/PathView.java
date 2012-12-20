@@ -59,7 +59,7 @@ public class PathView extends View{
 	private final int ANIMATIONTOTAL = 500;										//TOTAL TIME TAKEN (MILLIS) TO MOVE THROUGH ANIMATION
 	private float transX, transY;												//INTERMITTENT STEPS IN THE TRANSLATION
 	
-	private final String[] source = {"campus5.png","jen_1sm.png","jen_2sm.png", "jen_3sm.png", "jen_4sm.png"};		//STRNIG[] OF FLOOR PLAN FILE NAMES, STORED IN ORDER OF FLOOR	
+	private final String[] source = {"main_map.png","jen_1.png","jen_2.png", "jen_3.png", "jen_4.png"};		//STRNIG[] OF FLOOR PLAN FILE NAMES, STORED IN ORDER OF FLOOR	
 	
 	public PathView(Context context){
 		super(context);
