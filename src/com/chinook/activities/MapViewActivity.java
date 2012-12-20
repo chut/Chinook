@@ -164,7 +164,7 @@ public class MapViewActivity extends Activity implements OnTouchListener, IMapVi
     		textView.append("error passing data\n");
     	}
 		
-		SystemClock.sleep(3000);	//TODO find better solution than sleep
+		SystemClock.sleep(7000);	//TODO find better solution than sleep
 		
 //=========================================================================================================
 		//oncreate pieces from pathdrawactivity
@@ -372,13 +372,15 @@ public class MapViewActivity extends Activity implements OnTouchListener, IMapVi
 		//Log.v("nextFloor", nextFloorNode.getStepNode().getNodeID());
 		
 		if(dirHelper == 1){
+			if((breakNodes.size()-1) == breakNodes.indexOf(cNode)){
+				
+			}else{
 			RouteStep nextBreak = breakNodes.get(breakNodes.indexOf(cNode)+1);	//end of route
 			//nextFloorNode is start of route
 			
 			for(int i = routePut.indexOf(cNode); i <= routePut.indexOf(nextBreak); i++){
 				xPoints.add(routePut.get(i).getStepNode().getX());
 				yPoints.add(routePut.get(i).getStepNode().getY());
-				
 			}
 			floor = cNode.getStepNode().getFloorLevel();
 			
@@ -386,9 +388,12 @@ public class MapViewActivity extends Activity implements OnTouchListener, IMapVi
 			Log.v("mapimg", mapFloor);
 			pv.updatePath(xPoints, yPoints, floor, sFloor, eFloor, mapFloor);
 			pv.setCenterPoint(cNode.getStepNode());
-			
+			}
 			
 		}else{
+			if(0 == breakNodes.indexOf(cNode)){
+				
+			}else{
 			RouteStep nextBreak = breakNodes.get(breakNodes.indexOf(cNode)-1);	//end of route
 			//nextFloorNode is start of route
 			
@@ -403,8 +408,12 @@ public class MapViewActivity extends Activity implements OnTouchListener, IMapVi
 			Log.v("mapimg", mapFloor);
 			pv.updatePath(xPoints, yPoints, floor, sFloor, eFloor, mapFloor);
 			pv.setCenterPoint(cNode.getStepNode());
+			}
 			
 		}
+		
+		Log.v("updatex", xPoints.toString());
+		Log.v("updatey", yPoints.toString());
 		
 		
 		
@@ -475,54 +484,11 @@ public class MapViewActivity extends Activity implements OnTouchListener, IMapVi
 			Log.v("cnode-step", cNode.getStepNode().getNodeID());
 			Log.v("bnodeindex", Integer.toString(breakNodes.indexOf(cNode)));
 			
+			//update map
 			if(breakNodes.indexOf(cNode) != -1 && !mapFloor.equals(cNode.getStepNode().getMapImg())){
 				updateMap(cNode, outsideHelper);
 			}else pv.setCenterPoint(cNode.getStepNode());
-			
-			
-			//update map
-			
-			
-			
-			
-			
-			//Log.v("floor", "nextnodefloor:"+Integer.toString(nextFloorNode.getStepNode().getFloorLevel()));
-			//Log.v("floor", "breaknodefloor:"+Integer.toString(fBreakNode.getStepNode().getFloorLevel()));
-			//Log.v("floor", "         floor:"+Integer.toString(floor));
-			
-//			if(multifloor){
-//				//Log.v("multi", "in the multifloor");
-//				if(index >= bNodeIndex && floor != nextFloorNode.getStepNode().getFloorLevel()){
-//					Log.v("in-if","in if - 1   index:" + Integer.toString(index));
-//					xPoints.clear();
-//					yPoints.clear();
-//					for(int i = routePut.indexOf(nextFloorNode); i < routePut.size(); i++){
-//						xPoints.add(routePut.get(i).getStepNode().getX());
-//						yPoints.add(routePut.get(i).getStepNode().getY());
-//					}
-//					pv.updatePath(xPoints, yPoints, nextFloorNode.getStepNode().getFloorLevel(), sFloor, eFloor);
-//					floor = nextFloorNode.getStepNode().getFloorLevel();
-//					pv.setCenterPoint(nextFloorNode.getStepNode());			
-//				} else if(index <= bNodeIndex && floor == nextFloorNode.getStepNode().getFloorLevel()){
-//					Log.v("in-if","in if - 2    index:" + Integer.toString(index));
-//					xPoints.clear();
-//					yPoints.clear();
-//					for(int i = 0; i < bNodeIndex; i++){
-//						xPoints.add(routePut.get(i).getStepNode().getX());
-//						yPoints.add(routePut.get(i).getStepNode().getY());
-//					}
-//					pv.updatePath(xPoints, yPoints, fBreakNode.getStepNode().getFloorLevel(), sFloor, eFloor);
-//					floor = fBreakNode.getStepNode().getFloorLevel();
-//					pv.setCenterPoint(fBreakNode.getStepNode());
-//				} else if(floor == currentNodeFloor){
-//					Log.v("in-if","in if - 3    index:" + Integer.toString(index));
-//					pv.setCenterPoint(cNode);	
-//				}
-//			} else {
-//				Log.v("in-if","in if - else    index:" + Integer.toString(index));
-//				pv.setCenterPoint(cNode);
-//			}
-			
+						
 			return true;
 		}
 		
