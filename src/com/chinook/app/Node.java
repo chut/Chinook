@@ -19,6 +19,7 @@ public class Node {
 	private String nodeType;
 	private boolean isConnector;
 	private String mapImg;
+	private int mapScale;
 	private String photoImg;
 	private int xCoordinate;
 	private int yCoordinate;
@@ -26,7 +27,7 @@ public class Node {
 	private String poiIconImg;	
 	
 	// constructor
-	public Node(String nodeID, String nodeLabel, String buildingID, String floorID, int floorLevel, String nodeType, boolean isConnector, String mapImg, String photoImg, int xCoordinate, int yCoordinate, boolean isPOI, String poiIconImg) {  
+	public Node(String nodeID, String nodeLabel, String buildingID, String floorID, int floorLevel, String nodeType, boolean isConnector, String mapImg, int mapScale, String photoImg, int xCoordinate, int yCoordinate, boolean isPOI, String poiIconImg) {  
 		this.nodeID = nodeID;
 		this.neighborList = new ArrayList<Neighbor>();
 		this.nodeLabel = nodeLabel;
@@ -38,6 +39,7 @@ public class Node {
 		this.nodeType = nodeType;
 		this.isConnector = isConnector;
 		this.mapImg = mapImg;
+		this.mapScale = mapScale;
 		this.photoImg = photoImg;
 		this.xCoordinate = xCoordinate;
 		this.yCoordinate = yCoordinate;
@@ -172,7 +174,15 @@ public class Node {
 	public String getMapImg() {
 		return mapImg;
 	}
-
+	
+	public void setMapScale(int mapScale) {
+		this.mapScale = mapScale;
+	}
+	
+	public int getMapScale() {
+		return mapScale;
+	}
+	
 	public void setPhotoImg(String photoImg) {
 		this.photoImg = photoImg;
 	}
