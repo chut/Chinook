@@ -406,7 +406,7 @@ public class MapViewActivity extends Activity implements OnTouchListener, IMapVi
 			}
 			floor = cNode.getStepNode().getFloorLevel();
 			
-			String mapFloor = cNode.getStepNode().getMapImg().toLowerCase();
+			mapFloor = cNode.getStepNode().getMapImg().toLowerCase();
 			Log.v("mapimg", mapFloor);
 			pv.updatePath(xPoints, yPoints, floor, sFloor, eFloor, mapFloor);
 			pv.setCenterPoint(cNode.getStepNode());
@@ -485,10 +485,20 @@ public class MapViewActivity extends Activity implements OnTouchListener, IMapVi
 			
 			Log.v("cnode-step", cNode.getStepNode().getNodeID());
 			Log.v("bnodeindex", Integer.toString(breakNodes.indexOf(cNode)));
+			Log.v("mapFloor", mapFloor);
+			
 			
 			//update map
 			if(breakNodes.indexOf(cNode) != -1 && !mapFloor.equals(cNode.getStepNode().getMapImg()) && routePut.indexOf(cNode) != routePut.size()-1 && routePut.indexOf(cNode) != 0){
-				updateMap(cNode, outsideHelper);
+				if(!routePut.get(routePut.indexOf(cNode)+1).getStepNode().getIsConnector() && outsideHelper == 1){
+					updateMap(cNode, outsideHelper);
+				}else if(!routePut.get(routePut.indexOf(cNode)-1).getStepNode().getIsConnector() && outsideHelper == 0){
+					updateMap(cNode, outsideHelper);
+				}else pv.setCenterPoint(cNode.getStepNode());
+				Log.v("next", Boolean.toString(routePut.get(routePut.indexOf(cNode)+1).getStepNode().getIsConnector()));
+				Log.v("prev", Boolean.toString(routePut.get(routePut.indexOf(cNode)-1).getStepNode().getIsConnector()));
+				Log.v("dirHelp", Integer.toString(outsideHelper));
+				
 			}else pv.setCenterPoint(cNode.getStepNode());
 						
 			return true;
