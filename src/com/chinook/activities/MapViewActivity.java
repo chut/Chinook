@@ -163,6 +163,8 @@ public class MapViewActivity extends Activity implements OnTouchListener, IMapVi
     	} else {
     		textView.append("error passing data\n");
     	}
+//===========================SLEEP ISSUE==================================================================		
+		
 		
 		SystemClock.sleep(7000);	//TODO find better solution than sleep
 		
