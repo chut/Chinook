@@ -137,13 +137,11 @@ public class MapViewActivity extends Activity implements OnTouchListener, IMapVi
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);	// this is required for indeterminate in title bar
-		setContentView(R.layout.map);
-        
-		//textView = (TextView) findViewById(R.id.textView1);
+		
+	    //textView = (TextView) findViewById(R.id.textView1);
 		//textView.setText("MAP VIEW - the native custom graphics view will go here\n\n");
 		//textView.setVisibility(8);
-		am = getAssets();
-		
+				
 		startID = AppPrefs.getStartID(this);
 		endID = AppPrefs.getEndID(this);
 		String bVerbose = AppPrefs.getVerbose(this)? "true":"false";
@@ -152,6 +150,8 @@ public class MapViewActivity extends Activity implements OnTouchListener, IMapVi
 		
 		appIO = new AppIO(AsyncConstants.DEFAULT_THREAD_POOL_SIZE);
 		r2 = Route.getInstance(this);
+		
+		Log.i("PATH","before calculateRoute");
 		
 		if (startID != null && endID != null && startID.length() != 0 && endID.length() != 0) {
     		
@@ -164,93 +164,11 @@ public class MapViewActivity extends Activity implements OnTouchListener, IMapVi
     		textView.append("error passing data\n");
     	}
 		
-		SystemClock.sleep(7000);	//TODO find better solution than sleep
+		Log.i("PATH","after calculateRoute");
+		//SystemClock.sleep(7000);	//TODO find better solution than sleep
 		
 //=========================================================================================================
-		//oncreate pieces from pathdrawactivity
-	    res = getResources();
 
-			next = (Button)findViewById(R.id.btnNext);
-			next.setBackgroundDrawable(res.getDrawable(R.drawable.smallright));
-			prev = (Button)findViewById(R.id.btnPrev);
-			prev.setBackgroundDrawable(res.getDrawable(R.drawable.smallleft));
-
-	        pv = (PathView)findViewById(R.id.pathView);
-	        am = getAssets();
-	        
-	        
-	    	//TODO is this code needed?
-	    	//WHEN CALCULATING AN INTERFLOOR PATH, WE NEED TO BREAK IT UP INTO INDIVIDUAL FLOORS
-//	            if(sFloor != eFloor){							
-	    //
-//	            	bNode = dijkstra.getBreakNode();										//SET BNODE TO THE FIRST NODE ON THE SECOND FLOOR OF TRAVEL (WE CAN GET AT IT'S PREDECESSOR VIA .getPreviousNode()
-//	            	bNodeIndex = walkNodePath.indexOf(bNode.getPreviousNode());
-//	            	
-//	            	multifloor = true;
-//	            	
-//	            	for(int i = 0; i <= bNodeIndex; i++){
-//	            		xPoints.add(walkNodePath.get(i).getX());
-//	            		yPoints.add(walkNodePath.get(i).getY());
-//	            	}
-//	            	
-//	            } else {
-	    //
-//	            	multifloor = false;
-//	            	
-//	            	for(Node it:walkNodePath){
-//	            		xPoints.add(it.getX());
-//	            		yPoints.add(it.getY());
-//	            	}
-//	            }
-	         
-	    		
-	    		
-
-	    	//BUTTON LISTENERS
-	    		next.setOnClickListener(
-	    				new OnClickListener(){
-	    					public void onClick(View v){
-	    						index++;
-	    						
-	    						outsideHelper = 1;
-	    						step();
-	    						
-	    						
-//	    						Node stepNode = walkNodePath.get(index);
-//	    			        	double dAngle = stepNode.getNNodeAngle();
-//	    			        	String cardDir  = "Go to ";
-	    						
-	    						//the toast
-	    						//Toast.makeText(PathDrawActivity.this, cardDir + walkNodePath.get(index).getNodeDepartment(), Toast.LENGTH_SHORT).show();
-	    					}
-	    				}
-	    		);	
-	    		
-	    		prev.setOnClickListener(
-	    				new OnClickListener(){
-	    					public void onClick(View v){
-	    						index--;
-	    						outsideHelper = 0;
-	    						step();
-	    						
-//	    						Node stepNode = walkNodePath.get(index);
-//	    			        	double dAngle = stepNode.getNNodeAngle();
-//	    			        	String cardDir  = "Go to ";
-	    						
-	    						//the toast
-	    						//Toast.makeText(PathDrawActivity.this, cardDir + walkNodePath.get(index).getNodeDepartment(), Toast.LENGTH_SHORT).show();
-	    					}
-	    				}
-	    		);	
-	    				
-	    		
-	    		
-	    		//view.getBackground().setColorFilter(0xFF6685D1, PorterDuff.Mode.MULTIPLY);
-	    	
-	    		Thread c1 = new Thread(centerOnLoad, "onCreate Centering Thread");
-	    		c1.start();
-		
-		
 		
 		
 	}//end oncreate
@@ -269,17 +187,111 @@ public class MapViewActivity extends Activity implements OnTouchListener, IMapVi
 		//textView.append("runResult = " + result + "\n");
 		//textView.append(routeObj.toString() + "\n");
 		//textView.append(routeObj.getMyMetrics().toString() + "\n");
+		Log.i("PATH","begin routeConvertData");
 		
 		routePut = routeObj.getRouteStepList();	//get ArrayList<RouteStep>
 		
 		
-//		for(int i = 0; i < routePut.size(); i++){
-//			int nodex = routePut.get(i).getStepNode().getX();
-//			Log.v("X", Integer.toString(nodex));
-//			int nodey = routePut.get(i).getStepNode().getY();
-//			Log.v("Y", Integer.toString(nodey));
-//			//boolean nod = routePut.get(1).getStepNode().
-//		}
+
+////		for(int i = 0; i < routePut.size(); i++){
+////			int nodex = routePut.get(i).getStepNode().getX();
+////			Log.v("X", Integer.toString(nodex));
+////			int nodey = routePut.get(i).getStepNode().getY();
+////			Log.v("Y", Integer.toString(nodey));
+////			//boolean nod = routePut.get(1).getStepNode().
+////		}
+//		
+		
+		//oncreate pieces from pathdrawactivity
+		setContentView(R.layout.map);
+        
+		Log.i("PATH","begin calum stuff");
+		am = getAssets();
+		res = getResources();
+
+		next = (Button)findViewById(R.id.btnNext);
+		next.setBackgroundDrawable(res.getDrawable(R.drawable.smallright));
+		prev = (Button)findViewById(R.id.btnPrev);
+		prev.setBackgroundDrawable(res.getDrawable(R.drawable.smallleft));
+		
+        pv = (PathView)findViewById(R.id.pathView);
+        am = getAssets();
+        
+        Log.i("PATH","after pv inflation");
+    	//TODO is this code needed?
+    	//WHEN CALCULATING AN INTERFLOOR PATH, WE NEED TO BREAK IT UP INTO INDIVIDUAL FLOORS
+//            if(sFloor != eFloor){							
+    //
+//            	bNode = dijkstra.getBreakNode();										//SET BNODE TO THE FIRST NODE ON THE SECOND FLOOR OF TRAVEL (WE CAN GET AT IT'S PREDECESSOR VIA .getPreviousNode()
+//            	bNodeIndex = walkNodePath.indexOf(bNode.getPreviousNode());
+//            	
+//            	multifloor = true;
+//            	
+//            	for(int i = 0; i <= bNodeIndex; i++){
+//            		xPoints.add(walkNodePath.get(i).getX());
+//            		yPoints.add(walkNodePath.get(i).getY());
+//            	}
+//            	
+//            } else {
+    //
+//            	multifloor = false;
+//            	
+//            	for(Node it:walkNodePath){
+//            		xPoints.add(it.getX());
+//            		yPoints.add(it.getY());
+//            	}
+//            }
+         
+    		
+    		
+
+    	//BUTTON LISTENERS
+    		next.setOnClickListener(
+    				new OnClickListener(){
+    					public void onClick(View v){
+    						index++;
+    						
+    						outsideHelper = 1;
+    						step();
+    						
+    						
+//    						Node stepNode = walkNodePath.get(index);
+//    			        	double dAngle = stepNode.getNNodeAngle();
+//    			        	String cardDir  = "Go to ";
+    						
+    						//the toast
+    						//Toast.makeText(PathDrawActivity.this, cardDir + walkNodePath.get(index).getNodeDepartment(), Toast.LENGTH_SHORT).show();
+    					}
+    				}
+    		);	
+    		
+    		prev.setOnClickListener(
+    				new OnClickListener(){
+    					public void onClick(View v){
+    						index--;
+    						outsideHelper = 0;
+    						step();
+    						
+//    						Node stepNode = walkNodePath.get(index);
+//    			        	double dAngle = stepNode.getNNodeAngle();
+//    			        	String cardDir  = "Go to ";
+    						
+    						//the toast
+    						//Toast.makeText(PathDrawActivity.this, cardDir + walkNodePath.get(index).getNodeDepartment(), Toast.LENGTH_SHORT).show();
+    					}
+    				}
+    		);	
+    				
+    		
+    		
+    		//view.getBackground().setColorFilter(0xFF6685D1, PorterDuff.Mode.MULTIPLY);
+    	
+    		Thread c1 = new Thread(centerOnLoad, "onCreate Centering Thread");
+    		c1.start();
+    		
+    		Log.i("PATH","end calum stuff");
+		
+		
 		
 		drawMap();
 		
