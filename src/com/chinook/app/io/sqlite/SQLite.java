@@ -35,7 +35,8 @@ public class SQLite implements IDatabaseProvider {
 		this.context = context;
 		
 		// setup helper
-		this.sqliteHelper = SQLiteHelper.getInstance(context);
+		//this.sqliteHelper = SQLiteHelper.getInstance(context);
+		this.sqliteHelper = new SQLiteHelper(context);
 		
 		// open the SQLite database
 		openDatabaseConnection();
