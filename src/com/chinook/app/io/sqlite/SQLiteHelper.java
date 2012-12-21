@@ -15,12 +15,12 @@ public class SQLiteHelper extends SQLiteOpenHelper{
 	private static SQLiteHelper mInstance = null;
 	private ArrayList<String> tabledata = null;
 	
-	public static SQLiteHelper getInstance(Context context) {
-		if (mInstance == null) {
-			mInstance = new SQLiteHelper(context);
-		}
-		return mInstance;
-	}
+//	public static SQLiteHelper getInstance(Context context) {
+//		if (mInstance == null) {
+//			mInstance = new SQLiteHelper(context);
+//		}
+//		return mInstance;
+//	}
 	
 //	public static SQLiteHelper getInstanstance(Context context, ArrayList<String> tabledata) {
 //		if (mInstance == null) {
@@ -32,7 +32,7 @@ public class SQLiteHelper extends SQLiteOpenHelper{
 //		return mInstance;
 //	}
 	
-	private SQLiteHelper(Context context) {
+	public SQLiteHelper(Context context) {
 		super(context, DatabaseConstants.DATABASE_NAME, null, DatabaseConstants.DATABASE_VERSION);
 		
 		//this.tabledata = null;
