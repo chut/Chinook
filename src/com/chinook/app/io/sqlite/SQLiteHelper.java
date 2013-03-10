@@ -47,7 +47,7 @@ public class SQLiteHelper extends SQLiteOpenHelper{
 	
 	public void setTableData (ArrayList<String> tabledata) {
 		Log.i("SQLITE","setTableData table size: " + tabledata.size());
-		mInstance.tabledata = tabledata;
+		this.tabledata = tabledata;
 	}
 	
 	// called to create table

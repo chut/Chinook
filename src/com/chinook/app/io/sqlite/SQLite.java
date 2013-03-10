@@ -164,9 +164,9 @@ public class SQLite implements IDatabaseProvider {
 		} catch (Exception e) {
 			// TODO error handling of dbTask failure
 			//results.add(DatabaseConstants.RESULT_FAILED);
+			Log.i("SQLITE","setTableData Exception: " + e);
         	return false;
 		}
-		
 		// open/create the SQLite database 
 		if (!openDatabaseConnection()) {return false;}
 		//if (this.future == null || !this.future.isCancelled()) {
