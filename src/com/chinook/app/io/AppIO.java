@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.chinook.activities.Entry;
 import com.chinook.activities.MapViewActivity;
 import com.chinook.app.AppConstants;
 import com.chinook.app.Route;
@@ -46,7 +47,7 @@ private final UIHandler handlerUI;
 		
 	public void syncDatabase_async(int progressBar, Activity activity) {
 		// create task
-		Task_DatabaseIO<String, Context> databaseTask = new Task_DatabaseIO<String, Context>(activity, handlerUI, DatabaseConstants.QUERY_SYNC_DB, null, AppConstants.PROVIDER_INT_SQLITE);
+		Task_DatabaseIO<String, Activity> databaseTask = new Task_DatabaseIO<String, Activity>(activity, handlerUI, DatabaseConstants.QUERY_SYNC_DB, null, AppConstants.PROVIDER_INT_SQLITE);
 		
 		// attach progress bar/dialog
 		switch (progressBar) {
@@ -66,7 +67,9 @@ private final UIHandler handlerUI;
 		}
 		
 		// create and set resultTask
-		Post_ToastMessage resultTask = new Post_ToastMessage("Database sync completed!", activity);
+		//Post_ToastMessage resultTask = new Post_ToastMessage("Database sync completed!", activity);
+		
+		Post_triggerOnResume resultTask = new Post_triggerOnResume("Database sync completed!", activity);
 		databaseTask.setResultTask(resultTask);
 		
 		// submit task
@@ -280,6 +283,23 @@ private final UIHandler handlerUI;
 
 		@Override
 		public void run() {
+			//Log.i("RESULT","toasting message: " + element1);
+			Toast.makeText(element2, element1, Toast.LENGTH_SHORT).show();
+		}
+	}
+	
+	private class Post_triggerOnResume extends PostRunnableBase<String, Activity> {
+		
+		public Post_triggerOnResume(String message, Activity activity) {
+			super(message, activity);	// super(element1, element2)
+		}
+
+		@Override
+		public void run() {
+			if (element2.getClass().getName().equals(AppConstants.CLASS_ENTRY.getName())) {
+				Entry myEntry = (Entry) element2;
+				myEntry.onResume();
+			}
 			//Log.i("RESULT","toasting message: " + element1);
 			Toast.makeText(element2, element1, Toast.LENGTH_SHORT).show();
 		}

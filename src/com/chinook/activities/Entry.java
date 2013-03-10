@@ -318,19 +318,7 @@ public class Entry extends Activity implements OnClickListener, OnItemSelectedLi
 		end_byType_spinner.setAdapter(end_byType_spinner_adapter);
 		
 		// load spinner and auto-complete list data from database
-		Log.i("SPIN","before load");
-		appIO.updateListView_async(DatabaseConstants.QUERY_BUILDING_LIST, AppConstants.PROGRESS_BAR_INDETERMINATE, start_byBldg_spinner_list, start_byBldg_spinner_adapter, this);
-		appIO.updateListView_async(DatabaseConstants.QUERY_FLOOR_LIST, AppConstants.PROGRESS_BAR_INDETERMINATE, start_byFloor_spinner_list, start_byFloor_spinner_adapter, this, "camp");
-		appIO.updateListView_async(DatabaseConstants.QUERY_TYPE_LIST,	AppConstants.PROGRESS_BAR_INDETERMINATE, start_byType_spinner_list, start_byType_spinner_adapter, this, "camp");
-		appIO.updateListView_async(DatabaseConstants.QUERY_BUILDING_LIST, AppConstants.PROGRESS_BAR_INDETERMINATE, end_byBldg_spinner_list, end_byBldg_spinner_adapter, this);
-		appIO.updateListView_async(DatabaseConstants.QUERY_FLOOR_LIST, AppConstants.PROGRESS_BAR_INDETERMINATE, end_byFloor_spinner_list, end_byFloor_spinner_adapter, this, "camp");
-		appIO.updateListView_async(DatabaseConstants.QUERY_TYPE_LIST,	AppConstants.PROGRESS_BAR_INDETERMINATE, end_byType_spinner_list, end_byType_spinner_adapter, this, "camp");
-//		appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list, start_spinner_adapter, this, "", "camp", "", "list");
-//		appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list_DATA, start_spinner_adapter, this, "", "camp", "", "data");
-//		appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, end_spinner_list, end_spinner_adapter, this, "", "camp", "", "list");
-//		appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, end_spinner_list_DATA, end_spinner_adapter, this, "", "camp", "", "data");
-//		appIO.updateListView_async(DatabaseConstants.QUERY_NODES_ALL,	AppConstants.PROGRESS_BAR_INDETERMINATE,	autoComplete_list, autoComplete_adapter, this, AppPrefs.getBrowseBldg(this));
-//		appIO.updateListView_async(DatabaseConstants.QUERY_NODES_ALL, AppConstants.PROGRESS_BAR_INDETERMINATE,	autoComplete_list, autoComplete_adapter, this, AppPrefs.getBrowseBldg(this));
+		// moved to onResume()
 		
 		// make sure keyboard doesnt auto-popup
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -980,15 +968,31 @@ public class Entry extends Activity implements OnClickListener, OnItemSelectedLi
 	}
 
 	@Override
-	protected void onResume() {
+	public void onResume() {
 		super.onResume();
+		Log.i("SPIN", "onResume start");
 		// Toast.makeText(this, "onResume", Toast.LENGTH_SHORT).show();
 		// webView.loadUrl(AppConstants.GLOBAL_WEB_SITE + "?mode=browse&bldg=" +
 		// AppPrefs.getBrowseBldg(this));
 		
+		Log.i("SPIN","before load");
+		appIO.updateListView_async(DatabaseConstants.QUERY_BUILDING_LIST, AppConstants.PROGRESS_BAR_INDETERMINATE, start_byBldg_spinner_list, start_byBldg_spinner_adapter, this);
+		appIO.updateListView_async(DatabaseConstants.QUERY_FLOOR_LIST, AppConstants.PROGRESS_BAR_INDETERMINATE, start_byFloor_spinner_list, start_byFloor_spinner_adapter, this, "camp");
+		appIO.updateListView_async(DatabaseConstants.QUERY_TYPE_LIST,	AppConstants.PROGRESS_BAR_INDETERMINATE, start_byType_spinner_list, start_byType_spinner_adapter, this, "camp");
+		appIO.updateListView_async(DatabaseConstants.QUERY_BUILDING_LIST, AppConstants.PROGRESS_BAR_INDETERMINATE, end_byBldg_spinner_list, end_byBldg_spinner_adapter, this);
+		appIO.updateListView_async(DatabaseConstants.QUERY_FLOOR_LIST, AppConstants.PROGRESS_BAR_INDETERMINATE, end_byFloor_spinner_list, end_byFloor_spinner_adapter, this, "camp");
+		appIO.updateListView_async(DatabaseConstants.QUERY_TYPE_LIST,	AppConstants.PROGRESS_BAR_INDETERMINATE, end_byType_spinner_list, end_byType_spinner_adapter, this, "camp");
+//		appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list, start_spinner_adapter, this, "", "camp", "", "list");
+//		appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list_DATA, start_spinner_adapter, this, "", "camp", "", "data");
+//		appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, end_spinner_list, end_spinner_adapter, this, "", "camp", "", "list");
+//		appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, end_spinner_list_DATA, end_spinner_adapter, this, "", "camp", "", "data");
+//		appIO.updateListView_async(DatabaseConstants.QUERY_NODES_ALL,	AppConstants.PROGRESS_BAR_INDETERMINATE,	autoComplete_list, autoComplete_adapter, this, AppPrefs.getBrowseBldg(this));
+//		appIO.updateListView_async(DatabaseConstants.QUERY_NODES_ALL, AppConstants.PROGRESS_BAR_INDETERMINATE,	autoComplete_list, autoComplete_adapter, this, AppPrefs.getBrowseBldg(this));
+
 		updateStartEndLocation(true, null, AppPrefs.getStartID(this), AppPrefs.getStartLabel(this));
 		updateStartEndLocation(false, null, AppPrefs.getEndID(this), AppPrefs.getEndLabel(this));
 //		webView.getHandler().sendMessage(webView.getHandler().obtainMessage(webView.HANDLER_UPDATE_MAP_PREFS));
+		
 	}
 
 	@Override
