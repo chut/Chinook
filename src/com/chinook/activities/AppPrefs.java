@@ -145,7 +145,7 @@ public final class AppPrefs {
 	
 	public static String getStairs(Context context) {
 		prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		return prefs.getString(PREFERENCE_STAIRS, "elevator");
+		return prefs.getString(PREFERENCE_STAIRS, "stairs");
 	}
 	
 	public static void setStairs(String stairs, Context context) {
