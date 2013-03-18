@@ -115,7 +115,7 @@ private final UIHandler handlerUI;
 
 	}
 	
-	public void updateListView_async(int querytype, int progressBar, ArrayList<String> element1, ArrayAdapter<String> element2, Activity activity, String ... params) {
+	public void updateListView_async(int querytype, int progressBar, ArrayList<String> element1, ArrayAdapter<String> element2, ArrayList<String> element3, Activity activity, String ... params) {
 		Log.i("APPIO","begin updateListView");
 		// create task
 		//Task_SQLiteIO<ArrayList<String>, ArrayAdapter<String>> sqliteTask = new Task_SQLiteIO<ArrayList<String>, ArrayAdapter<String>>(activity, handlerUI, querytype, params, element1, element2);
@@ -139,7 +139,7 @@ private final UIHandler handlerUI;
 		}
 		
 		// create and set resultTask
-		Post_UpdateList resultTask = new Post_UpdateList(element1, element2);
+		Post_UpdateList resultTask = new Post_UpdateList(element1, element2, element3);
 		sqliteTask.setResultTask(resultTask);
 		
 		// submit task
@@ -235,8 +235,11 @@ private final UIHandler handlerUI;
 
 	private class Post_UpdateList extends PostRunnableBase<ArrayList<String>, ArrayAdapter<String>> {
 		
-		public Post_UpdateList(ArrayList<String> element1, ArrayAdapter<String> element2) {
+		private ArrayList<String> element3;
+		
+		public Post_UpdateList(ArrayList<String> element1, ArrayAdapter<String> element2, ArrayList<String> element3) {
 			super(element1, element2);
+			this.element3 = element3;
 		}
 
 		@Override
@@ -244,8 +247,29 @@ private final UIHandler handlerUI;
 			// first, clear the items list
 			element1.clear();
 			
-			// update arrayList
-			element1.addAll(results);			
+			// element1 = label (what you see in list)
+			// element3 = DATA (if data is not the same as the label)
+			
+			// if element3 is not null, then label is not the same as DATA
+			if (element3 != null) {
+				// always have a blank entry as first item
+				element1.add("");
+				element3.add("");
+				
+				for (String row : results) {
+					String[] columns = row.split(",");
+					element1.add(columns[1]);	//label
+					element3.add(columns[0]);	//data
+				}
+				
+			} else {
+				// always have a blank entry as first item
+				element1.add("");
+				
+				element1.addAll(results);
+			}
+			
+			
 			
 			// notify array adapter
 			element2.notifyDataSetChanged();

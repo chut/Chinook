@@ -54,9 +54,11 @@ public class Entry extends Activity implements OnClickListener, OnItemSelectedLi
 	private ArrayList<NodeInfo> end_spinner_list;
 	private ArrayList<NodeInfo> end_spinner_list_DATA;
 	private ArrayList<String> start_byBldg_spinner_list;
+	private ArrayList<String> start_byBldg_spinner_list_DATA;
 	private ArrayList<String> start_byFloor_spinner_list;
 	private ArrayList<String> start_byType_spinner_list;
 	private ArrayList<String> end_byBldg_spinner_list;
+	private ArrayList<String> end_byBldg_spinner_list_DATA;
 	private ArrayList<String> end_byFloor_spinner_list;
 	private ArrayList<String> end_byType_spinner_list;
 	private ArrayAdapter<NodeInfo> start_spinner_adapter;
@@ -287,6 +289,7 @@ public class Entry extends Activity implements OnClickListener, OnItemSelectedLi
 		end_spinner.setAdapter(end_spinner_adapter);
 		
 		start_byBldg_spinner_list = new ArrayList<String>();
+		start_byBldg_spinner_list_DATA = new ArrayList<String>();
 		start_byBldg_spinner_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, start_byBldg_spinner_list);
 		start_byBldg_spinner_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		
@@ -299,6 +302,7 @@ public class Entry extends Activity implements OnClickListener, OnItemSelectedLi
 		start_byType_spinner_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		
 		end_byBldg_spinner_list = new ArrayList<String>();
+		end_byBldg_spinner_list_DATA = new ArrayList<String>();
 		end_byBldg_spinner_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, end_byBldg_spinner_list);
 		end_byBldg_spinner_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		
@@ -466,102 +470,136 @@ public class Entry extends Activity implements OnClickListener, OnItemSelectedLi
 			Log.i("ENTRY","  - startByBldgSpinner");
 			if (!bFirst_startByBldgSpinner) {
 				
-//				Toast.makeText(this, "startByFloorSpinner, value: " + start_byBldg_spinner_list.get(start_byBldg_spinner.getSelectedItemPosition()).toLowerCase(), Toast.LENGTH_SHORT).show();
-				Log.i("ENTRY", "Bldg: " + start_byBldg_spinner_list.get(start_byBldg_spinner.getSelectedItemPosition()).toLowerCase());
-				String bldgID = start_byBldg_spinner_list.get(start_byBldg_spinner.getSelectedItemPosition()).toLowerCase();
-//				appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list, start_spinner_adapter, this, "", bldgID, "");
-//				appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list_DATA, start_spinner_adapter, this, "", bldgID, "");
-				//appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list, start_spinner_adapter, this, "", "camp", "", "list");
-				//appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list_DATA, start_spinner_adapter, this, "", "camp", "", "data");
-				if (start_byFloor_spinner_list != null && start_byFloor_spinner.getSelectedItemPosition() != 0) {
-					Log.i("ENTRY", "setting Floor menu to 0");
-					bFirst_startByFloorSpinner = true;
-					start_byFloor_spinner.setSelection(0);
+				if (start_byBldg_spinner.getSelectedItemPosition() == 0) {
+					start_FloorMenu.setVisibility(View.GONE);
+					start_TypeMenu.setVisibility(View.GONE); 
+					start_LocationMenu.setVisibility(View.GONE); 
+					
+				} else {
+	//				Toast.makeText(this, "startByFloorSpinner, value: " + start_byBldg_spinner_list.get(start_byBldg_spinner.getSelectedItemPosition()).toLowerCase(), Toast.LENGTH_SHORT).show();
+					Log.i("ENTRY", "BldgID: " + start_byBldg_spinner_list_DATA.get(start_byBldg_spinner.getSelectedItemPosition()).toLowerCase());
+					String bldgID = start_byBldg_spinner_list_DATA.get(start_byBldg_spinner.getSelectedItemPosition()).toLowerCase();
+	//				appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list, start_spinner_adapter, this, "", bldgID, "");
+	//				appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list_DATA, start_spinner_adapter, this, "", bldgID, "");
+					//appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list, start_spinner_adapter, this, "", "camp", "", "list");
+					//appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list_DATA, start_spinner_adapter, this, "", "camp", "", "data");
+					if (start_byFloor_spinner_list != null && start_byFloor_spinner_list.size() > 0 && start_byFloor_spinner.getSelectedItemPosition() != 0) {
+						Log.i("ENTRY", "setting Floor menu to 0");
+						bFirst_startByFloorSpinner = true;
+						start_byFloor_spinner.setSelection(0);
+					}
+					if (start_byType_spinner_list != null && start_byType_spinner_list.size() > 0 && start_byType_spinner.getSelectedItemPosition() != 0) {
+						start_byType_spinner.setSelection(0);
+					}
+					
+					if (bldgID.equals("camp")) {
+						if (start_TypeMenu.getVisibility() == View.GONE) {
+							bFirst_startByTypeSpinner = true;
+							//start_byFloor_spinner.setSelection(1);
+							start_TypeMenu.setVisibility(View.VISIBLE); 
+						}
+						start_FloorMenu.setVisibility(View.GONE);
+						start_LocationMenu.setVisibility(View.GONE);
+						
+						appIO.updateListView_async(DatabaseConstants.QUERY_TYPE_LIST,	AppConstants.PROGRESS_BAR_INDETERMINATE, start_byType_spinner_list, start_byType_spinner_adapter, null, this, bldgID, "0");
+						
+					} else {
+						if (start_FloorMenu.getVisibility() == View.GONE) {
+							Log.i("ENTRY", "making Floor menu visible. current floor: " + start_byFloor_spinner.getSelectedItemPosition());
+							bFirst_startByFloorSpinner = true;
+							start_FloorMenu.setVisibility(View.VISIBLE); 
+						}
+						start_TypeMenu.setVisibility(View.GONE); 
+						start_LocationMenu.setVisibility(View.GONE);
+						
+						appIO.updateListView_async(DatabaseConstants.QUERY_FLOOR_LIST, AppConstants.PROGRESS_BAR_INDETERMINATE, start_byFloor_spinner_list, start_byFloor_spinner_adapter, null, this, bldgID);
+						
+					}
+					//appIO.updateListView_async(DatabaseConstants.QUERY_FLOOR_LIST, AppConstants.PROGRESS_BAR_INDETERMINATE, start_byFloor_spinner_list, start_byFloor_spinner_adapter, null, this, bldgID);
+					//appIO.updateListView_async(DatabaseConstants.QUERY_TYPE_LIST,	AppConstants.PROGRESS_BAR_INDETERMINATE, start_byType_spinner_list, start_byType_spinner_adapter, this, bldgID);
+	
+	//				if (start_spinner.getSelectedItemPosition() > 0) {
+	//					bFirst_startRoomListSpinner = true;
+	//					start_spinner.setSelection(0);
+	//					start_spinner_list.clear();
+	//					start_spinner_list_DATA.clear();
+	//					start_spinner_adapter.notifyDataSetChanged();
+	//				}
 				}
-				if (start_byType_spinner_list != null && start_byType_spinner.getSelectedItemPosition() != 0) {
-					start_byType_spinner.setSelection(0);
-				}
-				
-				if (start_FloorMenu.getVisibility() == View.GONE) {
-					Log.i("ENTRY", "making Floor menu visible");
-					bFirst_startByFloorSpinner = true;
-					start_FloorMenu.setVisibility(View.VISIBLE); 
-				}
-				start_TypeMenu.setVisibility(View.GONE); 
-				start_LocationMenu.setVisibility(View.GONE); 
-				
-				appIO.updateListView_async(DatabaseConstants.QUERY_FLOOR_LIST, AppConstants.PROGRESS_BAR_INDETERMINATE, start_byFloor_spinner_list, start_byFloor_spinner_adapter, this, bldgID);
-				//appIO.updateListView_async(DatabaseConstants.QUERY_TYPE_LIST,	AppConstants.PROGRESS_BAR_INDETERMINATE, start_byType_spinner_list, start_byType_spinner_adapter, this, bldgID);
-
-//				if (start_spinner.getSelectedItemPosition() > 0) {
-//					bFirst_startRoomListSpinner = true;
-//					start_spinner.setSelection(0);
-//					start_spinner_list.clear();
-//					start_spinner_list_DATA.clear();
-//					start_spinner_adapter.notifyDataSetChanged();
-//				}
 			} else {bFirst_startByBldgSpinner = false;}
 			break;
 			
 		case R.id.startByFloorSpinner:
 			Log.i("ENTRY","  - startByFloorSpinner");
 			if (!bFirst_startByFloorSpinner) {
-				
-				//Toast.makeText(this, "startByFloorSpinner, value: " + byFloor_spinner_list.get(position) + ", startByTypeSpinner: " + byType_spinner_list.get(start_byType_spinner.getSelectedItemPosition()), Toast.LENGTH_SHORT).show();
-				String bldgID = start_byBldg_spinner_list.get(start_byBldg_spinner.getSelectedItemPosition()).toLowerCase();
-				String floorLevel = start_byFloor_spinner_list.get(start_byFloor_spinner.getSelectedItemPosition()).toLowerCase();
-				String type = start_byType_spinner_list.get(start_byType_spinner.getSelectedItemPosition()).toLowerCase();
-				Log.i("ENTRY","Floor - bldgID: " + bldgID);
-				Log.i("ENTRY","Floor - floorLevel: " + floorLevel);
-				Log.i("ENTRY","Floor - type: " + type);
-				
-				if (start_byType_spinner_list != null && start_byType_spinner.getSelectedItemPosition() != 0) {
-					bFirst_startByTypeSpinner = true;
-					start_byType_spinner.setSelection(0);
+				if (start_byFloor_spinner.getSelectedItemPosition() == 0) {
+					start_TypeMenu.setVisibility(View.GONE); 
+					start_LocationMenu.setVisibility(View.GONE);
+				} else {
+					//Toast.makeText(this, "startByFloorSpinner, value: " + byFloor_spinner_list.get(position) + ", startByTypeSpinner: " + byType_spinner_list.get(start_byType_spinner.getSelectedItemPosition()), Toast.LENGTH_SHORT).show();
+					String bldgID = start_byBldg_spinner_list_DATA.get(start_byBldg_spinner.getSelectedItemPosition()).toLowerCase();
+					String floorLevel = start_byFloor_spinner_list.get(start_byFloor_spinner.getSelectedItemPosition()).toLowerCase();
+					//String type = start_byType_spinner_list.get(start_byType_spinner.getSelectedItemPosition()).toLowerCase();
+					Log.i("ENTRY","Floor - bldgID: " + bldgID);
+					Log.i("ENTRY","Floor - floorLevel: " + floorLevel);
+					//Log.i("ENTRY","Floor - type: " + type);
+					
+					if (start_byType_spinner_list != null && start_byType_spinner_list.size() > 0 && start_byType_spinner.getSelectedItemPosition() != 0) {
+						bFirst_startByTypeSpinner = true;
+						start_byType_spinner.setSelection(0);
+					}
+					
+					if (start_TypeMenu.getVisibility() == View.GONE) {
+						bFirst_startByTypeSpinner = true;
+						start_TypeMenu.setVisibility(View.VISIBLE); 
+					}
+					start_LocationMenu.setVisibility(View.GONE); 
+					
+					appIO.updateListView_async(DatabaseConstants.QUERY_TYPE_LIST,	AppConstants.PROGRESS_BAR_INDETERMINATE, start_byType_spinner_list, start_byType_spinner_adapter, null, this, bldgID, floorLevel);
+	
+	//				appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list, start_spinner_adapter, this, floorLevel, bldgID, type);
+	//				appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list_DATA, start_spinner_adapter, this, floorLevel, bldgID, type);
+					
+	//				if (start_spinner.getSelectedItemPosition() > 0) {
+	//					bFirst_startRoomListSpinner = true;
+	//					start_spinner.setSelection(0);
+	//				}
 				}
-				
-				if (start_TypeMenu.getVisibility() == View.GONE) {
-					bFirst_startByTypeSpinner = true;
-					start_TypeMenu.setVisibility(View.VISIBLE); 
-				}
-				start_LocationMenu.setVisibility(View.GONE); 
-				
-				appIO.updateListView_async(DatabaseConstants.QUERY_TYPE_LIST,	AppConstants.PROGRESS_BAR_INDETERMINATE, start_byType_spinner_list, start_byType_spinner_adapter, this, bldgID);
-
-//				appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list, start_spinner_adapter, this, floorLevel, bldgID, type);
-//				appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list_DATA, start_spinner_adapter, this, floorLevel, bldgID, type);
-				
-//				if (start_spinner.getSelectedItemPosition() > 0) {
-//					bFirst_startRoomListSpinner = true;
-//					start_spinner.setSelection(0);
-//				}
 			} else {bFirst_startByFloorSpinner = false;}
 			break;
 			
 		case R.id.startByTypeSpinner:
 			Log.i("ENTRY","  - startByTypeSpinner");
 			if (!bFirst_startByTypeSpinner) {
-				//Toast.makeText(this, "startByTypeSpinner, value: " + byType_spinner_list.get(position), Toast.LENGTH_SHORT).show();
-				String bldgID = start_byBldg_spinner_list.get(start_byBldg_spinner.getSelectedItemPosition()).toLowerCase();
-				String floorLevel = start_byFloor_spinner_list.get(start_byFloor_spinner.getSelectedItemPosition()).toLowerCase();
-				String type = start_byType_spinner_list.get(start_byType_spinner.getSelectedItemPosition()).toLowerCase();
-				Log.i("ENTRY","Type - bldgID: " + bldgID);
-				Log.i("ENTRY","Type - floorLevel: " + floorLevel);
-				Log.i("ENTRY","Type - type: " + type);
-				
-				if (start_LocationMenu.getVisibility() == View.GONE) {
-					bFirst_startRoomListSpinner = true;
-					start_LocationMenu.setVisibility(View.VISIBLE); 
+				if (start_byType_spinner.getSelectedItemPosition() == 0) {
+					start_LocationMenu.setVisibility(View.GONE);
+				} else {
+					//Toast.makeText(this, "startByTypeSpinner, value: " + byType_spinner_list.get(position), Toast.LENGTH_SHORT).show();
+					String bldgID = start_byBldg_spinner_list_DATA.get(start_byBldg_spinner.getSelectedItemPosition()).toLowerCase();
+					String floorLevel = "0";
+					if (bldgID.equals("camp")) {
+						floorLevel = "0";
+					} else {
+						floorLevel = start_byFloor_spinner_list.get(start_byFloor_spinner.getSelectedItemPosition()).toLowerCase();
+					}
+					String type = start_byType_spinner_list.get(start_byType_spinner.getSelectedItemPosition()).toLowerCase();
+					Log.i("ENTRY","Type - bldgID: " + bldgID);
+					Log.i("ENTRY","Type - floorLevel: " + floorLevel);
+					Log.i("ENTRY","Type - type: " + type);
+					
+					if (start_LocationMenu.getVisibility() == View.GONE) {
+						bFirst_startRoomListSpinner = true;
+						start_LocationMenu.setVisibility(View.VISIBLE); 
+					}
+					
+					if (start_spinner_list.size() > 0 && start_spinner.getSelectedItemPosition() > 0) {
+						bFirst_startRoomListSpinner = true;
+						start_spinner.setSelection(0);
+					}
+					
+					appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list, start_spinner_adapter, this, floorLevel, bldgID, type);
+					appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list_DATA, start_spinner_adapter, this, floorLevel, bldgID, type);
 				}
-				
-				if (start_spinner.getSelectedItemPosition() > 0) {
-					bFirst_startRoomListSpinner = true;
-					start_spinner.setSelection(0);
-				}
-				
-				appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list, start_spinner_adapter, this, floorLevel, bldgID, type);
-				appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list_DATA, start_spinner_adapter, this, floorLevel, bldgID, type);
-				
 			} else {bFirst_startByTypeSpinner = false;}
 			break;
 			
@@ -578,38 +616,57 @@ public class Entry extends Activity implements OnClickListener, OnItemSelectedLi
 			Log.i("ENTRY","  - endByBldgSpinner");
 			if (!bFirst_endByBldgSpinner) {
 				
-				//Toast.makeText(this, "endByFloorSpinner, value: " + byFloor_spinner_list.get(position), Toast.LENGTH_SHORT).show();
-				Log.i("ENTRY", "Bldg: " + end_byBldg_spinner_list.get(end_byBldg_spinner.getSelectedItemPosition()).toLowerCase());
-				String bldgID = end_byBldg_spinner_list.get(end_byBldg_spinner.getSelectedItemPosition()).toLowerCase();
-//				appIO.updateListView_async(DatabaseConstants.QUERY_NODES_BY_FLOOR_AND_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, end_spinner_list, end_spinner_adapter, this, byFloor_spinner_list.get(position), AppPrefs.getBrowseBldg(this), byType_spinner_list.get(end_byType_spinner.getSelectedItemPosition()).toLowerCase(), "list");
-//				appIO.updateListView_async(DatabaseConstants.QUERY_NODES_BY_FLOOR_AND_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, end_spinner_list_DATA, end_spinner_adapter, this, byFloor_spinner_list.get(position), AppPrefs.getBrowseBldg(this), byType_spinner_list.get(end_byType_spinner.getSelectedItemPosition()).toLowerCase(), "data");
-				if (end_byFloor_spinner_list != null && end_byFloor_spinner.getSelectedItemPosition() != 0) {
-					Log.i("ENTRY", "setting Floor menu to 0");
-					bFirst_endByFloorSpinner = true;
-					end_byFloor_spinner.setSelection(0);
+				if (end_byBldg_spinner.getSelectedItemPosition() == 0) {
+					end_FloorMenu.setVisibility(View.GONE);
+					end_TypeMenu.setVisibility(View.GONE); 
+					end_LocationMenu.setVisibility(View.GONE); 
+				} else {
+					//Toast.makeText(this, "endByFloorSpinner, value: " + byFloor_spinner_list.get(position), Toast.LENGTH_SHORT).show();
+					Log.i("ENTRY", "BldgID: " + end_byBldg_spinner_list_DATA.get(end_byBldg_spinner.getSelectedItemPosition()).toLowerCase());
+					String bldgID = end_byBldg_spinner_list_DATA.get(end_byBldg_spinner.getSelectedItemPosition()).toLowerCase();
+	//				appIO.updateListView_async(DatabaseConstants.QUERY_NODES_BY_FLOOR_AND_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, end_spinner_list, end_spinner_adapter, this, byFloor_spinner_list.get(position), AppPrefs.getBrowseBldg(this), byType_spinner_list.get(end_byType_spinner.getSelectedItemPosition()).toLowerCase(), "list");
+	//				appIO.updateListView_async(DatabaseConstants.QUERY_NODES_BY_FLOOR_AND_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, end_spinner_list_DATA, end_spinner_adapter, this, byFloor_spinner_list.get(position), AppPrefs.getBrowseBldg(this), byType_spinner_list.get(end_byType_spinner.getSelectedItemPosition()).toLowerCase(), "data");
+					if (end_byFloor_spinner_list != null && end_byFloor_spinner_list.size() > 0 && end_byFloor_spinner.getSelectedItemPosition() != 0) {
+						Log.i("ENTRY", "setting Floor menu to 0");
+						bFirst_endByFloorSpinner = true;
+						end_byFloor_spinner.setSelection(0);
+					}
+					if (end_byType_spinner_list != null && end_byType_spinner_list.size() > 0 && end_byType_spinner.getSelectedItemPosition() != 0) {
+						end_byType_spinner.setSelection(0);				
+					}
+					
+					if (bldgID.equals("camp")) {
+						if (end_TypeMenu.getVisibility() == View.GONE) {
+							bFirst_endByTypeSpinner = true;
+							//start_byFloor_spinner.setSelection(1);
+							end_TypeMenu.setVisibility(View.VISIBLE); 
+						}
+						end_FloorMenu.setVisibility(View.GONE);
+						end_LocationMenu.setVisibility(View.GONE);
+						
+						appIO.updateListView_async(DatabaseConstants.QUERY_TYPE_LIST,	AppConstants.PROGRESS_BAR_INDETERMINATE, end_byType_spinner_list, end_byType_spinner_adapter, null, this, bldgID, "0");
+						
+					} else {
+						if (end_FloorMenu.getVisibility() == View.GONE) {
+							Log.i("ENTRY", "making Floor menu visible");
+							bFirst_endByFloorSpinner = true;
+							end_FloorMenu.setVisibility(View.VISIBLE); 
+						}
+						end_TypeMenu.setVisibility(View.GONE); 
+						end_LocationMenu.setVisibility(View.GONE); 
+						
+						appIO.updateListView_async(DatabaseConstants.QUERY_FLOOR_LIST, AppConstants.PROGRESS_BAR_INDETERMINATE, end_byFloor_spinner_list, end_byFloor_spinner_adapter, null, this, bldgID);
+					}
+					//appIO.updateListView_async(DatabaseConstants.QUERY_TYPE_LIST,	AppConstants.PROGRESS_BAR_INDETERMINATE, end_byType_spinner_list, end_byType_spinner_adapter, this, bldgID);
+	
+	//				if (end_spinner.getSelectedItemPosition() > 0) {
+	//					bFirst_endRoomListSpinner = true;
+	//					end_spinner.setSelection(0);
+	//					end_spinner_list.clear();
+	//					end_spinner_list_DATA.clear();
+	//					end_spinner_adapter.notifyDataSetChanged();
+	//				}
 				}
-				if (end_byType_spinner_list != null && end_byType_spinner.getSelectedItemPosition() != 0) {
-					end_byType_spinner.setSelection(0);				
-				}
-				
-				if (end_FloorMenu.getVisibility() == View.GONE) {
-					Log.i("ENTRY", "making Floor menu visible");
-					bFirst_endByFloorSpinner = true;
-					end_FloorMenu.setVisibility(View.VISIBLE); 
-				}
-				end_TypeMenu.setVisibility(View.GONE); 
-				end_LocationMenu.setVisibility(View.GONE); 
-				
-				appIO.updateListView_async(DatabaseConstants.QUERY_FLOOR_LIST, AppConstants.PROGRESS_BAR_INDETERMINATE, end_byFloor_spinner_list, end_byFloor_spinner_adapter, this, bldgID);
-				//appIO.updateListView_async(DatabaseConstants.QUERY_TYPE_LIST,	AppConstants.PROGRESS_BAR_INDETERMINATE, end_byType_spinner_list, end_byType_spinner_adapter, this, bldgID);
-
-//				if (end_spinner.getSelectedItemPosition() > 0) {
-//					bFirst_endRoomListSpinner = true;
-//					end_spinner.setSelection(0);
-//					end_spinner_list.clear();
-//					end_spinner_list_DATA.clear();
-//					end_spinner_adapter.notifyDataSetChanged();
-//				}
 			} else {bFirst_endByBldgSpinner = false;}
 			break;
 		
@@ -617,62 +674,73 @@ public class Entry extends Activity implements OnClickListener, OnItemSelectedLi
 			Log.i("ENTRY","  - endByFloorSpinner");
 			if (!bFirst_endByFloorSpinner) {
 				
-				bFirst_endByTypeSpinner = true;
-				
-				//Toast.makeText(this, "endByFloorSpinner, value: " + byFloor_spinner_list.get(position), Toast.LENGTH_SHORT).show();
-				String bldgID = end_byBldg_spinner_list.get(end_byBldg_spinner.getSelectedItemPosition()).toLowerCase();
-				String floorLevel = end_byFloor_spinner_list.get(end_byFloor_spinner.getSelectedItemPosition()).toLowerCase();
-				String type = end_byType_spinner_list.get(end_byType_spinner.getSelectedItemPosition()).toLowerCase();
-				Log.i("ENTRY","bldgID: " + bldgID);
-				Log.i("ENTRY","floorLevel: " + floorLevel);
-				Log.i("ENTRY","type: " + type);
-				
-				if (end_byType_spinner_list != null && end_byType_spinner.getSelectedItemPosition() != 0) {
-					bFirst_endByTypeSpinner = true;
-					end_byType_spinner.setSelection(0);
+				if (end_byFloor_spinner.getSelectedItemPosition() == 0) {
+					end_TypeMenu.setVisibility(View.GONE); 
+					end_LocationMenu.setVisibility(View.GONE); 
+				} else {
+					//Toast.makeText(this, "endByFloorSpinner, value: " + byFloor_spinner_list.get(position), Toast.LENGTH_SHORT).show();
+					String bldgID = end_byBldg_spinner_list_DATA.get(end_byBldg_spinner.getSelectedItemPosition()).toLowerCase();
+					String floorLevel = end_byFloor_spinner_list.get(end_byFloor_spinner.getSelectedItemPosition()).toLowerCase();
+					//String type = end_byType_spinner_list.get(end_byType_spinner.getSelectedItemPosition()).toLowerCase();
+					Log.i("ENTRY","bldgID: " + bldgID);
+					Log.i("ENTRY","floorLevel: " + floorLevel);
+					//Log.i("ENTRY","type: " + type);
+					
+					if (end_byType_spinner_list != null && end_byType_spinner_list.size() > 0 && end_byType_spinner.getSelectedItemPosition() != 0) {
+						bFirst_endByTypeSpinner = true;
+						end_byType_spinner.setSelection(0);
+					}
+					
+					if (end_TypeMenu.getVisibility() == View.GONE) {
+						bFirst_endByTypeSpinner = true;
+						end_TypeMenu.setVisibility(View.VISIBLE); 
+					}
+					end_LocationMenu.setVisibility(View.GONE); 
+					
+					appIO.updateListView_async(DatabaseConstants.QUERY_TYPE_LIST,	AppConstants.PROGRESS_BAR_INDETERMINATE, end_byType_spinner_list, end_byType_spinner_adapter, null, this, bldgID, floorLevel);
+					
+	//				appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, end_spinner_list, end_spinner_adapter, this, floorLevel, bldgID, type);
+	//				appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, end_spinner_list_DATA, end_spinner_adapter, this, floorLevel, bldgID, type);
+	//				if (end_spinner.getSelectedItemPosition() > 0) {
+	//					bFirst_endRoomListSpinner = true;
+	//					end_spinner.setSelection(0);
+	//				}
 				}
-				
-				if (end_TypeMenu.getVisibility() == View.GONE) {
-					bFirst_endByTypeSpinner = true;
-					end_TypeMenu.setVisibility(View.VISIBLE); 
-				}
-				end_LocationMenu.setVisibility(View.GONE); 
-				
-				appIO.updateListView_async(DatabaseConstants.QUERY_TYPE_LIST,	AppConstants.PROGRESS_BAR_INDETERMINATE, end_byType_spinner_list, end_byType_spinner_adapter, this, bldgID);
-				
-//				appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, end_spinner_list, end_spinner_adapter, this, floorLevel, bldgID, type);
-//				appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, end_spinner_list_DATA, end_spinner_adapter, this, floorLevel, bldgID, type);
-//				if (end_spinner.getSelectedItemPosition() > 0) {
-//					bFirst_endRoomListSpinner = true;
-//					end_spinner.setSelection(0);
-//				}
 			} else {bFirst_endByFloorSpinner = false;}
 			break;
 			
 		case R.id.endByTypeSpinner:
 			Log.i("ENTRY","  - endByTypeSpinner");
 			if (!bFirst_endByTypeSpinner) {
-				//Toast.makeText(this, "endByTypeSpinner, value: " + byType_spinner_list.get(position), Toast.LENGTH_SHORT).show();
-				String bldgID = end_byBldg_spinner_list.get(end_byBldg_spinner.getSelectedItemPosition()).toLowerCase();
-				String floorLevel = end_byFloor_spinner_list.get(end_byFloor_spinner.getSelectedItemPosition()).toLowerCase();
-				String type = end_byType_spinner_list.get(end_byType_spinner.getSelectedItemPosition()).toLowerCase();
-				Log.i("ENTRY","bldgID: " + bldgID);
-				Log.i("ENTRY","floorLevel: " + floorLevel);
-				Log.i("ENTRY","type: " + type);
-				
-				if (end_LocationMenu.getVisibility() == View.GONE) {
-					bFirst_endRoomListSpinner = true;
-					end_LocationMenu.setVisibility(View.VISIBLE); 
+				if (end_byType_spinner.getSelectedItemPosition() == 0) {
+					end_LocationMenu.setVisibility(View.GONE); 
+				} else {
+					//Toast.makeText(this, "endByTypeSpinner, value: " + byType_spinner_list.get(position), Toast.LENGTH_SHORT).show();
+					String bldgID = end_byBldg_spinner_list_DATA.get(end_byBldg_spinner.getSelectedItemPosition()).toLowerCase();
+					String floorLevel = "0";
+					if (bldgID.equals("camp")) {
+						floorLevel = "0";
+					} else {
+						floorLevel = end_byFloor_spinner_list.get(end_byFloor_spinner.getSelectedItemPosition()).toLowerCase();
+					}
+					String type = end_byType_spinner_list.get(end_byType_spinner.getSelectedItemPosition()).toLowerCase();
+					Log.i("ENTRY","bldgID: " + bldgID);
+					Log.i("ENTRY","floorLevel: " + floorLevel);
+					Log.i("ENTRY","type: " + type);
+					
+					if (end_LocationMenu.getVisibility() == View.GONE) {
+						bFirst_endRoomListSpinner = true;
+						end_LocationMenu.setVisibility(View.VISIBLE); 
+					}
+					
+					if (end_spinner_list.size() > 0 && end_spinner.getSelectedItemPosition() > 0) {
+						bFirst_endRoomListSpinner = true;
+						end_spinner.setSelection(0);
+					}
+					
+					appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, end_spinner_list, end_spinner_adapter, this, floorLevel, bldgID, type);
+					appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, end_spinner_list_DATA, end_spinner_adapter, this, floorLevel, bldgID, type);
 				}
-				
-				if (end_spinner.getSelectedItemPosition() > 0) {
-					bFirst_endRoomListSpinner = true;
-					end_spinner.setSelection(0);
-				}
-				
-				appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, end_spinner_list, end_spinner_adapter, this, floorLevel, bldgID, type);
-				appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, end_spinner_list_DATA, end_spinner_adapter, this, floorLevel, bldgID, type);
-				
 			} else {bFirst_endByTypeSpinner = false;}
 			break;
 			
@@ -965,11 +1033,13 @@ public class Entry extends Activity implements OnClickListener, OnItemSelectedLi
 				updateStartEndLocation(false, null, "", "");
 //				start_autoComplete.setText("");
 //				end_autoComplete.setText("");
-				start_byFloor_spinner.setSelection(0);
-				start_byType_spinner.setSelection(0);
+				if (start_byBldg_spinner_list.size() > 0) start_byBldg_spinner.setSelection(0);
+				if (start_byFloor_spinner_list.size() > 0) start_byFloor_spinner.setSelection(0);
+				if (start_byType_spinner_list.size() > 0) start_byType_spinner.setSelection(0);
 				//start_spinner.setSelection(0);	// this is done when byFloor and byType spinners are reset to 0;
-				end_byFloor_spinner.setSelection(0);
-				end_byType_spinner.setSelection(0);
+				if (end_byBldg_spinner_list.size() > 0) end_byBldg_spinner.setSelection(0);
+				if (end_byFloor_spinner_list.size() > 0) end_byFloor_spinner.setSelection(0);
+				if (end_byType_spinner_list.size() > 0) end_byType_spinner.setSelection(0);
 				//end_spinner.setSelection(0);
 				
 				start_FloorMenu.setVisibility(View.GONE); 
@@ -1093,12 +1163,29 @@ public class Entry extends Activity implements OnClickListener, OnItemSelectedLi
 		// AppPrefs.getBrowseBldg(this));
 		
 		Log.i("SPIN","before load");
-		appIO.updateListView_async(DatabaseConstants.QUERY_BUILDING_LIST, AppConstants.PROGRESS_BAR_INDETERMINATE, start_byBldg_spinner_list, start_byBldg_spinner_adapter, this);
-		appIO.updateListView_async(DatabaseConstants.QUERY_FLOOR_LIST, AppConstants.PROGRESS_BAR_INDETERMINATE, start_byFloor_spinner_list, start_byFloor_spinner_adapter, this, "camp");
-		appIO.updateListView_async(DatabaseConstants.QUERY_TYPE_LIST,	AppConstants.PROGRESS_BAR_INDETERMINATE, start_byType_spinner_list, start_byType_spinner_adapter, this, "camp");
-		appIO.updateListView_async(DatabaseConstants.QUERY_BUILDING_LIST, AppConstants.PROGRESS_BAR_INDETERMINATE, end_byBldg_spinner_list, end_byBldg_spinner_adapter, this);
-		appIO.updateListView_async(DatabaseConstants.QUERY_FLOOR_LIST, AppConstants.PROGRESS_BAR_INDETERMINATE, end_byFloor_spinner_list, end_byFloor_spinner_adapter, this, "camp");
-		appIO.updateListView_async(DatabaseConstants.QUERY_TYPE_LIST,	AppConstants.PROGRESS_BAR_INDETERMINATE, end_byType_spinner_list, end_byType_spinner_adapter, this, "camp");
+		
+		if (start_byBldg_spinner_list.size() > 0) start_byBldg_spinner.setSelection(0);
+		if (start_byFloor_spinner_list.size() > 0) start_byFloor_spinner.setSelection(0);
+		if (start_byType_spinner_list.size() > 0) start_byType_spinner.setSelection(0);
+		//start_spinner.setSelection(0);	// this is done when byFloor and byType spinners are reset to 0;
+		if (end_byBldg_spinner_list.size() > 0) end_byBldg_spinner.setSelection(0);
+		if (end_byFloor_spinner_list.size() > 0) end_byFloor_spinner.setSelection(0);
+		if (end_byType_spinner_list.size() > 0) end_byType_spinner.setSelection(0);
+		//end_spinner.setSelection(0);
+		
+		start_FloorMenu.setVisibility(View.GONE); 
+		start_TypeMenu.setVisibility(View.GONE); 
+		start_LocationMenu.setVisibility(View.GONE); 
+		end_FloorMenu.setVisibility(View.GONE); 
+		end_TypeMenu.setVisibility(View.GONE); 
+		end_LocationMenu.setVisibility(View.GONE); 
+		
+		appIO.updateListView_async(DatabaseConstants.QUERY_BUILDING_LIST, AppConstants.PROGRESS_BAR_INDETERMINATE, start_byBldg_spinner_list, start_byBldg_spinner_adapter, start_byBldg_spinner_list_DATA, this);
+//		appIO.updateListView_async(DatabaseConstants.QUERY_FLOOR_LIST, AppConstants.PROGRESS_BAR_INDETERMINATE, start_byFloor_spinner_list, start_byFloor_spinner_adapter, null, this, "camp");
+//		appIO.updateListView_async(DatabaseConstants.QUERY_TYPE_LIST,	AppConstants.PROGRESS_BAR_INDETERMINATE, start_byType_spinner_list, start_byType_spinner_adapter, null, this, "camp");
+		appIO.updateListView_async(DatabaseConstants.QUERY_BUILDING_LIST, AppConstants.PROGRESS_BAR_INDETERMINATE, end_byBldg_spinner_list, end_byBldg_spinner_adapter, end_byBldg_spinner_list_DATA, this);
+//		appIO.updateListView_async(DatabaseConstants.QUERY_FLOOR_LIST, AppConstants.PROGRESS_BAR_INDETERMINATE, end_byFloor_spinner_list, end_byFloor_spinner_adapter, null, this, "camp");
+//		appIO.updateListView_async(DatabaseConstants.QUERY_TYPE_LIST,	AppConstants.PROGRESS_BAR_INDETERMINATE, end_byType_spinner_list, end_byType_spinner_adapter, null, this, "camp");
 //		appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list, start_spinner_adapter, this, "", "camp", "", "list");
 //		appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list_DATA, start_spinner_adapter, this, "", "camp", "", "data");
 //		appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, end_spinner_list, end_spinner_adapter, this, "", "camp", "", "list");
