@@ -717,10 +717,12 @@ public class SQLite implements IDatabaseProvider {
 
 		// obtain data from sqlite database
 		// params[0] = buildingID
+		// params[1] = floorLevel
+		Log.i("SQLITE","buildingID: " + params[0] + ", floorLevel: " + params[1]);
 		cursor = db.query(true, // distinct
 				DatabaseConstants.TABLE_NAME, // table name
 				new String[] { DatabaseConstants.KEY_NODE_TYPE }, // table columns returned
-				"(" + DatabaseConstants.KEY_NODE_TYPE + " NOT LIKE 'hall%') AND " + DatabaseConstants.KEY_BUILDING_ID + "='" + params[0] + "'", // where clause
+				"(" + DatabaseConstants.KEY_NODE_TYPE + " NOT LIKE 'hall') AND (" + DatabaseConstants.KEY_NODE_TYPE + " NOT LIKE 'intersection') AND (" + DatabaseConstants.KEY_BUILDING_ID + "='" + params[0] + "') AND (" + DatabaseConstants.KEY_FLOOR_LEVEL + "='" + params[1] + "')", // where clause
 				null, // selection args
 				null, // groupBy
 				null, // having
@@ -750,25 +752,32 @@ public class SQLite implements IDatabaseProvider {
 		// params[0] = buildingID
 		cursor = db.query(true, // distinct
 				DatabaseConstants.TABLE_NAME, // table name
-				new String[] { DatabaseConstants.KEY_BUILDING_ID }, // table columns returned
+				new String[] { DatabaseConstants.KEY_BUILDING_ID, DatabaseConstants.KEY_BUILDING_NAME }, // table columns returned
 				null, // where clause
 				null, // selection args
 				null, // groupBy
 				null, // having
-				DatabaseConstants.KEY_BUILDING_ID, // orderBy
+				DatabaseConstants.KEY_BUILDING_NAME, // orderBy
 				null // limit
 				);
 
 		// create an ArrayList<String> from cursor results
 		if (this.cursor != null) {
 			while (cursor.moveToNext()) {
-				this.results.add(cursor.getString(cursor.getColumnIndex(DatabaseConstants.KEY_BUILDING_ID)));
+				this.results.add(
+						cursor.getString(cursor.getColumnIndex(DatabaseConstants.KEY_BUILDING_ID)) +
+						"," +
+						cursor.getString(cursor.getColumnIndex(DatabaseConstants.KEY_BUILDING_NAME)));
 			}
 		} else {
 			this.results.add(DatabaseConstants.RESULT_FAILED);
 		}
 		
 		Log.i("SQLITE","query_BuildingList- results.size: " + this.results.size());
+		for (String str : results) {
+			Log.i("SQLITE", str);
+		}
+		
 		return true;
 	}
 	
@@ -785,14 +794,20 @@ public class SQLite implements IDatabaseProvider {
 			whereSQL = DatabaseConstants.KEY_FLOOR_LEVEL + "=" + params[0] + " AND ";
 		}
 		if (params[2].length() > 0) {
-			whereSQL = whereSQL + DatabaseConstants.KEY_NODE_TYPE + "='" + params[2] + "' AND ";
+			if (params[2].equals("path")) {
+				whereSQL = whereSQL + "(" + DatabaseConstants.KEY_NODE_TYPE + "='path' OR " + DatabaseConstants.KEY_NODE_TYPE + "='intersection') AND ";
+			} else {
+				whereSQL = whereSQL + DatabaseConstants.KEY_NODE_TYPE + "='" + params[2] + "' AND ";
+			}
 		}
+		whereSQL = whereSQL + DatabaseConstants.KEY_BUILDING_ID + "='" + params[1] + "' AND ";
+		whereSQL = whereSQL + DatabaseConstants.KEY_NODE_LABEL + " NOT LIKE 'xxx'";
 		
 		Log.i("SQLITE","floorID: " + params[0] + ", buildingID: " + params[1] + ", type: " + params[2]);
 		cursor = db.query(true, // distinct
 				DatabaseConstants.TABLE_NAME, // table name
 				new String[] { DatabaseConstants.KEY_NODE_ID,	DatabaseConstants.KEY_NODE_LABEL }, // table columns returned 
-				whereSQL + DatabaseConstants.KEY_BUILDING_ID + "='" + params[1] + "'", // where clause
+				whereSQL, // where clause
 				null, // selection args
 				null, // groupBy
 				null, // having

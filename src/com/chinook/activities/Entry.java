@@ -37,7 +37,8 @@ import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.content.SharedPreferences;
 
-public class Entry extends Activity implements OnClickListener, OnItemSelectedListener, OnGestureListener {
+//OnGestureListener
+public class Entry extends Activity implements OnClickListener, OnItemSelectedListener {
 
 	// spinners
 	private Spinner start_byBldg_spinner;
@@ -53,9 +54,11 @@ public class Entry extends Activity implements OnClickListener, OnItemSelectedLi
 	private ArrayList<NodeInfo> end_spinner_list;
 	private ArrayList<NodeInfo> end_spinner_list_DATA;
 	private ArrayList<String> start_byBldg_spinner_list;
+	private ArrayList<String> start_byBldg_spinner_list_DATA;
 	private ArrayList<String> start_byFloor_spinner_list;
 	private ArrayList<String> start_byType_spinner_list;
 	private ArrayList<String> end_byBldg_spinner_list;
+	private ArrayList<String> end_byBldg_spinner_list_DATA;
 	private ArrayList<String> end_byFloor_spinner_list;
 	private ArrayList<String> end_byType_spinner_list;
 	private ArrayAdapter<NodeInfo> start_spinner_adapter;
@@ -67,43 +70,51 @@ public class Entry extends Activity implements OnClickListener, OnItemSelectedLi
 	private ArrayAdapter<String> end_byFloor_spinner_adapter;
 	private ArrayAdapter<String> end_byType_spinner_adapter;
 
+	// selection menus
+	private LinearLayout start_FloorMenu;
+	private LinearLayout start_TypeMenu;
+	private LinearLayout start_LocationMenu;
+	private LinearLayout end_FloorMenu;
+	private LinearLayout end_TypeMenu;
+	private LinearLayout end_LocationMenu;
+		
 	// auto-complete
-	private AutoCompleteTextView start_autoComplete;
-	private AutoCompleteTextView end_autoComplete;
-	private ArrayList<NodeInfo> autoComplete_list;
-	private ArrayAdapter<NodeInfo> autoComplete_adapter;
+//	private AutoCompleteTextView start_autoComplete;
+//	private AutoCompleteTextView end_autoComplete;
+//	private ArrayList<NodeInfo> autoComplete_list;
+//	private ArrayAdapter<NodeInfo> autoComplete_adapter;
 	
 	// buttons
 	private Button searchNextButton;
-	private Button enterNextButton;
-	private Button scanButton;
-	private Button scanNextButton;
+//	private Button enterNextButton;
+//	private Button scanButton;
+//	private Button scanNextButton;
 //	private Button mapNextButton;
 //	private Button mapFloorButton;
 //	private Button mapFilterButton;
 	private Button searchClearButton;
-	private Button enterClearButton;
-	private Button scanClearButton;
+//	private Button enterClearButton;
+//	private Button scanClearButton;
 	
 	// textviews
 	private TextView searchStartText;
 	private TextView searchEndText;
-	private TextView enterStartText;
-	private TextView enterEndText;
-	private TextView scanStartText;
-	private TextView scanEndText;
+//	private TextView enterStartText;
+//	private TextView enterEndText;
+//	private TextView scanStartText;
+//	private TextView scanEndText;
 //	private TextView mapStartText;
 //	private TextView mapEndText;
 	
 	// imageviews
 	private ImageView searchSwitch;
-	private ImageView enterSwitch;
-	private ImageView scanSwitch;
+//	private ImageView enterSwitch;
+//	private ImageView scanSwitch;
 //	private ImageView mapSwitch;
 	
 //	private NavWebView webView;
 	private LinearLayout progress;
-	private TabHost tabs;
+//	private TabHost tabs;
 	
 	private AppIO appIO;
 	
@@ -119,12 +130,12 @@ public class Entry extends Activity implements OnClickListener, OnItemSelectedLi
 	private boolean bFirst_endByTypeSpinner = true;
 	private boolean bFirst_endRoomListSpinner = true;
 	
-	private GestureDetector myGesture;
-	private int currentTab;
-	private int numTab;
-	public final int ENABLE_FLING = 4;
-	public final int DISABLE_FLING = 3;
-	private int maxFling = ENABLE_FLING;	// by default, we have fling turned on, on the map tab 
+//	private GestureDetector myGesture;
+//	private int currentTab;
+//	private int numTab;
+//	public final int ENABLE_FLING = 4;
+//	public final int DISABLE_FLING = 3;
+//	private int maxFling = ENABLE_FLING;	// by default, we have fling turned on, on the map tab 
 											// setting this to 3 will turn it off on the map tab
 	
 	/** Called when the activity is first created. */
@@ -136,35 +147,35 @@ public class Entry extends Activity implements OnClickListener, OnItemSelectedLi
 		Log.i("CLEAR","Entry - onCreate: " + AppPrefs.getClearData(this));
 		appIO = new AppIO(AsyncConstants.DEFAULT_THREAD_POOL_SIZE);
 		
-		myGesture = new GestureDetector(this);
+//		myGesture = new GestureDetector(this);
 		
 		Drawable searchIcon, enterIcon, codeIcon, mapIcon;
 
-		tabs = (TabHost) findViewById(R.id.tabhost);
-		tabs.setup();
-
-		TabHost.TabSpec spec;
-
-		// Tab Lists
-		spec = tabs.newTabSpec("Type");
-		spec.setContent(R.id.Search);
-		searchIcon = getResources().getDrawable(R.drawable.menuicon36);
-		spec.setIndicator("By Type", searchIcon);
-		tabs.addTab(spec);
-
-		// Tab - Search
-		spec = tabs.newTabSpec("Enter");
-		spec.setContent(R.id.Enter);
-		enterIcon = getResources().getDrawable(R.drawable.searchicon36);
-		spec.setIndicator("Search", enterIcon);
-		tabs.addTab(spec);
-
-		// Tab - QR Scanner
-		spec = tabs.newTabSpec("QR");
-		spec.setContent(R.id.QR);
-		codeIcon = getResources().getDrawable(R.drawable.codeicon36);
-		spec.setIndicator("Scan", codeIcon);
-		tabs.addTab(spec);
+//		tabs = (TabHost) findViewById(R.id.tabhost);
+//		tabs.setup();
+//
+//		TabHost.TabSpec spec;
+//
+//		// Tab Lists
+//		spec = tabs.newTabSpec("Type");
+//		spec.setContent(R.id.Search);
+//		searchIcon = getResources().getDrawable(R.drawable.menuicon36);
+//		spec.setIndicator("By Type", searchIcon);
+//		tabs.addTab(spec);
+//
+//		// Tab - Search
+//		spec = tabs.newTabSpec("Enter");
+//		spec.setContent(R.id.Enter);
+//		enterIcon = getResources().getDrawable(R.drawable.searchicon36);
+//		spec.setIndicator("Search", enterIcon);
+//		tabs.addTab(spec);
+//
+//		// Tab - QR Scanner
+//		spec = tabs.newTabSpec("QR");
+//		spec.setContent(R.id.QR);
+//		codeIcon = getResources().getDrawable(R.drawable.codeicon36);
+//		spec.setIndicator("Scan", codeIcon);
+//		tabs.addTab(spec);
 
 		// Tab - Map
 //		spec = tabs.newTabSpec("Map");
@@ -179,78 +190,86 @@ public class Entry extends Activity implements OnClickListener, OnItemSelectedLi
 		// Start and End location textviews
 		(searchStartText = (TextView) findViewById(R.id.searchStartText)).setOnClickListener(this);
 		(searchEndText = (TextView) findViewById(R.id.searchEndText)).setOnClickListener(this);
-		(enterStartText = (TextView) findViewById(R.id.enterStartText)).setOnClickListener(this);
-		(enterEndText = (TextView) findViewById(R.id.enterEndText)).setOnClickListener(this);
-		(scanStartText = (TextView) findViewById(R.id.scanStartText)).setOnClickListener(this);
-		(scanEndText = (TextView) findViewById(R.id.scanEndText)).setOnClickListener(this);
+//		(enterStartText = (TextView) findViewById(R.id.enterStartText)).setOnClickListener(this);
+//		(enterEndText = (TextView) findViewById(R.id.enterEndText)).setOnClickListener(this);
+//		(scanStartText = (TextView) findViewById(R.id.scanStartText)).setOnClickListener(this);
+//		(scanEndText = (TextView) findViewById(R.id.scanEndText)).setOnClickListener(this);
 //		(mapStartText = (TextView) findViewById(R.id.mapStartText)).setOnClickListener(this);
 //		(mapEndText = (TextView) findViewById(R.id.mapEndText)).setOnClickListener(this);
 		
 		// Switch imageview
 		(searchSwitch = (ImageView) findViewById(R.id.searchSwitch)).setOnClickListener(this);
-		(enterSwitch = (ImageView) findViewById(R.id.enterSwitch)).setOnClickListener(this);
-		(scanSwitch = (ImageView) findViewById(R.id.scanSwitch)).setOnClickListener(this);
+//		(enterSwitch = (ImageView) findViewById(R.id.enterSwitch)).setOnClickListener(this);
+//		(scanSwitch = (ImageView) findViewById(R.id.scanSwitch)).setOnClickListener(this);
 //		(mapSwitch = (ImageView) findViewById(R.id.mapSwitch)).setOnClickListener(this);
 		
 		// next buttons
 		searchNextButton = (Button) findViewById(R.id.searchNext);
 		searchNextButton.setOnClickListener(this);
 
-		enterNextButton = (Button) findViewById(R.id.enterNext);
-		enterNextButton.setOnClickListener(this);
+//		enterNextButton = (Button) findViewById(R.id.enterNext);
+//		enterNextButton.setOnClickListener(this);
 
-		scanNextButton = (Button) findViewById(R.id.scanNext);
-		scanNextButton.setOnClickListener(this);
+//		scanNextButton = (Button) findViewById(R.id.scanNext);
+//		scanNextButton.setOnClickListener(this);
 
 //		mapNextButton = (Button) findViewById(R.id.mapNext);
 //		mapNextButton.setOnClickListener(this);
 		
 		// clear buttons
 		(searchClearButton = (Button) findViewById(R.id.searchClear)).setOnClickListener(this);;
-		(enterClearButton = (Button) findViewById(R.id.enterClear)).setOnClickListener(this);;
-		(scanClearButton = (Button) findViewById(R.id.scanClear)).setOnClickListener(this);;
+//		(enterClearButton = (Button) findViewById(R.id.enterClear)).setOnClickListener(this);;
+//		(scanClearButton = (Button) findViewById(R.id.scanClear)).setOnClickListener(this);;
 		
 		// scan buttons
-		scanButton = (Button) findViewById(R.id.ScanStartButton);
-		scanButton.setOnClickListener(this);
+//		scanButton = (Button) findViewById(R.id.ScanStartButton);
+//		scanButton.setOnClickListener(this);
 		
 		// map tab buttons
 //		(mapFloorButton = (Button) findViewById(R.id.mapFloor)).setOnClickListener(this);
 //		(mapFilterButton = (Button) findViewById(R.id.mapPOI)).setOnClickListener(this);
 		
 		// auto complete
-		autoComplete_list = new ArrayList<NodeInfo>();
-		autoComplete_adapter = new ArrayAdapter<NodeInfo>(this, android.R.layout.simple_dropdown_item_1line, autoComplete_list);
+//		autoComplete_list = new ArrayList<NodeInfo>();
+//		autoComplete_adapter = new ArrayAdapter<NodeInfo>(this, android.R.layout.simple_dropdown_item_1line, autoComplete_list);
 				
-		start_autoComplete = (AutoCompleteTextView) findViewById(R.id.startRoomText);
-		start_autoComplete.setAdapter(autoComplete_adapter);
-		start_autoComplete.setOnItemClickListener(new OnItemClickListener() {
-			@Override 
-		    public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-				// close the keyboard
-				InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE); 
-		        in.hideSoftInputFromWindow(start_autoComplete.getApplicationWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS); 
-				
-		        Log.i("AUTO","start_autoComplete, position: " + position + ", id: " + id);
-		        updateStartEndLocation(true, (NodeInfo) parent.getItemAtPosition(position), null, null);
-		        //updateStartEndLocation(true, autoComplete_list.get(position).toString(), null, null);
-			}
-		});
+//		start_autoComplete = (AutoCompleteTextView) findViewById(R.id.startRoomText);
+//		start_autoComplete.setAdapter(autoComplete_adapter);
+//		start_autoComplete.setOnItemClickListener(new OnItemClickListener() {
+//			@Override 
+//		    public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+//				// close the keyboard
+//				InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE); 
+//		        in.hideSoftInputFromWindow(start_autoComplete.getApplicationWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS); 
+//				
+//		        Log.i("AUTO","start_autoComplete, position: " + position + ", id: " + id);
+//		        updateStartEndLocation(true, (NodeInfo) parent.getItemAtPosition(position), null, null);
+//		        //updateStartEndLocation(true, autoComplete_list.get(position).toString(), null, null);
+//			}
+//		});
 		
-		end_autoComplete = (AutoCompleteTextView) findViewById(R.id.endRoomText);
-		end_autoComplete.setAdapter(autoComplete_adapter);
-		end_autoComplete.setOnItemClickListener(new OnItemClickListener() {
-			@Override 
-		    public void onItemClick(AdapterView<?> parent, View v, int position, long id) { 
-				InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE); 
-		        in.hideSoftInputFromWindow(end_autoComplete.getApplicationWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS); 
-				
-		        Log.i("AUTO","end_autoComplete, position: " + position + ", id: " + id);
-		        updateStartEndLocation(false, (NodeInfo) parent.getItemAtPosition(position), null, null);
-		        //updateStartEndLocation(false, autoComplete_list.get(position).toString(), null, null);
-		        
-			}
-		});
+//		end_autoComplete = (AutoCompleteTextView) findViewById(R.id.endRoomText);
+//		end_autoComplete.setAdapter(autoComplete_adapter);
+//		end_autoComplete.setOnItemClickListener(new OnItemClickListener() {
+//			@Override 
+//		    public void onItemClick(AdapterView<?> parent, View v, int position, long id) { 
+//				InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE); 
+//		        in.hideSoftInputFromWindow(end_autoComplete.getApplicationWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS); 
+//				
+//		        Log.i("AUTO","end_autoComplete, position: " + position + ", id: " + id);
+//		        updateStartEndLocation(false, (NodeInfo) parent.getItemAtPosition(position), null, null);
+//		        //updateStartEndLocation(false, autoComplete_list.get(position).toString(), null, null);
+//		        
+//			}
+//		});
+		
+		// selection menus
+		start_FloorMenu = (LinearLayout) findViewById(R.id.startFloorMenu);
+		start_TypeMenu = (LinearLayout) findViewById(R.id.startTypeMenu);
+		start_LocationMenu = (LinearLayout) findViewById(R.id.startLocationMenu);
+		end_FloorMenu = (LinearLayout) findViewById(R.id.endFloorMenu);
+		end_TypeMenu = (LinearLayout) findViewById(R.id.endTypeMenu);
+		end_LocationMenu = (LinearLayout) findViewById(R.id.endLocationMenu);
 		
 		// spinners
 		start_spinner = (Spinner) findViewById(R.id.startRoomListSpinner);
@@ -270,6 +289,7 @@ public class Entry extends Activity implements OnClickListener, OnItemSelectedLi
 		end_spinner.setAdapter(end_spinner_adapter);
 		
 		start_byBldg_spinner_list = new ArrayList<String>();
+		start_byBldg_spinner_list_DATA = new ArrayList<String>();
 		start_byBldg_spinner_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, start_byBldg_spinner_list);
 		start_byBldg_spinner_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		
@@ -282,6 +302,7 @@ public class Entry extends Activity implements OnClickListener, OnItemSelectedLi
 		start_byType_spinner_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		
 		end_byBldg_spinner_list = new ArrayList<String>();
+		end_byBldg_spinner_list_DATA = new ArrayList<String>();
 		end_byBldg_spinner_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, end_byBldg_spinner_list);
 		end_byBldg_spinner_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		
@@ -346,6 +367,9 @@ public class Entry extends Activity implements OnClickListener, OnItemSelectedLi
 //			
 //			tabs.setCurrentTab(3);
 //		}
+        
+        //test
+        //start_LocationMenu.setVisibility(0); //visible
 	}
 
 	public void onClick(View v) {
@@ -395,7 +419,7 @@ public class Entry extends Activity implements OnClickListener, OnItemSelectedLi
 //			webView.getHandler().sendMessage(webView.getHandler().obtainMessage(webView.HANDLER_SHOW_PROGRESS));
 //			webView.setZoomLevel(150);
 //			webView.loadUrl(AppConstants.GLOBAL_WEB_SITE + "?mode=browse&bldg=" + AppPrefs.getBrowseBldg(this) + "&floor=" + startFloorID + "&center=" + AppPrefs.getStartID(this));
-			tabs.setCurrentTab(3);
+//			tabs.setCurrentTab(3);
 			break;
 			
 		case R.id.searchEndText:
@@ -411,7 +435,7 @@ public class Entry extends Activity implements OnClickListener, OnItemSelectedLi
 //			webView.getHandler().sendMessage(webView.getHandler().obtainMessage(webView.HANDLER_SHOW_PROGRESS));
 //			webView.setZoomLevel(150);
 //			webView.loadUrl(AppConstants.GLOBAL_WEB_SITE + "?mode=browse&bldg=" + AppPrefs.getBrowseBldg(this) + "&floor=" + endFloorID + "&center=" + AppPrefs.getEndID(this));
-			tabs.setCurrentTab(3);
+//			tabs.setCurrentTab(3);
 			break;
 			
 //		case R.id.mapFloor:
@@ -439,71 +463,148 @@ public class Entry extends Activity implements OnClickListener, OnItemSelectedLi
 		// When the Activity is first loaded, the spinners will call onItemSelected as
 		// they are initialized.  We dont want this, so as a work around, we ignore
 		// the first "update"
+		Log.i("ENTRY","onItemSelected");
+		
 		switch (parent.getId()) {
 		case R.id.startByBldgSpinner:
+			Log.i("ENTRY","  - startByBldgSpinner");
 			if (!bFirst_startByBldgSpinner) {
-				//Toast.makeText(this, "startByFloorSpinner, value: " + byFloor_spinner_list.get(position) + ", startByTypeSpinner: " + byType_spinner_list.get(start_byType_spinner.getSelectedItemPosition()), Toast.LENGTH_SHORT).show();
-				Log.i("ENTRY", start_byBldg_spinner_list.get(start_byBldg_spinner.getSelectedItemPosition()).toLowerCase());
-				String bldgID = start_byBldg_spinner_list.get(start_byBldg_spinner.getSelectedItemPosition()).toLowerCase();
-//				appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list, start_spinner_adapter, this, "", bldgID, "");
-//				appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list_DATA, start_spinner_adapter, this, "", bldgID, "");
-				//appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list, start_spinner_adapter, this, "", "camp", "", "list");
-				//appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list_DATA, start_spinner_adapter, this, "", "camp", "", "data");
-				if (start_byFloor_spinner_list != null && start_byFloor_spinner_list.size() > 0) start_byFloor_spinner.setSelection(0);
-				if (start_byType_spinner_list != null && start_byType_spinner_list.size() > 0) start_byType_spinner.setSelection(0);
 				
-				appIO.updateListView_async(DatabaseConstants.QUERY_FLOOR_LIST, AppConstants.PROGRESS_BAR_INDETERMINATE, start_byFloor_spinner_list, start_byFloor_spinner_adapter, this, bldgID);
-				appIO.updateListView_async(DatabaseConstants.QUERY_TYPE_LIST,	AppConstants.PROGRESS_BAR_INDETERMINATE, start_byType_spinner_list, start_byType_spinner_adapter, this, bldgID);
-
-				if (start_spinner.getSelectedItemPosition() > 0) {
-					bFirst_startRoomListSpinner = true;
-					start_spinner.setSelection(0);
-					start_spinner_list.clear();
-					start_spinner_list_DATA.clear();
-					start_spinner_adapter.notifyDataSetChanged();
+				if (start_byBldg_spinner.getSelectedItemPosition() == 0) {
+					start_FloorMenu.setVisibility(View.GONE);
+					start_TypeMenu.setVisibility(View.GONE); 
+					start_LocationMenu.setVisibility(View.GONE); 
+					
+				} else {
+	//				Toast.makeText(this, "startByFloorSpinner, value: " + start_byBldg_spinner_list.get(start_byBldg_spinner.getSelectedItemPosition()).toLowerCase(), Toast.LENGTH_SHORT).show();
+					Log.i("ENTRY", "BldgID: " + start_byBldg_spinner_list_DATA.get(start_byBldg_spinner.getSelectedItemPosition()).toLowerCase());
+					String bldgID = start_byBldg_spinner_list_DATA.get(start_byBldg_spinner.getSelectedItemPosition()).toLowerCase();
+	//				appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list, start_spinner_adapter, this, "", bldgID, "");
+	//				appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list_DATA, start_spinner_adapter, this, "", bldgID, "");
+					//appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list, start_spinner_adapter, this, "", "camp", "", "list");
+					//appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list_DATA, start_spinner_adapter, this, "", "camp", "", "data");
+					if (start_byFloor_spinner_list != null && start_byFloor_spinner_list.size() > 0 && start_byFloor_spinner.getSelectedItemPosition() != 0) {
+						Log.i("ENTRY", "setting Floor menu to 0");
+						bFirst_startByFloorSpinner = true;
+						start_byFloor_spinner.setSelection(0);
+					}
+					if (start_byType_spinner_list != null && start_byType_spinner_list.size() > 0 && start_byType_spinner.getSelectedItemPosition() != 0) {
+						start_byType_spinner.setSelection(0);
+					}
+					
+					if (bldgID.equals("camp")) {
+						if (start_TypeMenu.getVisibility() == View.GONE) {
+							bFirst_startByTypeSpinner = true;
+							//start_byFloor_spinner.setSelection(1);
+							start_TypeMenu.setVisibility(View.VISIBLE); 
+						}
+						start_FloorMenu.setVisibility(View.GONE);
+						start_LocationMenu.setVisibility(View.GONE);
+						
+						appIO.updateListView_async(DatabaseConstants.QUERY_TYPE_LIST,	AppConstants.PROGRESS_BAR_INDETERMINATE, start_byType_spinner_list, start_byType_spinner_adapter, null, this, bldgID, "0");
+						
+					} else {
+						if (start_FloorMenu.getVisibility() == View.GONE) {
+							Log.i("ENTRY", "making Floor menu visible. current floor: " + start_byFloor_spinner.getSelectedItemPosition());
+							bFirst_startByFloorSpinner = true;
+							start_FloorMenu.setVisibility(View.VISIBLE); 
+						}
+						start_TypeMenu.setVisibility(View.GONE); 
+						start_LocationMenu.setVisibility(View.GONE);
+						
+						appIO.updateListView_async(DatabaseConstants.QUERY_FLOOR_LIST, AppConstants.PROGRESS_BAR_INDETERMINATE, start_byFloor_spinner_list, start_byFloor_spinner_adapter, null, this, bldgID);
+						
+					}
+					//appIO.updateListView_async(DatabaseConstants.QUERY_FLOOR_LIST, AppConstants.PROGRESS_BAR_INDETERMINATE, start_byFloor_spinner_list, start_byFloor_spinner_adapter, null, this, bldgID);
+					//appIO.updateListView_async(DatabaseConstants.QUERY_TYPE_LIST,	AppConstants.PROGRESS_BAR_INDETERMINATE, start_byType_spinner_list, start_byType_spinner_adapter, this, bldgID);
+	
+	//				if (start_spinner.getSelectedItemPosition() > 0) {
+	//					bFirst_startRoomListSpinner = true;
+	//					start_spinner.setSelection(0);
+	//					start_spinner_list.clear();
+	//					start_spinner_list_DATA.clear();
+	//					start_spinner_adapter.notifyDataSetChanged();
+	//				}
 				}
 			} else {bFirst_startByBldgSpinner = false;}
 			break;
 			
 		case R.id.startByFloorSpinner:
+			Log.i("ENTRY","  - startByFloorSpinner");
 			if (!bFirst_startByFloorSpinner) {
-				//Toast.makeText(this, "startByFloorSpinner, value: " + byFloor_spinner_list.get(position) + ", startByTypeSpinner: " + byType_spinner_list.get(start_byType_spinner.getSelectedItemPosition()), Toast.LENGTH_SHORT).show();
-				String bldgID = start_byBldg_spinner_list.get(start_byBldg_spinner.getSelectedItemPosition()).toLowerCase();
-				String floorLevel = start_byFloor_spinner_list.get(start_byFloor_spinner.getSelectedItemPosition()).toLowerCase();
-				String type = start_byType_spinner_list.get(start_byType_spinner.getSelectedItemPosition()).toLowerCase();
-				Log.i("ENTRY","bldgID: " + bldgID);
-				Log.i("ENTRY","floorLevel: " + floorLevel);
-				Log.i("ENTRY","type: " + type);
-				
-				appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list, start_spinner_adapter, this, floorLevel, bldgID, type);
-				appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list_DATA, start_spinner_adapter, this, floorLevel, bldgID, type);
-				if (start_spinner.getSelectedItemPosition() > 0) {
-					bFirst_startRoomListSpinner = true;
-					start_spinner.setSelection(0);
+				if (start_byFloor_spinner.getSelectedItemPosition() == 0) {
+					start_TypeMenu.setVisibility(View.GONE); 
+					start_LocationMenu.setVisibility(View.GONE);
+				} else {
+					//Toast.makeText(this, "startByFloorSpinner, value: " + byFloor_spinner_list.get(position) + ", startByTypeSpinner: " + byType_spinner_list.get(start_byType_spinner.getSelectedItemPosition()), Toast.LENGTH_SHORT).show();
+					String bldgID = start_byBldg_spinner_list_DATA.get(start_byBldg_spinner.getSelectedItemPosition()).toLowerCase();
+					String floorLevel = start_byFloor_spinner_list.get(start_byFloor_spinner.getSelectedItemPosition()).toLowerCase();
+					//String type = start_byType_spinner_list.get(start_byType_spinner.getSelectedItemPosition()).toLowerCase();
+					Log.i("ENTRY","Floor - bldgID: " + bldgID);
+					Log.i("ENTRY","Floor - floorLevel: " + floorLevel);
+					//Log.i("ENTRY","Floor - type: " + type);
+					
+					if (start_byType_spinner_list != null && start_byType_spinner_list.size() > 0 && start_byType_spinner.getSelectedItemPosition() != 0) {
+						bFirst_startByTypeSpinner = true;
+						start_byType_spinner.setSelection(0);
+					}
+					
+					if (start_TypeMenu.getVisibility() == View.GONE) {
+						bFirst_startByTypeSpinner = true;
+						start_TypeMenu.setVisibility(View.VISIBLE); 
+					}
+					start_LocationMenu.setVisibility(View.GONE); 
+					
+					appIO.updateListView_async(DatabaseConstants.QUERY_TYPE_LIST,	AppConstants.PROGRESS_BAR_INDETERMINATE, start_byType_spinner_list, start_byType_spinner_adapter, null, this, bldgID, floorLevel);
+	
+	//				appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list, start_spinner_adapter, this, floorLevel, bldgID, type);
+	//				appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list_DATA, start_spinner_adapter, this, floorLevel, bldgID, type);
+					
+	//				if (start_spinner.getSelectedItemPosition() > 0) {
+	//					bFirst_startRoomListSpinner = true;
+	//					start_spinner.setSelection(0);
+	//				}
 				}
 			} else {bFirst_startByFloorSpinner = false;}
 			break;
 			
 		case R.id.startByTypeSpinner:
+			Log.i("ENTRY","  - startByTypeSpinner");
 			if (!bFirst_startByTypeSpinner) {
-				//Toast.makeText(this, "startByTypeSpinner, value: " + byType_spinner_list.get(position), Toast.LENGTH_SHORT).show();
-				String bldgID = start_byBldg_spinner_list.get(start_byBldg_spinner.getSelectedItemPosition()).toLowerCase();
-				String floorLevel = start_byFloor_spinner_list.get(start_byFloor_spinner.getSelectedItemPosition()).toLowerCase();
-				String type = start_byType_spinner_list.get(start_byType_spinner.getSelectedItemPosition()).toLowerCase();
-				Log.i("ENTRY","bldgID: " + bldgID);
-				Log.i("ENTRY","floorLevel: " + floorLevel);
-				Log.i("ENTRY","type: " + type);
-				
-				appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list, start_spinner_adapter, this, floorLevel, bldgID, type);
-				appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list_DATA, start_spinner_adapter, this, floorLevel, bldgID, type);
-				if (start_spinner.getSelectedItemPosition() > 0) {
-					bFirst_startRoomListSpinner = true;
-					start_spinner.setSelection(0);
+				if (start_byType_spinner.getSelectedItemPosition() == 0) {
+					start_LocationMenu.setVisibility(View.GONE);
+				} else {
+					//Toast.makeText(this, "startByTypeSpinner, value: " + byType_spinner_list.get(position), Toast.LENGTH_SHORT).show();
+					String bldgID = start_byBldg_spinner_list_DATA.get(start_byBldg_spinner.getSelectedItemPosition()).toLowerCase();
+					String floorLevel = "0";
+					if (bldgID.equals("camp")) {
+						floorLevel = "0";
+					} else {
+						floorLevel = start_byFloor_spinner_list.get(start_byFloor_spinner.getSelectedItemPosition()).toLowerCase();
+					}
+					String type = start_byType_spinner_list.get(start_byType_spinner.getSelectedItemPosition()).toLowerCase();
+					Log.i("ENTRY","Type - bldgID: " + bldgID);
+					Log.i("ENTRY","Type - floorLevel: " + floorLevel);
+					Log.i("ENTRY","Type - type: " + type);
+					
+					if (start_LocationMenu.getVisibility() == View.GONE) {
+						bFirst_startRoomListSpinner = true;
+						start_LocationMenu.setVisibility(View.VISIBLE); 
+					}
+					
+					if (start_spinner_list.size() > 0 && start_spinner.getSelectedItemPosition() > 0) {
+						bFirst_startRoomListSpinner = true;
+						start_spinner.setSelection(0);
+					}
+					
+					appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list, start_spinner_adapter, this, floorLevel, bldgID, type);
+					appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list_DATA, start_spinner_adapter, this, floorLevel, bldgID, type);
 				}
 			} else {bFirst_startByTypeSpinner = false;}
 			break;
 			
 		case R.id.startRoomListSpinner:
+			Log.i("ENTRY","  - startRoomListSpinner");
 			if (!bFirst_startRoomListSpinner) {
 				//Toast.makeText(this, "startRoomListSpinner, value: " + start_spinner_list.get(position), Toast.LENGTH_SHORT).show();
 				updateStartEndLocation(true, start_spinner_list.get(position), null, null);
@@ -512,64 +613,139 @@ public class Entry extends Activity implements OnClickListener, OnItemSelectedLi
 			break;
 			
 		case R.id.endByBldgSpinner:
+			Log.i("ENTRY","  - endByBldgSpinner");
 			if (!bFirst_endByBldgSpinner) {
-				//Toast.makeText(this, "endByFloorSpinner, value: " + byFloor_spinner_list.get(position), Toast.LENGTH_SHORT).show();
-				String bldgID = end_byBldg_spinner_list.get(end_byBldg_spinner.getSelectedItemPosition()).toLowerCase();
-//				appIO.updateListView_async(DatabaseConstants.QUERY_NODES_BY_FLOOR_AND_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, end_spinner_list, end_spinner_adapter, this, byFloor_spinner_list.get(position), AppPrefs.getBrowseBldg(this), byType_spinner_list.get(end_byType_spinner.getSelectedItemPosition()).toLowerCase(), "list");
-//				appIO.updateListView_async(DatabaseConstants.QUERY_NODES_BY_FLOOR_AND_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, end_spinner_list_DATA, end_spinner_adapter, this, byFloor_spinner_list.get(position), AppPrefs.getBrowseBldg(this), byType_spinner_list.get(end_byType_spinner.getSelectedItemPosition()).toLowerCase(), "data");
-				if (end_byFloor_spinner_list != null && end_byFloor_spinner_list.size() > 0) end_byFloor_spinner.setSelection(0);
-				if (end_byType_spinner_list != null && end_byType_spinner_list.size() > 0) end_byType_spinner.setSelection(0);				
 				
-				appIO.updateListView_async(DatabaseConstants.QUERY_FLOOR_LIST, AppConstants.PROGRESS_BAR_INDETERMINATE, end_byFloor_spinner_list, end_byFloor_spinner_adapter, this, bldgID);
-				appIO.updateListView_async(DatabaseConstants.QUERY_TYPE_LIST,	AppConstants.PROGRESS_BAR_INDETERMINATE, end_byType_spinner_list, end_byType_spinner_adapter, this, bldgID);
-
-				if (end_spinner.getSelectedItemPosition() > 0) {
-					bFirst_endRoomListSpinner = true;
-					end_spinner.setSelection(0);
-					end_spinner_list.clear();
-					end_spinner_list_DATA.clear();
-					end_spinner_adapter.notifyDataSetChanged();
+				if (end_byBldg_spinner.getSelectedItemPosition() == 0) {
+					end_FloorMenu.setVisibility(View.GONE);
+					end_TypeMenu.setVisibility(View.GONE); 
+					end_LocationMenu.setVisibility(View.GONE); 
+				} else {
+					//Toast.makeText(this, "endByFloorSpinner, value: " + byFloor_spinner_list.get(position), Toast.LENGTH_SHORT).show();
+					Log.i("ENTRY", "BldgID: " + end_byBldg_spinner_list_DATA.get(end_byBldg_spinner.getSelectedItemPosition()).toLowerCase());
+					String bldgID = end_byBldg_spinner_list_DATA.get(end_byBldg_spinner.getSelectedItemPosition()).toLowerCase();
+	//				appIO.updateListView_async(DatabaseConstants.QUERY_NODES_BY_FLOOR_AND_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, end_spinner_list, end_spinner_adapter, this, byFloor_spinner_list.get(position), AppPrefs.getBrowseBldg(this), byType_spinner_list.get(end_byType_spinner.getSelectedItemPosition()).toLowerCase(), "list");
+	//				appIO.updateListView_async(DatabaseConstants.QUERY_NODES_BY_FLOOR_AND_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, end_spinner_list_DATA, end_spinner_adapter, this, byFloor_spinner_list.get(position), AppPrefs.getBrowseBldg(this), byType_spinner_list.get(end_byType_spinner.getSelectedItemPosition()).toLowerCase(), "data");
+					if (end_byFloor_spinner_list != null && end_byFloor_spinner_list.size() > 0 && end_byFloor_spinner.getSelectedItemPosition() != 0) {
+						Log.i("ENTRY", "setting Floor menu to 0");
+						bFirst_endByFloorSpinner = true;
+						end_byFloor_spinner.setSelection(0);
+					}
+					if (end_byType_spinner_list != null && end_byType_spinner_list.size() > 0 && end_byType_spinner.getSelectedItemPosition() != 0) {
+						end_byType_spinner.setSelection(0);				
+					}
+					
+					if (bldgID.equals("camp")) {
+						if (end_TypeMenu.getVisibility() == View.GONE) {
+							bFirst_endByTypeSpinner = true;
+							//start_byFloor_spinner.setSelection(1);
+							end_TypeMenu.setVisibility(View.VISIBLE); 
+						}
+						end_FloorMenu.setVisibility(View.GONE);
+						end_LocationMenu.setVisibility(View.GONE);
+						
+						appIO.updateListView_async(DatabaseConstants.QUERY_TYPE_LIST,	AppConstants.PROGRESS_BAR_INDETERMINATE, end_byType_spinner_list, end_byType_spinner_adapter, null, this, bldgID, "0");
+						
+					} else {
+						if (end_FloorMenu.getVisibility() == View.GONE) {
+							Log.i("ENTRY", "making Floor menu visible");
+							bFirst_endByFloorSpinner = true;
+							end_FloorMenu.setVisibility(View.VISIBLE); 
+						}
+						end_TypeMenu.setVisibility(View.GONE); 
+						end_LocationMenu.setVisibility(View.GONE); 
+						
+						appIO.updateListView_async(DatabaseConstants.QUERY_FLOOR_LIST, AppConstants.PROGRESS_BAR_INDETERMINATE, end_byFloor_spinner_list, end_byFloor_spinner_adapter, null, this, bldgID);
+					}
+					//appIO.updateListView_async(DatabaseConstants.QUERY_TYPE_LIST,	AppConstants.PROGRESS_BAR_INDETERMINATE, end_byType_spinner_list, end_byType_spinner_adapter, this, bldgID);
+	
+	//				if (end_spinner.getSelectedItemPosition() > 0) {
+	//					bFirst_endRoomListSpinner = true;
+	//					end_spinner.setSelection(0);
+	//					end_spinner_list.clear();
+	//					end_spinner_list_DATA.clear();
+	//					end_spinner_adapter.notifyDataSetChanged();
+	//				}
 				}
 			} else {bFirst_endByBldgSpinner = false;}
 			break;
 		
 		case R.id.endByFloorSpinner:
+			Log.i("ENTRY","  - endByFloorSpinner");
 			if (!bFirst_endByFloorSpinner) {
-				//Toast.makeText(this, "endByFloorSpinner, value: " + byFloor_spinner_list.get(position), Toast.LENGTH_SHORT).show();
-				String bldgID = end_byBldg_spinner_list.get(end_byBldg_spinner.getSelectedItemPosition()).toLowerCase();
-				String floorLevel = end_byFloor_spinner_list.get(end_byFloor_spinner.getSelectedItemPosition()).toLowerCase();
-				String type = end_byType_spinner_list.get(end_byType_spinner.getSelectedItemPosition()).toLowerCase();
-				Log.i("ENTRY","bldgID: " + bldgID);
-				Log.i("ENTRY","floorLevel: " + floorLevel);
-				Log.i("ENTRY","type: " + type);
-				appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, end_spinner_list, end_spinner_adapter, this, floorLevel, bldgID, type);
-				appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, end_spinner_list_DATA, end_spinner_adapter, this, floorLevel, bldgID, type);
-				if (end_spinner.getSelectedItemPosition() > 0) {
-					bFirst_endRoomListSpinner = true;
-					end_spinner.setSelection(0);
+				
+				if (end_byFloor_spinner.getSelectedItemPosition() == 0) {
+					end_TypeMenu.setVisibility(View.GONE); 
+					end_LocationMenu.setVisibility(View.GONE); 
+				} else {
+					//Toast.makeText(this, "endByFloorSpinner, value: " + byFloor_spinner_list.get(position), Toast.LENGTH_SHORT).show();
+					String bldgID = end_byBldg_spinner_list_DATA.get(end_byBldg_spinner.getSelectedItemPosition()).toLowerCase();
+					String floorLevel = end_byFloor_spinner_list.get(end_byFloor_spinner.getSelectedItemPosition()).toLowerCase();
+					//String type = end_byType_spinner_list.get(end_byType_spinner.getSelectedItemPosition()).toLowerCase();
+					Log.i("ENTRY","bldgID: " + bldgID);
+					Log.i("ENTRY","floorLevel: " + floorLevel);
+					//Log.i("ENTRY","type: " + type);
+					
+					if (end_byType_spinner_list != null && end_byType_spinner_list.size() > 0 && end_byType_spinner.getSelectedItemPosition() != 0) {
+						bFirst_endByTypeSpinner = true;
+						end_byType_spinner.setSelection(0);
+					}
+					
+					if (end_TypeMenu.getVisibility() == View.GONE) {
+						bFirst_endByTypeSpinner = true;
+						end_TypeMenu.setVisibility(View.VISIBLE); 
+					}
+					end_LocationMenu.setVisibility(View.GONE); 
+					
+					appIO.updateListView_async(DatabaseConstants.QUERY_TYPE_LIST,	AppConstants.PROGRESS_BAR_INDETERMINATE, end_byType_spinner_list, end_byType_spinner_adapter, null, this, bldgID, floorLevel);
+					
+	//				appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, end_spinner_list, end_spinner_adapter, this, floorLevel, bldgID, type);
+	//				appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, end_spinner_list_DATA, end_spinner_adapter, this, floorLevel, bldgID, type);
+	//				if (end_spinner.getSelectedItemPosition() > 0) {
+	//					bFirst_endRoomListSpinner = true;
+	//					end_spinner.setSelection(0);
+	//				}
 				}
 			} else {bFirst_endByFloorSpinner = false;}
 			break;
 			
 		case R.id.endByTypeSpinner:
+			Log.i("ENTRY","  - endByTypeSpinner");
 			if (!bFirst_endByTypeSpinner) {
-				//Toast.makeText(this, "endByTypeSpinner, value: " + byType_spinner_list.get(position), Toast.LENGTH_SHORT).show();
-				String bldgID = end_byBldg_spinner_list.get(end_byBldg_spinner.getSelectedItemPosition()).toLowerCase();
-				String floorLevel = end_byFloor_spinner_list.get(end_byFloor_spinner.getSelectedItemPosition()).toLowerCase();
-				String type = end_byType_spinner_list.get(end_byType_spinner.getSelectedItemPosition()).toLowerCase();
-				Log.i("ENTRY","bldgID: " + bldgID);
-				Log.i("ENTRY","floorLevel: " + floorLevel);
-				Log.i("ENTRY","type: " + type);
-				appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, end_spinner_list, end_spinner_adapter, this, floorLevel, bldgID, type);
-				appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, end_spinner_list_DATA, end_spinner_adapter, this, floorLevel, bldgID, type);
-				if (end_spinner.getSelectedItemPosition() > 0) {
-					bFirst_endRoomListSpinner = true;
-					end_spinner.setSelection(0);
+				if (end_byType_spinner.getSelectedItemPosition() == 0) {
+					end_LocationMenu.setVisibility(View.GONE); 
+				} else {
+					//Toast.makeText(this, "endByTypeSpinner, value: " + byType_spinner_list.get(position), Toast.LENGTH_SHORT).show();
+					String bldgID = end_byBldg_spinner_list_DATA.get(end_byBldg_spinner.getSelectedItemPosition()).toLowerCase();
+					String floorLevel = "0";
+					if (bldgID.equals("camp")) {
+						floorLevel = "0";
+					} else {
+						floorLevel = end_byFloor_spinner_list.get(end_byFloor_spinner.getSelectedItemPosition()).toLowerCase();
+					}
+					String type = end_byType_spinner_list.get(end_byType_spinner.getSelectedItemPosition()).toLowerCase();
+					Log.i("ENTRY","bldgID: " + bldgID);
+					Log.i("ENTRY","floorLevel: " + floorLevel);
+					Log.i("ENTRY","type: " + type);
+					
+					if (end_LocationMenu.getVisibility() == View.GONE) {
+						bFirst_endRoomListSpinner = true;
+						end_LocationMenu.setVisibility(View.VISIBLE); 
+					}
+					
+					if (end_spinner_list.size() > 0 && end_spinner.getSelectedItemPosition() > 0) {
+						bFirst_endRoomListSpinner = true;
+						end_spinner.setSelection(0);
+					}
+					
+					appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, end_spinner_list, end_spinner_adapter, this, floorLevel, bldgID, type);
+					appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, end_spinner_list_DATA, end_spinner_adapter, this, floorLevel, bldgID, type);
 				}
 			} else {bFirst_endByTypeSpinner = false;}
 			break;
 			
 		case R.id.endRoomListSpinner:
+			Log.i("ENTRY","  - endRoomListSpinner");
 			if (!bFirst_endRoomListSpinner) {
 				//Toast.makeText(this, "endRoomListSpinner, value: " + end_spinner_list.get(position), Toast.LENGTH_SHORT).show();
 				updateStartEndLocation(false, end_spinner_list.get(position), null, null);
@@ -665,16 +841,16 @@ public class Entry extends Activity implements OnClickListener, OnItemSelectedLi
 		if (bStart) {
 			// update Start location
 			searchStartText.setText("Start: " + label);
-			enterStartText.setText("Start: " + label);
-			scanStartText.setText("Start: " + label);
+//			enterStartText.setText("Start: " + label);
+//			scanStartText.setText("Start: " + label);
 //			mapStartText.setText("Start: " + label);
 			AppPrefs.setStartID(id, this);
 			AppPrefs.setStartLabel(label, this);
 		} else {
 			// update End location
 			searchEndText.setText("End: " + label);
-			enterEndText.setText("End: " + label);
-			scanEndText.setText("End: " + label);
+//			enterEndText.setText("End: " + label);
+//			scanEndText.setText("End: " + label);
 //			mapEndText.setText("End: " + label);
 			AppPrefs.setEndID(id, this);
 			AppPrefs.setEndLabel(label, this);
@@ -685,12 +861,12 @@ public class Entry extends Activity implements OnClickListener, OnItemSelectedLi
 	}
 	
 	public void changeTabs(int tabNum) {
-		tabs.setCurrentTab(tabNum);
+//		tabs.setCurrentTab(tabNum);
 	}
 	
-	public void setMaxFling(int maxFling) {
-		this.maxFling = maxFling;
-	}
+//	public void setMaxFling(int maxFling) {
+//		this.maxFling = maxFling;
+//	}
 	
 	private ArrayList<NodeInfo> verifyNodeCheck (String nodeID) {
 //		Future<ArrayList<?>> future = appIO.updateListView_async(DatabaseConstants.QUERY_NODE_CHECK, AppConstants.PROGRESS_BAR_INDETERMINATE, null, null, this, AppPrefs.getBrowseBldg(this), nodeID);
@@ -855,14 +1031,25 @@ public class Entry extends Activity implements OnClickListener, OnItemSelectedLi
 				// clear locations
 				updateStartEndLocation(true, null, "", "");
 				updateStartEndLocation(false, null, "", "");
-				start_autoComplete.setText("");
-				end_autoComplete.setText("");
-				start_byFloor_spinner.setSelection(0);
-				start_byType_spinner.setSelection(0);
+//				start_autoComplete.setText("");
+//				end_autoComplete.setText("");
+				if (start_byBldg_spinner_list.size() > 0) start_byBldg_spinner.setSelection(0);
+				if (start_byFloor_spinner_list.size() > 0) start_byFloor_spinner.setSelection(0);
+				if (start_byType_spinner_list.size() > 0) start_byType_spinner.setSelection(0);
 				//start_spinner.setSelection(0);	// this is done when byFloor and byType spinners are reset to 0;
-				end_byFloor_spinner.setSelection(0);
-				end_byType_spinner.setSelection(0);
+				if (end_byBldg_spinner_list.size() > 0) end_byBldg_spinner.setSelection(0);
+				if (end_byFloor_spinner_list.size() > 0) end_byFloor_spinner.setSelection(0);
+				if (end_byType_spinner_list.size() > 0) end_byType_spinner.setSelection(0);
 				//end_spinner.setSelection(0);
+				
+				start_FloorMenu.setVisibility(View.GONE); 
+				start_TypeMenu.setVisibility(View.GONE); 
+				start_LocationMenu.setVisibility(View.GONE); 
+				end_FloorMenu.setVisibility(View.GONE); 
+				end_TypeMenu.setVisibility(View.GONE); 
+				end_LocationMenu.setVisibility(View.GONE); 
+				
+				
 			}})
 			.setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
 			public void onClick(DialogInterface dialog, int id){
@@ -871,82 +1058,82 @@ public class Entry extends Activity implements OnClickListener, OnItemSelectedLi
 			}).show();
 	}
 	
-	@Override
-	public boolean onTouchEvent(MotionEvent event){
-		if (myGesture.onTouchEvent(event)) 
-	        return true; 
-	    else 
-	        return false;
-    }
+//	@Override
+//	public boolean onTouchEvent(MotionEvent event){
+//		if (myGesture.onTouchEvent(event)) 
+//	        return true; 
+//	    else 
+//	        return false;
+//    }
 	
-	@Override
-	public boolean onDown(MotionEvent e) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+//	@Override
+//	public boolean onDown(MotionEvent e) {
+//		// TODO Auto-generated method stub
+//		return false;
+//	}
 	
 	// fixes issue with fling/swipe and scrollview
-	@Override 
-    public boolean dispatchTouchEvent(MotionEvent ev){ 
-        super.dispatchTouchEvent(ev); 
-        return myGesture.onTouchEvent(ev); 
-    } 
+//	@Override 
+//    public boolean dispatchTouchEvent(MotionEvent ev){ 
+//        super.dispatchTouchEvent(ev); 
+//        return myGesture.onTouchEvent(ev); 
+//    } 
 	
-	@Override
-	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,	float velocityY) {
-	try {
-		//do not do anything if the swipe does not reach a certain length of distance
-		if (Math.abs(e1.getY() - e2.getY()) > AppConstants.SWIPE_MAX_OFF_PATH) return false;
-		 
-		// right to left swipe
-		if(e1.getX() - e2.getX() > AppConstants.SWIPE_MIN_DISTANCE && Math.abs(velocityX) > AppConstants.SWIPE_THRESHOLD_VELOCITY) {
-			//Toast.makeText(this, "RIGHT TO LEFT", Toast.LENGTH_SHORT).show();
-			numTab = tabs.getTabWidget().getTabCount();
-			currentTab = tabs.getCurrentTab();
-			
-			if (currentTab < numTab)
-		    tabs.setCurrentTab(currentTab + 1);
-		}
-		
-		// left to right swipe
-		else if (e2.getX() - e1.getX() > AppConstants.SWIPE_MIN_DISTANCE && Math.abs(velocityX) > AppConstants.SWIPE_THRESHOLD_VELOCITY) {
-			//Toast.makeText(this, "LEFT TO RIGHT", Toast.LENGTH_SHORT).show();
-			currentTab = tabs.getCurrentTab();
-			
-			// turn off fling when on map tab (currentTab < 3)
-			if (currentTab > 0 && currentTab < maxFling)
-			tabs.setCurrentTab(currentTab - 1);
-		}
-	} catch (Exception e) {
-	    // nothing
-	}
-	return false;
-	}
+//	@Override
+//	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,	float velocityY) {
+//	try {
+//		//do not do anything if the swipe does not reach a certain length of distance
+//		if (Math.abs(e1.getY() - e2.getY()) > AppConstants.SWIPE_MAX_OFF_PATH) return false;
+//		 
+//		// right to left swipe
+//		if(e1.getX() - e2.getX() > AppConstants.SWIPE_MIN_DISTANCE && Math.abs(velocityX) > AppConstants.SWIPE_THRESHOLD_VELOCITY) {
+//			//Toast.makeText(this, "RIGHT TO LEFT", Toast.LENGTH_SHORT).show();
+////			numTab = tabs.getTabWidget().getTabCount();
+////			currentTab = tabs.getCurrentTab();
+//			
+////			if (currentTab < numTab)
+////		    tabs.setCurrentTab(currentTab + 1);
+//		}
+//		
+//		// left to right swipe
+//		else if (e2.getX() - e1.getX() > AppConstants.SWIPE_MIN_DISTANCE && Math.abs(velocityX) > AppConstants.SWIPE_THRESHOLD_VELOCITY) {
+//			//Toast.makeText(this, "LEFT TO RIGHT", Toast.LENGTH_SHORT).show();
+////			currentTab = tabs.getCurrentTab();
+//			
+//			// turn off fling when on map tab (currentTab < 3)
+////			if (currentTab > 0 && currentTab < maxFling)
+////			tabs.setCurrentTab(currentTab - 1);
+//		}
+//	} catch (Exception e) {
+//	    // nothing
+//	}
+//	return false;
+//	}
 
-	@Override
-	public void onLongPress(MotionEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+//	@Override
+//	public void onLongPress(MotionEvent e) {
+//		// TODO Auto-generated method stub
+//		
+//	}
 
-	@Override
-	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
-			float distanceY) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+//	@Override
+//	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
+//			float distanceY) {
+//		// TODO Auto-generated method stub
+//		return false;
+//	}
 
-	@Override
-	public void onShowPress(MotionEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+//	@Override
+//	public void onShowPress(MotionEvent e) {
+//		// TODO Auto-generated method stub
+//		
+//	}
 
-	@Override
-	public boolean onSingleTapUp(MotionEvent e) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+//	@Override
+//	public boolean onSingleTapUp(MotionEvent e) {
+//		// TODO Auto-generated method stub
+//		return false;
+//	}
 	
 	@Override
 	protected void onDestroy() {
@@ -976,12 +1163,29 @@ public class Entry extends Activity implements OnClickListener, OnItemSelectedLi
 		// AppPrefs.getBrowseBldg(this));
 		
 		Log.i("SPIN","before load");
-		appIO.updateListView_async(DatabaseConstants.QUERY_BUILDING_LIST, AppConstants.PROGRESS_BAR_INDETERMINATE, start_byBldg_spinner_list, start_byBldg_spinner_adapter, this);
-		appIO.updateListView_async(DatabaseConstants.QUERY_FLOOR_LIST, AppConstants.PROGRESS_BAR_INDETERMINATE, start_byFloor_spinner_list, start_byFloor_spinner_adapter, this, "camp");
-		appIO.updateListView_async(DatabaseConstants.QUERY_TYPE_LIST,	AppConstants.PROGRESS_BAR_INDETERMINATE, start_byType_spinner_list, start_byType_spinner_adapter, this, "camp");
-		appIO.updateListView_async(DatabaseConstants.QUERY_BUILDING_LIST, AppConstants.PROGRESS_BAR_INDETERMINATE, end_byBldg_spinner_list, end_byBldg_spinner_adapter, this);
-		appIO.updateListView_async(DatabaseConstants.QUERY_FLOOR_LIST, AppConstants.PROGRESS_BAR_INDETERMINATE, end_byFloor_spinner_list, end_byFloor_spinner_adapter, this, "camp");
-		appIO.updateListView_async(DatabaseConstants.QUERY_TYPE_LIST,	AppConstants.PROGRESS_BAR_INDETERMINATE, end_byType_spinner_list, end_byType_spinner_adapter, this, "camp");
+		
+		if (start_byBldg_spinner_list.size() > 0) start_byBldg_spinner.setSelection(0);
+		if (start_byFloor_spinner_list.size() > 0) start_byFloor_spinner.setSelection(0);
+		if (start_byType_spinner_list.size() > 0) start_byType_spinner.setSelection(0);
+		//start_spinner.setSelection(0);	// this is done when byFloor and byType spinners are reset to 0;
+		if (end_byBldg_spinner_list.size() > 0) end_byBldg_spinner.setSelection(0);
+		if (end_byFloor_spinner_list.size() > 0) end_byFloor_spinner.setSelection(0);
+		if (end_byType_spinner_list.size() > 0) end_byType_spinner.setSelection(0);
+		//end_spinner.setSelection(0);
+		
+		start_FloorMenu.setVisibility(View.GONE); 
+		start_TypeMenu.setVisibility(View.GONE); 
+		start_LocationMenu.setVisibility(View.GONE); 
+		end_FloorMenu.setVisibility(View.GONE); 
+		end_TypeMenu.setVisibility(View.GONE); 
+		end_LocationMenu.setVisibility(View.GONE); 
+		
+		appIO.updateListView_async(DatabaseConstants.QUERY_BUILDING_LIST, AppConstants.PROGRESS_BAR_INDETERMINATE, start_byBldg_spinner_list, start_byBldg_spinner_adapter, start_byBldg_spinner_list_DATA, this);
+//		appIO.updateListView_async(DatabaseConstants.QUERY_FLOOR_LIST, AppConstants.PROGRESS_BAR_INDETERMINATE, start_byFloor_spinner_list, start_byFloor_spinner_adapter, null, this, "camp");
+//		appIO.updateListView_async(DatabaseConstants.QUERY_TYPE_LIST,	AppConstants.PROGRESS_BAR_INDETERMINATE, start_byType_spinner_list, start_byType_spinner_adapter, null, this, "camp");
+		appIO.updateListView_async(DatabaseConstants.QUERY_BUILDING_LIST, AppConstants.PROGRESS_BAR_INDETERMINATE, end_byBldg_spinner_list, end_byBldg_spinner_adapter, end_byBldg_spinner_list_DATA, this);
+//		appIO.updateListView_async(DatabaseConstants.QUERY_FLOOR_LIST, AppConstants.PROGRESS_BAR_INDETERMINATE, end_byFloor_spinner_list, end_byFloor_spinner_adapter, null, this, "camp");
+//		appIO.updateListView_async(DatabaseConstants.QUERY_TYPE_LIST,	AppConstants.PROGRESS_BAR_INDETERMINATE, end_byType_spinner_list, end_byType_spinner_adapter, null, this, "camp");
 //		appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list, start_spinner_adapter, this, "", "camp", "", "list");
 //		appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, start_spinner_list_DATA, start_spinner_adapter, this, "", "camp", "", "data");
 //		appIO.updateNodeInfo_async(DatabaseConstants.QUERY_NODES_BY_BUILDING_FLOOR_TYPE, AppConstants.PROGRESS_BAR_INDETERMINATE, end_spinner_list, end_spinner_adapter, this, "", "camp", "", "list");
